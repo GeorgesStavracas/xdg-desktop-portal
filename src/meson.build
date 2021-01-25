@@ -114,6 +114,12 @@ if have_geoclue
   )
 endif
 
+if have_gudev
+  xdg_desktop_portal_sources += files(
+    'usb.c',
+  )
+endif
+
 if have_libsystemd
   xdg_desktop_portal_sources += sd_escape_sources
 endif
@@ -127,6 +133,7 @@ common_deps = [
 
 xdg_desktop_portal_deps = common_deps + [
   geoclue_dep,
+  gudev_dep,
   pipewire_dep,
   libsystemd_dep,
 ]

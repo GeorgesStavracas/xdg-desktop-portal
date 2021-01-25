@@ -187,6 +187,21 @@ get_token (GDBusMethodInvocation *invocation)
       if (method_info->option_arg >= 0)
         options = g_variant_get_child_value (parameters, method_info->option_arg);
     }
+  else if (strcmp (interface, "org.freedesktop.portal.Usb") == 0)
+    {
+      if (strcmp (method, "RequestPermission") == 0)
+        {
+          options = g_variant_get_child_value (parameters, 1);
+        }
+      else if (strcmp (method, "CreateSession") == 0)
+        {
+          options = g_variant_get_child_value (parameters, 0);
+        }
+      else if (strcmp (method, "OpenDevice") == 0)
+        {
+          options = g_variant_get_child_value (parameters, 1);
+        }
+    }
   else
     {
       g_warning ("Support for %s::%s missing in %s",

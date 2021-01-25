@@ -574,6 +574,34 @@ xdp_app_info_has_network (XdpAppInfo *app_info)
   return has_network;
 }
 
+gboolean
+xdp_app_info_has_all_devices (XdpAppInfo *app_info)
+{
+  switch (app_info->kind)
+    {
+    case XDP_APP_INFO_KIND_FLATPAK:
+      {
+        g_auto(GStrv) devices = g_key_file_get_string_list (app_info->u.flatpak.keyfile,
+                                                            "Context", "devices",
+                                                            NULL, NULL);
+        if (devices)
+          return g_strv_contains ((const char * const *) devices, "all");
+        else
+          return FALSE;
+      }
+      break;
+
+    case XDP_APP_INFO_KIND_SNAP:
+      return FALSE;
+
+    case XDP_APP_INFO_KIND_HOST:
+      return TRUE;
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 static void
 ensure_app_info_by_unique_name (void)
 {
