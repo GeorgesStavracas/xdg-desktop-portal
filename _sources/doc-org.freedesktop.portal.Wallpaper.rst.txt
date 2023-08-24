@@ -1,0 +1,130 @@
+.. _org.freedesktop.portal.Wallpaper:
+
+================================
+org.freedesktop.portal.Wallpaper
+================================
+
+-----------
+Description
+-----------
+
+.. _org.freedesktop.portal.Wallpaper Description:
+
+Portal for setting the desktop's Wallpaper
+
+This simple interface lets sandboxed applications set the user's
+desktop background picture.
+
+This documentation describes version 1 of this interface.
+
+
+
+----------
+Properties
+----------
+
+.. org.freedesktop.portal.Wallpaper Properties:
+
+org.freedesktop.portal.Wallpaper:version
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    version readable u
+
+
+
+
+-------
+Methods
+-------
+
+.. org.freedesktop.portal.Wallpaper Methods:
+
+org.freedesktop.portal.Wallpaper.SetWallpaperURI
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    SetWallpaperURI (
+      IN parent_window s,
+      IN uri s,
+      IN options a{sv},
+      OUT handle o
+    )
+
+
+
+Asks to set a given picture as the desktop background picture.
+
+Note that file: uris are explicitly not supported here. To use a local image file as
+background, use the `org.freedesktop.portal.Wallpaper.SetWallpaperFile`_ method.
+
+Supported keys in the ``options`` vardict include:
+
+``show-preview`` (``b``)
+Whether to show a preview of the picture. Note that the portal may
+decide to show a preview even if this option is not set.
+
+``set-on`` (``s``)
+Where to set the wallpaper. Possible values are ``'background'``,
+``'lockscreen'``, or ``'both'``.
+
+
+
+parent_window
+  Identifier for the application window, see <link linkend="parent_window">Common Conventions</link>
+
+uri
+  The picture file uri
+
+options
+  Options that influence the behavior of the portal
+
+
+
+org.freedesktop.portal.Wallpaper.SetWallpaperFile
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    SetWallpaperFile (
+      IN parent_window s,
+      IN fd h,
+      IN options a{sv},
+      OUT handle o
+    )
+
+
+
+Asks to set a given local file as the desktop background picture.
+
+Supported keys in the ``options`` vardict include:
+<variablelist>
+<varlistentry>
+<term>show-preview b</term>
+<listitem><para>
+whether to show a preview of the picture. Note that the portal may
+decide to show a preview even if this option is not set
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>set-on s</term>
+<listitem><para>
+where to set the wallpaper. Possible values are 'background', 'lockscreen' or 'both'
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+
+
+parent_window
+  Identifier for the application window, see <link linkend="parent_window">Common Conventions</link>
+
+fd
+  File descriptor for the file to open
+
+options
+  Options that influence the behavior of the portal
+
+

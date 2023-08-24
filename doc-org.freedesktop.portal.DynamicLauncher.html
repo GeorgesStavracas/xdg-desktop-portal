@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>org.freedesktop.portal.DynamicLauncher &mdash; XDG Desktop Portals xdg-desktop-portal documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="org.freedesktop.portal.Email" href="doc-org.freedesktop.portal.Email.html" />
+    <link rel="prev" title="org.freedesktop.portal.Documents" href="doc-org.freedesktop.portal.Documents.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            XDG Desktop Portals
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">For portal users and integrators</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="portals-conf.html">portals.conf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For application developers</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="common-conventions.html">Common Conventions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="portal-interfaces.html">D-Bus Interfaces for Portal Users</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Account.html">org.freedesktop.portal.Account</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Background.html">org.freedesktop.portal.Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Camera.html">org.freedesktop.portal.Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Clipboard.html">org.freedesktop.portal.Clipboard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Device.html">org.freedesktop.portal.Device</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Documents.html">org.freedesktop.portal.Documents</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">org.freedesktop.portal.DynamicLauncher</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#properties">Properties</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-dynamiclauncher-supportedlaunchertypes">org.freedesktop.portal.DynamicLauncher:SupportedLauncherTypes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-dynamiclauncher-version">org.freedesktop.portal.DynamicLauncher:version</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#methods">Methods</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-dynamiclauncher-install">org.freedesktop.portal.DynamicLauncher.Install</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-dynamiclauncher-prepareinstall">org.freedesktop.portal.DynamicLauncher.PrepareInstall</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-dynamiclauncher-requestinstalltoken">org.freedesktop.portal.DynamicLauncher.RequestInstallToken</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-dynamiclauncher-uninstall">org.freedesktop.portal.DynamicLauncher.Uninstall</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-dynamiclauncher-getdesktopentry">org.freedesktop.portal.DynamicLauncher.GetDesktopEntry</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-dynamiclauncher-geticon">org.freedesktop.portal.DynamicLauncher.GetIcon</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-dynamiclauncher-launch">org.freedesktop.portal.DynamicLauncher.Launch</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Email.html">org.freedesktop.portal.Email</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.FileChooser.html">org.freedesktop.portal.FileChooser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.FileTransfer.html">org.freedesktop.portal.FileTransfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.GameMode.html">org.freedesktop.portal.GameMode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.GlobalShortcuts.html">org.freedesktop.portal.GlobalShortcuts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Inhibit.html">org.freedesktop.portal.Inhibit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.InputCapture.html">org.freedesktop.portal.InputCapture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Location.html">org.freedesktop.portal.Location</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.MemoryMonitor.html">org.freedesktop.portal.MemoryMonitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.NetworkMonitor.html">org.freedesktop.portal.NetworkMonitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Notification.html">org.freedesktop.portal.Notification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.OpenURI.html">org.freedesktop.portal.OpenURI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.PowerProfileMonitor.html">org.freedesktop.portal.PowerProfileMonitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Print.html">org.freedesktop.portal.Print</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.ProxyResolver.html">org.freedesktop.portal.ProxyResolver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Realtime.html">org.freedesktop.portal.Realtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.RemoteDesktop.html">org.freedesktop.portal.RemoteDesktop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Request.html">org.freedesktop.portal.Request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.ScreenCast.html">org.freedesktop.portal.ScreenCast</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Screenshot.html">org.freedesktop.portal.Screenshot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Secret.html">org.freedesktop.portal.Secret</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Session.html">org.freedesktop.portal.Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Settings.html">org.freedesktop.portal.Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Trash.html">org.freedesktop.portal.Trash</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Wallpaper.html">org.freedesktop.portal.Wallpaper</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For portal developers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="implementation-interfaces.html">D-Bus Interfaces for Portal Implementations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">XDG Desktop Portals</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="portal-interfaces.html">D-Bus Interfaces for Portal Users</a></li>
+      <li class="breadcrumb-item active">org.freedesktop.portal.DynamicLauncher</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/doc-org.freedesktop.portal.DynamicLauncher.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="org-freedesktop-portal-dynamiclauncher">
+<span id="id1"></span><h1>org.freedesktop.portal.DynamicLauncher<a class="headerlink" href="#org-freedesktop-portal-dynamiclauncher" title="Permalink to this heading"></a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
+<p id="org-freedesktop-portal-dynamiclauncher-description">Portal for installing application launchers</p>
+<p>The DynamicLauncher portal allows sandboxed (or unsandboxed) applications
+to install launchers (.desktop files) which have an icon associated with them
+and which execute a command in the application. The desktop environment
+would display the launcher to the user in its menu of installed applications.
+For example this can be used by a sandboxed browser to install web app
+launchers. The portal also allows apps to uninstall the launchers, launch
+them, and read the desktop file and icon data for them.</p>
+<p>The standard way to install a launcher is to use the PrepareInstall() method
+which results in a dialog being presented to the user so they can confirm
+they want to install the launcher. Then, the token returned by PrepareInstall()
+would be passed to the Install() method to complete the installation.</p>
+<p>However, in the rare circumstance that an unsandboxed process such as a
+system component needs to install a launcher without user interaction, this
+can be accomplished by using the RequestInstallToken() method and passing
+the acquired token to Install().</p>
+<p>This documentation describes version 1 of this interface.</p>
+</section>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-portal-dynamiclauncher-supportedlaunchertypes">
+<h3>org.freedesktop.portal.DynamicLauncher:SupportedLauncherTypes<a class="headerlink" href="#org-freedesktop-portal-dynamiclauncher-supportedlaunchertypes" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SupportedLauncherTypes</span> <span class="n">readable</span> <span class="n">u</span>
+</pre></div>
+</div>
+<p>A bitmask of available launcher types. Currently defined types are:</p>
+<p>&lt;simplelist&gt;
+&lt;member&gt;1: Application. A launcher that represents an application.&lt;/member&gt;
+&lt;member&gt;2: Webapp. A launcher that represents a web app.&lt;/member&gt;
+&lt;/simplelist&gt;</p>
+</section>
+<section id="org-freedesktop-portal-dynamiclauncher-version">
+<h3>org.freedesktop.portal.DynamicLauncher:version<a class="headerlink" href="#org-freedesktop-portal-dynamiclauncher-version" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">version</span> <span class="n">readable</span> <span class="n">u</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-portal-dynamiclauncher-install">
+<h3>org.freedesktop.portal.DynamicLauncher.Install<a class="headerlink" href="#org-freedesktop-portal-dynamiclauncher-install" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Install</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">token</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">desktop_file_id</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">desktop_entry</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Installs a .desktop launcher and icon into appropriate directories to
+allow the desktop environment to find them. Please note that this method
+overwrites any existing launcher with the same id. If you want to
+present the user with a confirmation dialog in that case, you can check
+for it using the GetDesktopEntry() method and clean up any state from
+the previous launcher if you want.</p>
+<p><code class="docutils literal notranslate"><span class="pre">token</span></code> must be a token that was returned by a previous
+<a class="reference internal" href="#org-freedesktop-portal-dynamiclauncher-prepareinstall">org.freedesktop.portal.DynamicLauncher.PrepareInstall</a> or
+<a class="reference internal" href="#org-freedesktop-portal-dynamiclauncher-requestinstalltoken">org.freedesktop.portal.DynamicLauncher.RequestInstallToken</a> call.
+The token can only be used once and is valid for up to five minutes.</p>
+<p>The icon and name used for the launcher will be the ones from the previous
+<a class="reference internal" href="#org-freedesktop-portal-dynamiclauncher-prepareinstall">org.freedesktop.portal.DynamicLauncher.PrepareInstall</a> or
+<a class="reference internal" href="#org-freedesktop-portal-dynamiclauncher-requestinstalltoken">org.freedesktop.portal.DynamicLauncher.RequestInstallToken</a> call.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">desktop_file_id</span></code> must have “.desktop” as a suffix. Except in the
+special case when the calling process has no associated app ID,
+<code class="docutils literal notranslate"><span class="pre">desktop_file_id</span></code> must have the app ID followed by a period as a prefix,
+regardless of whether the calling process is sandboxed or unsandboxed.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">desktop_entry</span></code> should be a valid desktop entry file beginning with
+“[Desktop Entry]”, except it should not include Name= or Icon= entries
+(if present, these will be overwritten by the portal implementation).
+The Exec= entry will be rewritten to call the sandboxed application e.g.
+via “flatpak run”, if the application is sandboxed.</p>
+<p>It is recommended to include a TryExec= line with either a binary name
+or an absolute path. The launcher will be deleted if the TryExec binary
+cannot be found on session start.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">options</span></code> vardict currently has no supported entries.</p>
+<dl class="simple">
+<dt>token</dt><dd><p>Token proving authorization of the installation</p>
+</dd>
+<dt>desktop_file_id</dt><dd><p>The .desktop file name to be used</p>
+</dd>
+<dt>desktop_entry</dt><dd><p>The text of the Desktop Entry file to be installed, see below</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-portal-dynamiclauncher-prepareinstall">
+<h3>org.freedesktop.portal.DynamicLauncher.PrepareInstall<a class="headerlink" href="#org-freedesktop-portal-dynamiclauncher-prepareinstall" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PrepareInstall</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">parent_window</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">name</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">icon_v</span> <span class="n">v</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">OUT</span> <span class="n">handle</span> <span class="n">o</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Presents a dialog to the user to allow them to see the icon, potentially
+change the name, and confirm installation of the launcher.</p>
+<p>Supported keys in the <code class="docutils literal notranslate"><span class="pre">options</span></code> vardict:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;handle_token s&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+A string that will be used as the last element of the <code class="docutils literal notranslate"><span class="pre">handle</span></code>. Must be a valid
+object path element. See the <a href="#id2"><span class="problematic" id="id3">`org.freedesktop.portal.Request`_</span></a> documentation for
+more information about the <code class="docutils literal notranslate"><span class="pre">handle</span></code>.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;modal b&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+Whether to make the dialog modal. Defaults to yes.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;launcher_type u&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The type of launcher being created. For supported values see the
+SupportedLauncherTypes property. Defaults to “Application”.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;target s&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+For a launcher of type “Webapp”, this is the URL of the web app
+being installed. This is displayed in the user-facing dialog.
+For other launcher types, this is not needed.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;editable_name b&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+If true, the user will be able to edit the name of the launcher.
+Defaults to true.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;editable_icon b&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+If true, the user will be able to edit the icon of the launcher,
+if the implementation supports this. Defaults to false.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<p>The following results get returned via the <a href="#id4"><span class="problematic" id="id5">`org.freedesktop.portal.Request::Response`_</span></a> signal:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;name s&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The name chosen by the user for the launcher.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;token s&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+Token that can be passed to a subsequent <a class="reference internal" href="#org-freedesktop-portal-dynamiclauncher-install">org.freedesktop.portal.DynamicLauncher.Install</a> call to
+complete the installation without another dialog.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<dl class="simple">
+<dt>parent_window</dt><dd><p>Identifier for the application window, see &lt;link linkend=”parent_window”&gt;Common Conventions&lt;/link&gt;</p>
+</dd>
+<dt>name</dt><dd><p>The default name for the launcher</p>
+</dd>
+<dt>icon_v</dt><dd><p>A #GBytesIcon icon as returned by g_icon_serialize(). Must be a png or jpeg no larger than 512x512, or an svg</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-portal-dynamiclauncher-requestinstalltoken">
+<h3>org.freedesktop.portal.DynamicLauncher.RequestInstallToken<a class="headerlink" href="#org-freedesktop-portal-dynamiclauncher-requestinstalltoken" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RequestInstallToken</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">name</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">icon_v</span> <span class="n">v</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">OUT</span> <span class="n">token</span> <span class="n">s</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>This method is intended for use only by specific components that
+have their application ID allowlisted in the portal backend (e.g. GNOME
+Software and KDE Discover). It is otherwise not guaranteed to work.</p>
+<p>The token returned by this method can be used to avoid the need for a
+confirmation dialog; the token can be passed to the Install() method
+just as if it were acquired via the PrepareInstall() method.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">options</span></code> vardict currently has no supported entries.</p>
+<dl class="simple">
+<dt>name</dt><dd><p>The name that will be used in the desktop file</p>
+</dd>
+<dt>icon_v</dt><dd><p>A #GBytesIcon icon as returned by g_icon_serialize(). Must be a png or jpeg no larger than 512x512, or an svg</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-portal-dynamiclauncher-uninstall">
+<h3>org.freedesktop.portal.DynamicLauncher.Uninstall<a class="headerlink" href="#org-freedesktop-portal-dynamiclauncher-uninstall" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Uninstall</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">desktop_file_id</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>This method deletes the desktop file and corresponding icon from the
+appropriate directories to remove the launcher referred to by
+<code class="docutils literal notranslate"><span class="pre">desktop_file_id</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">desktop_file_id</span></code> must have “.desktop” as a suffix. Except in the
+special case when the calling process has no associated app ID,
+<code class="docutils literal notranslate"><span class="pre">desktop_file_id</span></code> must have the app ID followed by a period as a prefix,
+regardless of whether the calling process is sandboxed or unsandboxed.</p>
+<p>For example, Epiphany, which has the app ID “org.gnome.Epiphany”
+in stable builds, might use a <code class="docutils literal notranslate"><span class="pre">desktop_file_id</span></code> like
+“org.gnome.Epiphany.WebApp_e9d0e1e4b0a10856aa3b38d9eb4375de4070d043.desktop”
+In that example the desktop file would exist at the path
+“~/.local/share/xdg-desktop-portal/applications/org.gnome.Epiphany.WebApp_e9d0e1e4b0a10856aa3b38d9eb4375de4070d043.desktop”
+with a sym link in “~/.local/share/applications/”.
+The checksum at the end of the file name is an implementation detail in
+Epiphany and not required by the portal.</p>
+<p>This method is intended to be called by the application that created the
+launcher, e.g. a web browser, so it can clean up associated data as part
+of the uninstallation. Consequently, the proper way for a software center
+to remove a launcher is by using the APIs provided by the application
+that installed it. For example, for GNOME Software to remove web
+launchers created by Epiphany, it would use the
+org.gnome.Epiphany.WebAppProvider D-Bus interface.</p>
+<p>Please note that this method call will fail if the specified launcher
+already does not exist.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">options</span></code> vardict currently has no supported entries.</p>
+<dl class="simple">
+<dt>desktop_file_id</dt><dd><p>The .desktop file name</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-portal-dynamiclauncher-getdesktopentry">
+<h3>org.freedesktop.portal.DynamicLauncher.GetDesktopEntry<a class="headerlink" href="#org-freedesktop-portal-dynamiclauncher-getdesktopentry" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GetDesktopEntry</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">desktop_file_id</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">OUT</span> <span class="n">contents</span> <span class="n">s</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>This function returns the contents of a desktop file with the name
+<code class="docutils literal notranslate"><span class="pre">desktop_file_id</span></code> in <code class="docutils literal notranslate"><span class="pre">contents</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">desktop_file_id</span></code> must have “.desktop” as a suffix. Except in the
+special case when the calling process has no associated app ID,
+<code class="docutils literal notranslate"><span class="pre">desktop_file_id</span></code> must have the app ID followed by a period as a prefix.</p>
+<p>This method only works for desktop files that were created by the
+dynamic launcher portal.</p>
+<dl class="simple">
+<dt>desktop_file_id</dt><dd><p>The .desktop file name</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-portal-dynamiclauncher-geticon">
+<h3>org.freedesktop.portal.DynamicLauncher.GetIcon<a class="headerlink" href="#org-freedesktop-portal-dynamiclauncher-geticon" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GetIcon</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">desktop_file_id</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">OUT</span> <span class="n">icon_v</span> <span class="n">v</span><span class="p">,</span>
+  <span class="n">OUT</span> <span class="n">icon_format</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">OUT</span> <span class="n">icon_size</span> <span class="n">u</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>This function returns the contents of the icon specified in the “Icon”
+key of the desktop file with the name <code class="docutils literal notranslate"><span class="pre">desktop_file_id</span></code> in <code class="docutils literal notranslate"><span class="pre">icon_v</span></code>. The
+icon #GVariant can be passed to g_icon_deserialize() to reconstruct the
+#GIcon.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">desktop_file_id</span></code> must have “.desktop” as a suffix. Except in the
+special case when the calling process has no associated app ID,
+<code class="docutils literal notranslate"><span class="pre">desktop_file_id</span></code> must have the app ID followed by a period as a prefix.</p>
+<p>The format and size of the icon are returned in <code class="docutils literal notranslate"><span class="pre">icon_format</span></code> and
+<code class="docutils literal notranslate"><span class="pre">icon_size</span></code>. For svg icons, <code class="docutils literal notranslate"><span class="pre">icon_size</span></code> is currently always set to 4096,
+but don’t depend on that as it may change in the future.</p>
+<p>This method only works for desktop files that were created by the
+dynamic launcher portal.</p>
+<dl class="simple">
+<dt>desktop_file_id</dt><dd><p>The .desktop file name</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-portal-dynamiclauncher-launch">
+<h3>org.freedesktop.portal.DynamicLauncher.Launch<a class="headerlink" href="#org-freedesktop-portal-dynamiclauncher-launch" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Launch</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">desktop_file_id</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>This function launches the app specified by <code class="docutils literal notranslate"><span class="pre">desktop_file_id</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">desktop_file_id</span></code> must have “.desktop” as a suffix. Except in the
+special case when the calling process has no associated app ID,
+<code class="docutils literal notranslate"><span class="pre">desktop_file_id</span></code> must have the app ID followed by a period as a prefix.</p>
+<p>This method only works for desktop files that were created by the
+dynamic launcher portal.</p>
+<p>Supported keys in the <code class="docutils literal notranslate"><span class="pre">options</span></code> vardict include:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;activation_token s&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+A token that can be used to activate the chosen application.
+&lt;/para&gt;&lt;para&gt;
+The activation_token option was introduced in version 1 of the interface.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<dl class="simple">
+<dt>desktop_file_id</dt><dd><p>The .desktop file name</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="doc-org.freedesktop.portal.Documents.html" class="btn btn-neutral float-left" title="org.freedesktop.portal.Documents" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="doc-org.freedesktop.portal.Email.html" class="btn btn-neutral float-right" title="org.freedesktop.portal.Email" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, XDG Desktop Portal Authors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

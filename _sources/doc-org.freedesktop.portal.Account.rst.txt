@@ -1,0 +1,91 @@
+.. _org.freedesktop.portal.Account:
+
+==============================
+org.freedesktop.portal.Account
+==============================
+
+-----------
+Description
+-----------
+
+.. _org.freedesktop.portal.Account Description:
+
+Portal for obtaining information about the user
+
+This simple interface lets sandboxed applications query basic
+information about the user, like their name and avatar photo.
+
+This documentation describes version 1 of this interface.
+
+
+
+----------
+Properties
+----------
+
+.. org.freedesktop.portal.Account Properties:
+
+org.freedesktop.portal.Account:version
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    version readable u
+
+
+
+
+-------
+Methods
+-------
+
+.. org.freedesktop.portal.Account Methods:
+
+org.freedesktop.portal.Account.GetUserInformation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    GetUserInformation (
+      IN window s,
+      IN options a{sv},
+      OUT handle o
+    )
+
+
+
+Gets information about the user.
+
+Supported keys in the ``options`` vardict include:
+
+``handle_token`` (``s``)
+A string that will be used as the last element of the ``handle``. Must be a valid
+object path element. See the `org.freedesktop.portal.Request`_ documentation for
+more information about the ``handle``.
+
+``reason`` (``s``)
+A string that can be shown in the dialog to explain why the information is
+needed. This should be a complete sentence that explains what the application
+will do with the returned information, for example: "Allows your personal
+information to be included with recipes you share with your friends".
+
+The following results get returned via the `org.freedesktop.portal.Request::Response`_ signal:
+
+``id`` (``s``)
+The user id.
+
+``name`` (``s``)
+The user's real name.
+
+``image`` (``s``)
+The URI of an image file for the user's avatar photo.
+
+
+
+window
+  Identifier for the window
+
+options
+  Vardict with optional further information
+
+

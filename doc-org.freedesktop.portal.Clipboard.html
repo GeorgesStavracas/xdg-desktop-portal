@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>org.freedesktop.portal.Clipboard &mdash; XDG Desktop Portals xdg-desktop-portal documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="org.freedesktop.portal.Device" href="doc-org.freedesktop.portal.Device.html" />
+    <link rel="prev" title="org.freedesktop.portal.Camera" href="doc-org.freedesktop.portal.Camera.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            XDG Desktop Portals
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">For portal users and integrators</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="portals-conf.html">portals.conf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For application developers</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="common-conventions.html">Common Conventions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="portal-interfaces.html">D-Bus Interfaces for Portal Users</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Account.html">org.freedesktop.portal.Account</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Background.html">org.freedesktop.portal.Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Camera.html">org.freedesktop.portal.Camera</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">org.freedesktop.portal.Clipboard</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#properties">Properties</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-clipboard-version">org.freedesktop.portal.Clipboard:version</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#methods">Methods</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-clipboard-requestclipboard">org.freedesktop.portal.Clipboard.RequestClipboard</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-clipboard-setselection">org.freedesktop.portal.Clipboard.SetSelection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-clipboard-selectionwrite">org.freedesktop.portal.Clipboard.SelectionWrite</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-clipboard-selectionwritedone">org.freedesktop.portal.Clipboard.SelectionWriteDone</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-clipboard-selectionread">org.freedesktop.portal.Clipboard.SelectionRead</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#signals">Signals</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-clipboard-selectionownerchanged">org.freedesktop.portal.Clipboard::SelectionOwnerChanged</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-clipboard-selectiontransfer">org.freedesktop.portal.Clipboard::SelectionTransfer</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Device.html">org.freedesktop.portal.Device</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Documents.html">org.freedesktop.portal.Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.DynamicLauncher.html">org.freedesktop.portal.DynamicLauncher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Email.html">org.freedesktop.portal.Email</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.FileChooser.html">org.freedesktop.portal.FileChooser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.FileTransfer.html">org.freedesktop.portal.FileTransfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.GameMode.html">org.freedesktop.portal.GameMode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.GlobalShortcuts.html">org.freedesktop.portal.GlobalShortcuts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Inhibit.html">org.freedesktop.portal.Inhibit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.InputCapture.html">org.freedesktop.portal.InputCapture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Location.html">org.freedesktop.portal.Location</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.MemoryMonitor.html">org.freedesktop.portal.MemoryMonitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.NetworkMonitor.html">org.freedesktop.portal.NetworkMonitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Notification.html">org.freedesktop.portal.Notification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.OpenURI.html">org.freedesktop.portal.OpenURI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.PowerProfileMonitor.html">org.freedesktop.portal.PowerProfileMonitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Print.html">org.freedesktop.portal.Print</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.ProxyResolver.html">org.freedesktop.portal.ProxyResolver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Realtime.html">org.freedesktop.portal.Realtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.RemoteDesktop.html">org.freedesktop.portal.RemoteDesktop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Request.html">org.freedesktop.portal.Request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.ScreenCast.html">org.freedesktop.portal.ScreenCast</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Screenshot.html">org.freedesktop.portal.Screenshot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Secret.html">org.freedesktop.portal.Secret</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Session.html">org.freedesktop.portal.Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Settings.html">org.freedesktop.portal.Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Trash.html">org.freedesktop.portal.Trash</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Wallpaper.html">org.freedesktop.portal.Wallpaper</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For portal developers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="implementation-interfaces.html">D-Bus Interfaces for Portal Implementations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">XDG Desktop Portals</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="portal-interfaces.html">D-Bus Interfaces for Portal Users</a></li>
+      <li class="breadcrumb-item active">org.freedesktop.portal.Clipboard</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/doc-org.freedesktop.portal.Clipboard.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="org-freedesktop-portal-clipboard">
+<span id="id1"></span><h1>org.freedesktop.portal.Clipboard<a class="headerlink" href="#org-freedesktop-portal-clipboard" title="Permalink to this heading"></a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
+</section>
+<section id="properties">
+<span id="org-freedesktop-portal-clipboard-description"></span><h2>Properties<a class="headerlink" href="#properties" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-portal-clipboard-version">
+<h3>org.freedesktop.portal.Clipboard:version<a class="headerlink" href="#org-freedesktop-portal-clipboard-version" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">version</span> <span class="n">readable</span> <span class="n">u</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-portal-clipboard-requestclipboard">
+<h3>org.freedesktop.portal.Clipboard.RequestClipboard<a class="headerlink" href="#org-freedesktop-portal-clipboard-requestclipboard" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RequestClipboard</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Requests clipboard access for the given portal session. This request
+must be made before the session starts.</p>
+<p>This portal does NOT create it’s own session. Instead, it offers existing sessions
+created from other portals the option to integrate with the clipboard. For whether
+this interface is supported for a given session, refer to that portal’s documentation.
+See <a href="#id2"><span class="problematic" id="id3">`org.freedesktop.portal.RemoteDesktop`_</span></a> to integrate clipboard with the
+remote desktop session.</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id4"><span class="problematic" id="id5">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-portal-clipboard-setselection">
+<h3>org.freedesktop.portal.Clipboard.SetSelection<a class="headerlink" href="#org-freedesktop-portal-clipboard-setselection" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SetSelection</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Sets the owner of the clipboard formats in ‘mime_types’ in <code class="docutils literal notranslate"><span class="pre">options</span></code> to
+the session, i.e. this session has data for the advertised clipboard formats.</p>
+<p>See <a href="#id6"><span class="problematic" id="id7">`org.freedesktop.portal.FileTransfer`_</span></a> to transfer files using the
+‘application/vnd.portal.filetransfer’ mimetype.</p>
+<p>May only be called if clipboard access was given after starting the session.</p>
+<p>Supported keys in the <code class="docutils literal notranslate"><span class="pre">options</span></code> vardict include:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;mime_types as&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+A list of mime types that the session has clipboard content for.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id8"><span class="problematic" id="id9">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-portal-clipboard-selectionwrite">
+<h3>org.freedesktop.portal.Clipboard.SelectionWrite<a class="headerlink" href="#org-freedesktop-portal-clipboard-selectionwrite" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SelectionWrite</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">serial</span> <span class="n">u</span><span class="p">,</span>
+  <span class="n">OUT</span> <span class="n">fd</span> <span class="n">h</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Answer to ‘SelectionTransfer’ signal. Transfers the clipboard content for
+the given serial to the method callee via a file descriptor.
+It is the Callee that creates the file descriptor.</p>
+<p>May only be called if clipboard access was given after starting the session.</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id10"><span class="problematic" id="id11">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>serial</dt><dd><p>The serial of the request where this answer is directed towards</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-portal-clipboard-selectionwritedone">
+<h3>org.freedesktop.portal.Clipboard.SelectionWriteDone<a class="headerlink" href="#org-freedesktop-portal-clipboard-selectionwritedone" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SelectionWriteDone</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">serial</span> <span class="n">u</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">success</span> <span class="n">b</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>data was successful (‘true’) or not (‘false’)</p>
+<p>Notifies that the transfer of the clipboard data has either completed
+successfully, or failed.</p>
+<p>May only be called if clipboard access was given after starting the session.</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id12"><span class="problematic" id="id13">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>serial</dt><dd><p>The serial of the request where this answer is directed to</p>
+</dd>
+<dt>success</dt><dd><p>A boolean which indicates whether the transfer of the clipboard</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-portal-clipboard-selectionread">
+<h3>org.freedesktop.portal.Clipboard.SelectionRead<a class="headerlink" href="#org-freedesktop-portal-clipboard-selectionread" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SelectionRead</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">mime_type</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">OUT</span> <span class="n">fd</span> <span class="n">h</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Transfer the clipboard content given the specified mime type to the
+method caller via a file descriptor.
+It is the callee that creates the file descriptor.</p>
+<p>May only be called if clipboard access was given after starting the session.</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id14"><span class="problematic" id="id15">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>mime_type</dt><dd><p>The mime-type string of the requested format</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="signals">
+<h2>Signals<a class="headerlink" href="#signals" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-portal-clipboard-selectionownerchanged">
+<h3>org.freedesktop.portal.Clipboard::SelectionOwnerChanged<a class="headerlink" href="#org-freedesktop-portal-clipboard-selectionownerchanged" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SelectionOwnerChanged</span> <span class="p">(</span>
+  <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Notifies the session that the clipboard selection has changed.</p>
+<p>Caller will only be notified if clipboard access was given after starting the session.</p>
+<p>Supported keys in the <code class="docutils literal notranslate"><span class="pre">options</span></code> vardict include:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;mime_types as&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+A list of mime types that the the new clipboard selection has content for.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;session_is_owner b&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+A boolean for whether the session is the owner of the clipboard selection (‘true’) or not (‘false’).
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id16"><span class="problematic" id="id17">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-portal-clipboard-selectiontransfer">
+<h3>org.freedesktop.portal.Clipboard::SelectionTransfer<a class="headerlink" href="#org-freedesktop-portal-clipboard-selectiontransfer" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SelectionTransfer</span> <span class="p">(</span>
+  <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">mime_type</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">serial</span> <span class="n">u</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Notifies the session of a request for clipboard content of the given mime type.  The
+callee provides a serial to track the request, which any
+<a class="reference internal" href="#org-freedesktop-portal-clipboard-selectionwrite">org.freedesktop.portal.Clipboard.SelectionWrite</a> responses must use.</p>
+<p>Once the caller is done handling the ‘SelectionTransfer’ request, they must call
+<a class="reference internal" href="#org-freedesktop-portal-clipboard-selectionwritedone">org.freedesktop.portal.Clipboard.SelectionWriteDone</a> with the corresponding request’s serial
+and whether the request completed successfully. If the request is not handled, the caller should
+respond by setting ‘success’ to ‘false’.</p>
+<p>Caller will only be notified if clipboard access was given after starting the session.</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id18"><span class="problematic" id="id19">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>mime_type</dt><dd><p>The mime-type string of the requested format</p>
+</dd>
+<dt>serial</dt><dd><p>The serial used to track this transfer, to which the answer of this request must use</p>
+</dd>
+</dl>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="doc-org.freedesktop.portal.Camera.html" class="btn btn-neutral float-left" title="org.freedesktop.portal.Camera" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="doc-org.freedesktop.portal.Device.html" class="btn btn-neutral float-right" title="org.freedesktop.portal.Device" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, XDG Desktop Portal Authors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

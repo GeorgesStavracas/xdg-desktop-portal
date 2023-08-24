@@ -1,0 +1,99 @@
+.. _org.freedesktop.impl.portal.Account:
+
+===================================
+org.freedesktop.impl.portal.Account
+===================================
+
+-----------
+Description
+-----------
+
+.. _org.freedesktop.impl.portal.Account Description:
+
+Backend for the portal for obtaining user information
+
+This Account portal lets sandboxed applications query basic
+information about the user, like their name and avatar photo.
+The portal backend will present the user with a dialog to confirm
+which (if any) information to share.
+
+
+
+-------
+Methods
+-------
+
+.. org.freedesktop.impl.portal.Account Methods:
+
+org.freedesktop.impl.portal.Account.GetUserInformation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    GetUserInformation (
+      IN handle o,
+      IN app_id s,
+      IN window s,
+      IN options a{sv},
+      OUT response u,
+      OUT results a{sv}
+    )
+
+
+
+Gets information about the user.
+
+Supported keys in the ``options`` vardict include:
+<variablelist>
+<varlistentry>
+<term>reason s</term>
+<listitem><para>
+A string that can be shown in the dialog to expain why the information is needed.
+This should be a complete sentence that explains what the application will do with
+the returned information, for example: Allows your personal information to be included
+with recipes you share with your friends.
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+The following results get returned via the ``results`` vardict:
+<variablelist>
+<varlistentry>
+<term>id s</term>
+<listitem><para>
+The user id.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>name s</term>
+<listitem>
+<para>
+The users real name.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>image s</term>
+<listitem>
+<para>
+The uri of an image file for the users avatar photo.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+
+
+handle
+  Object path for the `org.freedesktop.portal.Request`_ object representing this call
+
+app_id
+  App id of the application
+
+window
+  Identifier for the window
+
+options
+  Vardict with optional further information
+
+

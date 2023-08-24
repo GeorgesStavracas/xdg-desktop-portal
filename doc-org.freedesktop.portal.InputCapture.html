@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>org.freedesktop.portal.InputCapture &mdash; XDG Desktop Portals xdg-desktop-portal documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="org.freedesktop.portal.Location" href="doc-org.freedesktop.portal.Location.html" />
+    <link rel="prev" title="org.freedesktop.portal.Inhibit" href="doc-org.freedesktop.portal.Inhibit.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            XDG Desktop Portals
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">For portal users and integrators</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="portals-conf.html">portals.conf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For application developers</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="common-conventions.html">Common Conventions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="portal-interfaces.html">D-Bus Interfaces for Portal Users</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Account.html">org.freedesktop.portal.Account</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Background.html">org.freedesktop.portal.Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Camera.html">org.freedesktop.portal.Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Clipboard.html">org.freedesktop.portal.Clipboard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Device.html">org.freedesktop.portal.Device</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Documents.html">org.freedesktop.portal.Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.DynamicLauncher.html">org.freedesktop.portal.DynamicLauncher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Email.html">org.freedesktop.portal.Email</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.FileChooser.html">org.freedesktop.portal.FileChooser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.FileTransfer.html">org.freedesktop.portal.FileTransfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.GameMode.html">org.freedesktop.portal.GameMode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.GlobalShortcuts.html">org.freedesktop.portal.GlobalShortcuts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Inhibit.html">org.freedesktop.portal.Inhibit</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">org.freedesktop.portal.InputCapture</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#properties">Properties</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-inputcapture-supportedcapabilities">org.freedesktop.portal.InputCapture:SupportedCapabilities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-inputcapture-version">org.freedesktop.portal.InputCapture:version</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#methods">Methods</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-inputcapture-createsession">org.freedesktop.portal.InputCapture.CreateSession</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-inputcapture-getzones">org.freedesktop.portal.InputCapture.GetZones</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-inputcapture-setpointerbarriers">org.freedesktop.portal.InputCapture.SetPointerBarriers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-inputcapture-enable">org.freedesktop.portal.InputCapture.Enable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-inputcapture-disable">org.freedesktop.portal.InputCapture.Disable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-inputcapture-release">org.freedesktop.portal.InputCapture.Release</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-inputcapture-connecttoeis">org.freedesktop.portal.InputCapture.ConnectToEIS</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#signals">Signals</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-inputcapture-disabled">org.freedesktop.portal.InputCapture::Disabled</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-inputcapture-activated">org.freedesktop.portal.InputCapture::Activated</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-inputcapture-deactivated">org.freedesktop.portal.InputCapture::Deactivated</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-inputcapture-zoneschanged">org.freedesktop.portal.InputCapture::ZonesChanged</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Location.html">org.freedesktop.portal.Location</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.MemoryMonitor.html">org.freedesktop.portal.MemoryMonitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.NetworkMonitor.html">org.freedesktop.portal.NetworkMonitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Notification.html">org.freedesktop.portal.Notification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.OpenURI.html">org.freedesktop.portal.OpenURI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.PowerProfileMonitor.html">org.freedesktop.portal.PowerProfileMonitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Print.html">org.freedesktop.portal.Print</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.ProxyResolver.html">org.freedesktop.portal.ProxyResolver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Realtime.html">org.freedesktop.portal.Realtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.RemoteDesktop.html">org.freedesktop.portal.RemoteDesktop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Request.html">org.freedesktop.portal.Request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.ScreenCast.html">org.freedesktop.portal.ScreenCast</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Screenshot.html">org.freedesktop.portal.Screenshot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Secret.html">org.freedesktop.portal.Secret</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Session.html">org.freedesktop.portal.Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Settings.html">org.freedesktop.portal.Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Trash.html">org.freedesktop.portal.Trash</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Wallpaper.html">org.freedesktop.portal.Wallpaper</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For portal developers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="implementation-interfaces.html">D-Bus Interfaces for Portal Implementations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">XDG Desktop Portals</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="portal-interfaces.html">D-Bus Interfaces for Portal Users</a></li>
+      <li class="breadcrumb-item active">org.freedesktop.portal.InputCapture</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/doc-org.freedesktop.portal.InputCapture.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="org-freedesktop-portal-inputcapture">
+<span id="id1"></span><h1>org.freedesktop.portal.InputCapture<a class="headerlink" href="#org-freedesktop-portal-inputcapture" title="Permalink to this heading"></a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
+<p id="org-freedesktop-portal-inputcapture-description">Portal for permitting input capture</p>
+<p>The InputCapture portal allows capture input events from connected
+physical or logical devices. Capturing input has two distinct states:
+“enabled” where an application has requested that input should be captured
+once certain conditions are met (but no input events are being delivered
+yet) and “active”, when input events are being delivered to the application.
+An application can only control the “enabled” state, the compositor decides
+when to switch into the “active” state - and which devices to capture.</p>
+<p>Once the compositor activates input capturing, events from physical or
+logical devices are sent directly to the application instead of using
+those events to update the pointer position on-screen. The compositor
+is in control of the input capturing and may filter events and/or stop
+capturing at any time.</p>
+<p>Input capturing is an asynchronous operation using “triggers”. An
+application sets up a number of triggers but it is the compositor who
+decides when the trigger conditions are met. Currently, the only defined
+trigger are pointer barriers: horizontal or vertical “lines” on the screen
+that should trigger when the cursor moves across those lines.
+See <a class="reference internal" href="#org-freedesktop-portal-inputcapture-setpointerbarriers">org.freedesktop.portal.InputCapture.SetPointerBarriers</a>.</p>
+<p>There is currently no way for an application to activate immediate input
+capture.</p>
+<p>The InputCapture portal merely <em>manages</em> the logic when input should be
+captured. The transport of actual input events is delegated to a
+transport layer, specifically libei. See <a class="reference internal" href="#org-freedesktop-portal-inputcapture-connecttoeis">org.freedesktop.portal.InputCapture.ConnectToEIS</a>.</p>
+<p>This documentation describes version 1 of this interface.</p>
+</section>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-portal-inputcapture-supportedcapabilities">
+<h3>org.freedesktop.portal.InputCapture:SupportedCapabilities<a class="headerlink" href="#org-freedesktop-portal-inputcapture-supportedcapabilities" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SupportedCapabilities</span> <span class="n">readable</span> <span class="n">u</span>
+</pre></div>
+</div>
+<p>A bitmask of supported capabilities. This list is constant, it is not the list of
+capabilities currently available but rather which capabilies are
+implemented by the portal.</p>
+<p>Applications must ignore unknown capabilities.</p>
+<p>Currently defined types are:</p>
+<p>&lt;simplelist&gt;
+&lt;member&gt;1: KEYBOARD&lt;/member&gt;
+&lt;member&gt;2: POINTER&lt;/member&gt;
+&lt;member&gt;4: TOUCHSCREEN&lt;/member&gt;
+&lt;/simplelist&gt;</p>
+</section>
+<section id="org-freedesktop-portal-inputcapture-version">
+<h3>org.freedesktop.portal.InputCapture:version<a class="headerlink" href="#org-freedesktop-portal-inputcapture-version" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">version</span> <span class="n">readable</span> <span class="n">u</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-portal-inputcapture-createsession">
+<h3>org.freedesktop.portal.InputCapture.CreateSession<a class="headerlink" href="#org-freedesktop-portal-inputcapture-createsession" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CreateSession</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">parent_window</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">OUT</span> <span class="n">handle</span> <span class="n">o</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Create a capture input session. A successfully created session can at
+any time be closed using <a href="#id2"><span class="problematic" id="id3">`org.freedesktop.portal.Session.Close`_</span></a>, or may
+at any time be closed by the portal implementation, which will be
+signalled via <a href="#id4"><span class="problematic" id="id5">`org.freedesktop.portal.Session::Closed`_</span></a>.</p>
+<p>Supported keys in the <code class="docutils literal notranslate"><span class="pre">options</span></code> vardict include:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;handle_token s&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+A string that will be used as the last element of the <code class="docutils literal notranslate"><span class="pre">handle</span></code>. Must be a valid
+object path element. See the <a href="#id6"><span class="problematic" id="id7">`org.freedesktop.portal.Request`_</span></a> documentation for
+more information about the <code class="docutils literal notranslate"><span class="pre">handle</span></code>.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;session_handle_token s&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+A string that will be used as the last element of the session handle. Must be a valid
+object path element. See the <a href="#id8"><span class="problematic" id="id9">`org.freedesktop.portal.Session`_</span></a> documentation for
+more information about the session handle.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;capabilities u&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+Bitmask of requested capabilities, see the
+SupportedCapabilities property. This value is required and must not be zero.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<p>The following results get returned via the <a href="#id10"><span class="problematic" id="id11">`org.freedesktop.portal.Request::Response`_</span></a> signal:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;session_handle o&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The session handle. An object path for the
+<a href="#id12"><span class="problematic" id="id13">`org.freedesktop.portal.Session`_</span></a> object representing the created
+session.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;capabilities u&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The capabilities available to this session. This is always a
+subset of the requested capabilities.
+See the SupportedCapabilities property for details. Note that
+while a capability may be available to a session, there is no
+guarantee a device with that capability is currently available
+or if one does become available that it will trigger input capture.</p>
+<p>It is best to view this set as a negative confirmation - a
+capability that was requested but is missing is an indication that
+this application may not capture events of that capability.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<dl class="simple">
+<dt>parent_window</dt><dd><p>Identifier for the application window, see &lt;link linkend=”parent_window”&gt;Common Conventions&lt;/link&gt;</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-portal-inputcapture-getzones">
+<h3>org.freedesktop.portal.InputCapture.GetZones<a class="headerlink" href="#org-freedesktop-portal-inputcapture-getzones" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GetZones</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">OUT</span> <span class="n">handle</span> <span class="n">o</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Retrieve the set of currently available input zones for this session.
+The zones may not be continuous and may be a logical representation
+of the physical screens (e.g. a 4k screen may be represented as
+low-resolution screen instead). A set of zones is identified by a unique
+zone_set ID.</p>
+<p>The name “Zone” was chosen to provide distinction with the libei
+“Region”.</p>
+<p>If the zones change (e.g. a monitor is unplugged), the
+<a class="reference internal" href="#org-freedesktop-portal-inputcapture-zoneschanged">org.freedesktop.portal.InputCapture::ZonesChanged</a> signal is emitted
+and the application should re-request the current zones to update its
+internal state.</p>
+<p>Note that zones are session-specific, there is no guarantee that two
+applications see the same screen zones. An empty zone list implies
+that no pointer barriers can be set.</p>
+<p>Whenever the application calls GetZones, the current
+zone_set ID is returned that references the current set of zones. To
+establish a pointer barrier, the application must pass this ID to
+<a class="reference internal" href="#org-freedesktop-portal-inputcapture-setpointerbarriers">org.freedesktop.portal.InputCapture.SetPointerBarriers</a>. A mismatch of
+zone_set IDs implies the application is not using the current zone set and
+pointer barriers will fail.</p>
+<p>The zone_set ID increases by an unspecified amount with each change to
+the set of zones. Applications must be able to handle the zone_set ID
+wrapping around. Implementations of this portal must to increase
+the zone_set ID by a sensible amount to allow for
+wrapping detection.</p>
+<p>The following results get returned via the <a href="#id14"><span class="problematic" id="id15">`org.freedesktop.portal.Request::Response`_</span></a> signal:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;zones a(uuii)&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+An array of regions, each specifying that zone’s width,
+height, x/y offset.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;zone_set u&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+A unique ID to be used in the
+<a class="reference internal" href="#org-freedesktop-portal-inputcapture-setpointerbarriers">org.freedesktop.portal.InputCapture.SetPointerBarriers</a> method to refer to
+this set of zones. This id increases by an unspecified
+amount whenever the zones change and pointer barriers can only be set up
+if the zone_set matches the most recent returned zone_set.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id16"><span class="problematic" id="id17">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-portal-inputcapture-setpointerbarriers">
+<h3>org.freedesktop.portal.InputCapture.SetPointerBarriers<a class="headerlink" href="#org-freedesktop-portal-inputcapture-setpointerbarriers" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SetPointerBarriers</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">IN</span> <span class="n">barriers</span> <span class="n">aa</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">IN</span> <span class="n">zone_set</span> <span class="n">u</span><span class="p">,</span>
+  <span class="n">OUT</span> <span class="n">handle</span> <span class="n">o</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Set up zero or more pointer barriers. Pointer barriers are horizontal
+or vertical “lines” that should trigger the start of input capture when the cursor moves
+across the pointer barrier. After a successful
+<a class="reference internal" href="#org-freedesktop-portal-inputcapture-enable">org.freedesktop.portal.InputCapture.Enable</a> call and when the
+compositor has deemed the pointer barrier to be crossed, input events
+(from compositor-determined input devices) are sent to the application
+via the transport layer.</p>
+<p>Pointer barriers are situated on the top or left of their respective pixels and a
+pointer barrier must be situated at the outside boundary of the union of all zones.
+A pointer barrier must be fully contained within one zone.</p>
+<p>For example, consider two zones of size 1920x1080 with offsets
+0,0 and 1920,0, respectively. (i.e. a left-right dual-monitor setup).
+The following pointer barriers are permitted:</p>
+<p>&lt;itemizedlist&gt;
+&lt;listitem&gt;&lt;para&gt;top edge of left screen: &lt;literal&gt;x1=0,y1=0,x2=1920,y1=0&lt;/literal&gt;&lt;/para&gt;&lt;/listitem&gt;
+&lt;listitem&gt;&lt;para&gt;bottom edge of left screen: &lt;literal&gt;x1=0,y1=1080,x2=1920,y1=1080&lt;/literal&gt;&lt;/para&gt;&lt;/listitem&gt;
+&lt;listitem&gt;&lt;para&gt;top edge of right screen: &lt;literal&gt;x1=1920,y1=0,x2=3840,y1=0&lt;/literal&gt;&lt;/para&gt;&lt;/listitem&gt;
+&lt;listitem&gt;&lt;para&gt;bottom edge of right screen: &lt;literal&gt;x1=1920,y1=1080,x2=3840,y1=1080&lt;/literal&gt;&lt;/para&gt;&lt;/listitem&gt;
+&lt;listitem&gt;&lt;para&gt;left edge of left screen: &lt;literal&gt;x1=0,y1=0,x2=0,y1=1920&lt;/literal&gt;&lt;/para&gt;&lt;/listitem&gt;
+&lt;listitem&gt;&lt;para&gt;right edge of right screen: &lt;literal&gt;x1=3840,y1=0,x2=3840,y1=1920&lt;/literal&gt;&lt;/para&gt;&lt;/listitem&gt;
+&lt;/itemizedlist&gt;</p>
+<p>A pointer barrier is considered triggered when the pointer would
+logically move off that zone, even if the actual cusor movement is
+clipped to the zone.</p>
+<p>A zero-sized array of pointer barriers removes all existing pointer barriers
+for this session. Setting pointer barriers immediately suspends the
+current session and the application must call <a class="reference internal" href="#org-freedesktop-portal-inputcapture-enable">org.freedesktop.portal.InputCapture.Enable</a>
+after this method.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">zone_set</span></code> must be equivalent to the last returned zone_set of the
+<a class="reference internal" href="#org-freedesktop-portal-inputcapture-getzones">org.freedesktop.portal.InputCapture.GetZones</a> method. A mismatch of ids
+implies the application is not using the current zone set and
+pointer barriers will fail.</p>
+<p>Supported keys in the <code class="docutils literal notranslate"><span class="pre">options</span></code> vardict include:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;handle_token s&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+A string that will be used as the last element of the <code class="docutils literal notranslate"><span class="pre">handle</span></code>. Must be a valid
+object path element. See the <a href="#id18"><span class="problematic" id="id19">`org.freedesktop.portal.Request`_</span></a> documentation for
+more information about the <code class="docutils literal notranslate"><span class="pre">handle</span></code>.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<p>Supported keys in the <code class="docutils literal notranslate"><span class="pre">barriers</span></code> vardicts include:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;barrier_id u&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The non-zero id of this barrier. This id is used in the
+<a class="reference internal" href="#org-freedesktop-portal-inputcapture-activated">org.freedesktop.portal.InputCapture::Activated</a> signal to inform
+which barrier triggered input capture.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;position (iiii)&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The x1/y1 x2/y2 position of the pointer barrier. A horizontal
+pointer barrier must have y1 == y2, a vertical pointer barrier
+must have x1 == x2. Diagonal pointer barriers are not supported.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<p>The following results get returned via the <a href="#id20"><span class="problematic" id="id21">`org.freedesktop.portal.Request::Response`_</span></a> signal:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;failed_barriers au&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+An array of barrier_ids of pointer barriers that have been denied. The
+id matches the barrier_id of the entries in the <code class="docutils literal notranslate"><span class="pre">barriers</span></code> argument.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id22"><span class="problematic" id="id23">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+<dt>barriers</dt><dd><p>An array of vardicts, each specifying one barrier</p>
+</dd>
+<dt>zone_set</dt><dd><p>A unique zone_set ID referring to the zone set</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-portal-inputcapture-enable">
+<h3>org.freedesktop.portal.InputCapture.Enable<a class="headerlink" href="#org-freedesktop-portal-inputcapture-enable" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Enable</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Enable input capturing. This does not immediately trigger capture, it
+merely enables the capturing to be triggered at some future point
+(e.g. by the cursor moving across a barrier). If and when that happens,
+the <a class="reference internal" href="#org-freedesktop-portal-inputcapture-activated">org.freedesktop.portal.InputCapture::Activated</a> signal is emitted.</p>
+<p>Supported keys in the <code class="docutils literal notranslate"><span class="pre">options</span></code> vardict include:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;handle_token s&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+A string that will be used as the last element of the <code class="docutils literal notranslate"><span class="pre">handle</span></code>. Must be a valid
+object path element. See the <a href="#id24"><span class="problematic" id="id25">`org.freedesktop.portal.Request`_</span></a> documentation for
+more information about the <code class="docutils literal notranslate"><span class="pre">handle</span></code>.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id26"><span class="problematic" id="id27">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-portal-inputcapture-disable">
+<h3>org.freedesktop.portal.InputCapture.Disable<a class="headerlink" href="#org-freedesktop-portal-inputcapture-disable" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Disable</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Disable input capturing. No
+<a class="reference internal" href="#org-freedesktop-portal-inputcapture-disabled">org.freedesktop.portal.InputCapture::Disabled</a> signal will be emitted.</p>
+<p>If input capturing is currently ongoing, no
+<a class="reference internal" href="#org-freedesktop-portal-inputcapture-deactivated">org.freedesktop.portal.InputCapture::Deactivated</a> signal will be
+emitted.</p>
+<p>Due to the asynchronous nature of this protocol,
+<a class="reference internal" href="#org-freedesktop-portal-inputcapture-deactivated">org.freedesktop.portal.InputCapture::Deactivated</a>
+and/or <a class="reference internal" href="#org-freedesktop-portal-inputcapture-deactivated">org.freedesktop.portal.InputCapture::Deactivated</a> signals may
+nevertheless be received by the application after a call to
+<a class="reference internal" href="#org-freedesktop-portal-inputcapture-enable">org.freedesktop.portal.InputCapture.Enable</a>.</p>
+<p>Input events will not be captured until a subsequent
+<a class="reference internal" href="#org-freedesktop-portal-inputcapture-enable">org.freedesktop.portal.InputCapture.Enable</a> call.</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id28"><span class="problematic" id="id29">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-portal-inputcapture-release">
+<h3>org.freedesktop.portal.InputCapture.Release<a class="headerlink" href="#org-freedesktop-portal-inputcapture-release" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Release</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Release any ongoing input capture. No
+<a class="reference internal" href="#org-freedesktop-portal-inputcapture-deactivated">org.freedesktop.portal.InputCapture::Deactivated</a> signal will be emitted.</p>
+<p>Due to the asynchronous nature of this protocol, a
+<a class="reference internal" href="#org-freedesktop-portal-inputcapture-deactivated">org.freedesktop.portal.InputCapture::Deactivated</a>
+signal may
+nevertheless be received by the application after a call to
+<a class="reference internal" href="#org-freedesktop-portal-inputcapture-release">org.freedesktop.portal.InputCapture.Release</a>.</p>
+<p>The activation_id provided in the <code class="docutils literal notranslate"><span class="pre">options</span></code> vardict specifies which
+currently ongoing input capture should be terminated. The asynchronous
+nature of this portal allows for an input capture to be Deactivated and
+a new input capture to be Activated before the client requests the
+Release for the previous input capture.</p>
+<p>A compositor should ignore a
+<a class="reference internal" href="#org-freedesktop-portal-inputcapture-release">org.freedesktop.portal.InputCapture.Release</a> request for a no longer active
+activation_id.</p>
+<p>Supported keys in the <code class="docutils literal notranslate"><span class="pre">options</span></code> vardict include:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;activation_id u&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The same activation_id number as in the
+<a class="reference internal" href="#org-freedesktop-portal-inputcapture-activated">org.freedesktop.portal.InputCapture::Activated</a> signal.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;cursor_position (dd)&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The suggested cursor position within the Zones available in
+this session.</p>
+<p>This is a suggestion to the compositor to place the cursor in
+the correct position to allow for fluent movement between virtual
+screens. The compositor is not required to honor this suggestion.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id30"><span class="problematic" id="id31">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-portal-inputcapture-connecttoeis">
+<h3>org.freedesktop.portal.InputCapture.ConnectToEIS<a class="headerlink" href="#org-freedesktop-portal-inputcapture-connecttoeis" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ConnectToEIS</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">OUT</span> <span class="n">fd</span> <span class="n">h</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Set up the connection to an active EIS implementation. Once input capturing starts,
+input events are sent via the EI protocol between the compositor and the application.
+This call must be invoked before <a class="reference internal" href="#org-freedesktop-portal-inputcapture-enable">org.freedesktop.portal.InputCapture.Enable</a>.</p>
+<p>A session only needs to set this up once, the EIS implementation is not affected by
+calls to <a class="reference internal" href="#org-freedesktop-portal-inputcapture-disable">org.freedesktop.portal.InputCapture.Disable</a> and <a class="reference internal" href="#org-freedesktop-portal-inputcapture-enable">org.freedesktop.portal.InputCapture.Enable</a> -
+the same connection can be re-used until the session is closed.</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id32"><span class="problematic" id="id33">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="signals">
+<h2>Signals<a class="headerlink" href="#signals" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-portal-inputcapture-disabled">
+<h3>org.freedesktop.portal.InputCapture::Disabled<a class="headerlink" href="#org-freedesktop-portal-inputcapture-disabled" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Disabled</span> <span class="p">(</span>
+  <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The Disabled signal is emitted when the application will no longer
+receive captured input. If input capturing is currently ongoing, the
+<a class="reference internal" href="#org-freedesktop-portal-inputcapture-deactivated">org.freedesktop.portal.InputCapture::Deactivated</a> signal is emitted
+before this signal.</p>
+<p>Applications must call <a class="reference internal" href="#org-freedesktop-portal-inputcapture-enable">org.freedesktop.portal.InputCapture.Enable</a> to
+request future input capturing for this session.</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id34"><span class="problematic" id="id35">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-portal-inputcapture-activated">
+<h3>org.freedesktop.portal.InputCapture::Activated<a class="headerlink" href="#org-freedesktop-portal-inputcapture-activated" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Activated</span> <span class="p">(</span>
+  <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The Activated signal is emitted when input capture starts and input events
+are about to be sent to the application.</p>
+<p>This signal is only emitted after a prior call
+to <a class="reference internal" href="#org-freedesktop-portal-inputcapture-enable">org.freedesktop.portal.InputCapture.Enable</a>.</p>
+<p>Supported keys in the <code class="docutils literal notranslate"><span class="pre">options</span></code> vardict include:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;activation_id u&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+A number that can be used to synchronize with the
+transport-layer. This number has no intrinsic meaning but
+is guaranteed to increase by an unspecified amount on each call.</p>
+<p>In particular: if the compositor sends a activation_id of N as
+part of this request it will also set the sequence in EIS’
+start_emulating event the same value N on the EIS connection
+before the first event from a device is sent.
+This allows an application to have a synchronization point and
+attribute an event sequence to the portal interaction.</p>
+<p>Applications must be able to handle the activation_id number
+wrapping around. Implementations of this portal must increase
+the activation_id number by a sensible amount to allow for
+wrapping detection.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;cursor_position (dd)&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The current cursor position in the same coordinate space as
+the Zones. Note that this position is usually outside the Zones
+available to this session as all PointerBarriers are at the edge
+of their respective Zones.</p>
+<p>For example, a fast movement against a barrier on the right edge
+of a screen may logically put the cursor dozens of pixels into
+the (non-existing) screen on the other side of the barrier.
+It is the application’s responsibility to calculate and adjust the
+cursor position as necessary.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;barrier_id u&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The barrier id of the barrier that triggered. If the value is
+nonzero, it matches the barrier id as specified in
+<a class="reference internal" href="#org-freedesktop-portal-inputcapture-setpointerbarriers">org.freedesktop.portal.InputCapture.SetPointerBarriers</a>.</p>
+<p>If the id is zero, the pointer barrier could not be determined.
+If the id is missing, the input capture was not triggered by a
+pointer barrier.</p>
+<p>Where more than one pointer barrier are triggered by the same
+movement it is up to the compositor to choose one barrier (or use
+a barrier id of zero).
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id36"><span class="problematic" id="id37">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-portal-inputcapture-deactivated">
+<h3>org.freedesktop.portal.InputCapture::Deactivated<a class="headerlink" href="#org-freedesktop-portal-inputcapture-deactivated" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Deactivated</span> <span class="p">(</span>
+  <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The Deactivated signal is emitted when input capture stopped and input events
+are no longer sent to the application. To prevent future input
+capture, an application must call <a class="reference internal" href="#org-freedesktop-portal-inputcapture-disable">org.freedesktop.portal.InputCapture.Disable</a>.</p>
+<p>Supported keys in the <code class="docutils literal notranslate"><span class="pre">options</span></code> vardict include:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;activation_id u&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The same activation_id number as in the corresponding
+<a class="reference internal" href="#org-freedesktop-portal-inputcapture-activated">org.freedesktop.portal.InputCapture::Activated</a> signal.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id38"><span class="problematic" id="id39">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-portal-inputcapture-zoneschanged">
+<h3>org.freedesktop.portal.InputCapture::ZonesChanged<a class="headerlink" href="#org-freedesktop-portal-inputcapture-zoneschanged" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ZonesChanged</span> <span class="p">(</span>
+  <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The ZonesChanged signal is emitted when the set of zones
+available <strong>to this session</strong> change. An application should immediately
+call <a class="reference internal" href="#org-freedesktop-portal-inputcapture-getzones">org.freedesktop.portal.InputCapture.GetZones</a> to update its state
+of the zones followed by
+<a class="reference internal" href="#org-freedesktop-portal-inputcapture-setpointerbarriers">org.freedesktop.portal.InputCapture.SetPointerBarriers</a> to re-establish
+the pointer barriers.</p>
+<p>The ZonesChanged signal includes the zone_set ID of the set of zones
+invalidated, see #`org.freedesktop.portal.InputCapture.GetZones`_.
+Due to the asynchronous nature of this protocol, the zone_set ID may
+identify a set of zones that the application has never (or not yet) seen.
+Applications must be able to handle unknown zone_set IDs. In particular,
+because the zone_set ID is guaranteed to increment, an application holding
+a zone_set ID higher than the ID in this signal can usually simply
+discard the signal.</p>
+<p>Supported keys in the <code class="docutils literal notranslate"><span class="pre">options</span></code> vardict include:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;zone_set u&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The zone_set ID of the invalidated zone set as described in
+<a class="reference internal" href="#org-freedesktop-portal-inputcapture-getzones">org.freedesktop.portal.InputCapture.GetZones</a>
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id40"><span class="problematic" id="id41">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="doc-org.freedesktop.portal.Inhibit.html" class="btn btn-neutral float-left" title="org.freedesktop.portal.Inhibit" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="doc-org.freedesktop.portal.Location.html" class="btn btn-neutral float-right" title="org.freedesktop.portal.Location" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, XDG Desktop Portal Authors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

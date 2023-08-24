@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>org.freedesktop.impl.portal.GlobalShortcuts &mdash; XDG Desktop Portals xdg-desktop-portal documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="org.freedesktop.impl.portal.Inhibit" href="doc-org.freedesktop.impl.portal.Inhibit.html" />
+    <link rel="prev" title="org.freedesktop.impl.portal.FileChooser" href="doc-org.freedesktop.impl.portal.FileChooser.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            XDG Desktop Portals
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">For portal users and integrators</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="portals-conf.html">portals.conf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For application developers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="common-conventions.html">Common Conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="portal-interfaces.html">D-Bus Interfaces for Portal Users</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For portal developers</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="implementation-interfaces.html">D-Bus Interfaces for Portal Implementations</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Access.html">org.freedesktop.impl.portal.Access</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Account.html">org.freedesktop.impl.portal.Account</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.AppChooser.html">org.freedesktop.impl.portal.AppChooser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Background.html">org.freedesktop.impl.portal.Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Clipboard.html">org.freedesktop.impl.portal.Clipboard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.DynamicLauncher.html">org.freedesktop.impl.portal.DynamicLauncher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Email.html">org.freedesktop.impl.portal.Email</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.FileChooser.html">org.freedesktop.impl.portal.FileChooser</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">org.freedesktop.impl.portal.GlobalShortcuts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#properties">Properties</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-globalshortcuts-version">org.freedesktop.impl.portal.GlobalShortcuts:version</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#methods">Methods</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-globalshortcuts-createsession">org.freedesktop.impl.portal.GlobalShortcuts.CreateSession</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-globalshortcuts-bindshortcuts">org.freedesktop.impl.portal.GlobalShortcuts.BindShortcuts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-globalshortcuts-listshortcuts">org.freedesktop.impl.portal.GlobalShortcuts.ListShortcuts</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#signals">Signals</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-globalshortcuts-activated">org.freedesktop.impl.portal.GlobalShortcuts::Activated</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-globalshortcuts-deactivated">org.freedesktop.impl.portal.GlobalShortcuts::Deactivated</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-globalshortcuts-shortcutschanged">org.freedesktop.impl.portal.GlobalShortcuts::ShortcutsChanged</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Inhibit.html">org.freedesktop.impl.portal.Inhibit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.InputCapture.html">org.freedesktop.impl.portal.InputCapture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Lockdown.html">org.freedesktop.impl.portal.Lockdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Notification.html">org.freedesktop.impl.portal.Notification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.PermissionStore.html">org.freedesktop.impl.portal.PermissionStore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Print.html">org.freedesktop.impl.portal.Print</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.RemoteDesktop.html">org.freedesktop.impl.portal.RemoteDesktop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Request.html">org.freedesktop.impl.portal.Request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.ScreenCast.html">org.freedesktop.impl.portal.ScreenCast</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Screenshot.html">org.freedesktop.impl.portal.Screenshot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Secret.html">org.freedesktop.impl.portal.Secret</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Session.html">org.freedesktop.impl.portal.Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Settings.html">org.freedesktop.impl.portal.Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Wallpaper.html">org.freedesktop.impl.portal.Wallpaper</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">XDG Desktop Portals</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="implementation-interfaces.html">D-Bus Interfaces for Portal Implementations</a></li>
+      <li class="breadcrumb-item active">org.freedesktop.impl.portal.GlobalShortcuts</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/doc-org.freedesktop.impl.portal.GlobalShortcuts.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="org-freedesktop-impl-portal-globalshortcuts">
+<span id="id1"></span><h1>org.freedesktop.impl.portal.GlobalShortcuts<a class="headerlink" href="#org-freedesktop-impl-portal-globalshortcuts" title="Permalink to this heading"></a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
+</section>
+<section id="properties">
+<span id="org-freedesktop-impl-portal-globalshortcuts-description"></span><h2>Properties<a class="headerlink" href="#properties" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-impl-portal-globalshortcuts-version">
+<h3>org.freedesktop.impl.portal.GlobalShortcuts:version<a class="headerlink" href="#org-freedesktop-impl-portal-globalshortcuts-version" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">version</span> <span class="n">readable</span> <span class="n">u</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-impl-portal-globalshortcuts-createsession">
+<h3>org.freedesktop.impl.portal.GlobalShortcuts.CreateSession<a class="headerlink" href="#org-freedesktop-impl-portal-globalshortcuts-createsession" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CreateSession</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">app_id</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">OUT</span> <span class="n">response</span> <span class="n">u</span><span class="p">,</span>
+  <span class="n">OUT</span> <span class="n">results</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Create a global shortcuts session.</p>
+<p>The following results get returned via the <a href="#id2"><span class="problematic" id="id3">`org.freedesktop.portal.Request::Response`_</span></a> signal:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;session_id s&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The session id. A string representing the created global shortcuts session.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<dl class="simple">
+<dt>handle</dt><dd><p>Object path for the <a href="#id4"><span class="problematic" id="id5">`org.freedesktop.impl.portal.Request`_</span></a> object representing this call</p>
+</dd>
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id6"><span class="problematic" id="id7">`org.freedesktop.impl.portal.Session`_</span></a> object representing the session being created</p>
+</dd>
+<dt>app_id</dt><dd><p>App id of the application</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information. See <code class="docutils literal notranslate"><span class="pre">org</span></code>.freedesktop.portal.GlobalShortcuts.CreateSession</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-impl-portal-globalshortcuts-bindshortcuts">
+<h3>org.freedesktop.impl.portal.GlobalShortcuts.BindShortcuts<a class="headerlink" href="#org-freedesktop-impl-portal-globalshortcuts-bindshortcuts" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">BindShortcuts</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">shortcuts</span> <span class="n">a</span><span class="p">(</span><span class="n">sa</span><span class="p">{</span><span class="n">sv</span><span class="p">}),</span>
+  <span class="n">IN</span> <span class="n">parent_window</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">OUT</span> <span class="n">response</span> <span class="n">u</span><span class="p">,</span>
+  <span class="n">OUT</span> <span class="n">results</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Bind the shortcuts of this session. This will typically result the portal
+presenting a dialog letting the user configure shortcut triggers.</p>
+<p>The results get returned via the <a href="#id8"><span class="problematic" id="id9">`org.freedesktop.portal.Request::Response`_</span></a>
+signal. See <a href="#id10"><span class="problematic" id="id11">`org.freedesktop.portal.GlobalShortcuts.BindShortcuts`_</span></a> for the
+list of supported properties of shortcuts.</p>
+<dl class="simple">
+<dt>handle</dt><dd><p>Object path for the <a href="#id12"><span class="problematic" id="id13">`org.freedesktop.impl.portal.Request`_</span></a> object representing this call</p>
+</dd>
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id14"><span class="problematic" id="id15">`org.freedesktop.impl.portal.Session`_</span></a> object representing the session</p>
+</dd>
+<dt>shortcuts</dt><dd><p>The identifier of the shortcuts we intend to register, empty for all shortcuts</p>
+</dd>
+<dt>parent_window</dt><dd><p>Identifier for the application window, see &lt;link linkend=”parent_window”&gt;Common Conventions&lt;/link&gt;</p>
+</dd>
+</dl>
+<p>options</p>
+</section>
+<section id="org-freedesktop-impl-portal-globalshortcuts-listshortcuts">
+<h3>org.freedesktop.impl.portal.GlobalShortcuts.ListShortcuts<a class="headerlink" href="#org-freedesktop-impl-portal-globalshortcuts-listshortcuts" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ListShortcuts</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">OUT</span> <span class="n">response</span> <span class="n">u</span><span class="p">,</span>
+  <span class="n">OUT</span> <span class="n">results</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>List shortcuts registered in the global shortcuts session.</p>
+<p>The following results get returned via the <a href="#id16"><span class="problematic" id="id17">`org.freedesktop.portal.Request::Response`_</span></a> signal:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;shortcuts a(sa{sv})&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+A list of shortcuts.</p>
+<p>See the <a href="#id18"><span class="problematic" id="id19">`org.freedesktop.portal.Request::Response`_</span></a> signal of the
+<a href="#id20"><span class="problematic" id="id21">`org.freedesktop.portal.GlobalShortcuts.BindShortcuts`_</span></a> method for
+the list of supported properties of shortcuts.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<dl class="simple">
+<dt>handle</dt><dd><p>Object path for the <a href="#id22"><span class="problematic" id="id23">`org.freedesktop.impl.portal.Request`_</span></a> object representing this call</p>
+</dd>
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id24"><span class="problematic" id="id25">`org.freedesktop.impl.portal.Session`_</span></a> object representing the session</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="signals">
+<h2>Signals<a class="headerlink" href="#signals" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-impl-portal-globalshortcuts-activated">
+<h3>org.freedesktop.impl.portal.GlobalShortcuts::Activated<a class="headerlink" href="#org-freedesktop-impl-portal-globalshortcuts-activated" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Activated</span> <span class="p">(</span>
+  <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">shortcut_id</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">timestamp</span> <span class="n">t</span><span class="p">,</span>
+  <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Emitted when a shortcut is activated.</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Session that requested the shortcut</p>
+</dd>
+<dt>shortcut_id</dt><dd><p>the application-provided ID for the notification</p>
+</dd>
+<dt>timestamp</dt><dd><p>The timestamp, as seconds and microseconds since the Unix epoch.</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-impl-portal-globalshortcuts-deactivated">
+<h3>org.freedesktop.impl.portal.GlobalShortcuts::Deactivated<a class="headerlink" href="#org-freedesktop-impl-portal-globalshortcuts-deactivated" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Deactivated</span> <span class="p">(</span>
+  <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">shortcut_id</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">timestamp</span> <span class="n">t</span><span class="p">,</span>
+  <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Emitted when a shortcut is deactivated.</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Session that requested the shortcut</p>
+</dd>
+<dt>shortcut_id</dt><dd><p>the application-provided ID for the notification</p>
+</dd>
+<dt>timestamp</dt><dd><p>The timestamp, as seconds and microseconds since the Unix epoch.</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-impl-portal-globalshortcuts-shortcutschanged">
+<h3>org.freedesktop.impl.portal.GlobalShortcuts::ShortcutsChanged<a class="headerlink" href="#org-freedesktop-impl-portal-globalshortcuts-shortcutschanged" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ShortcutsChanged</span> <span class="p">(</span>
+  <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">shortcuts</span> <span class="n">a</span><span class="p">(</span><span class="n">sa</span><span class="p">{</span><span class="n">sv</span><span class="p">})</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Emitted when shortcuts are changed.</p>
+<p>The results get returned via the <a href="#id26"><span class="problematic" id="id27">`org.freedesktop.portal.Request::Response`_</span></a>
+signal. See <a href="#id28"><span class="problematic" id="id29">`org.freedesktop.portal.GlobalShortcuts.BindShortcuts`_</span></a> for the
+list of supported properties of shortcuts.</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Session that requested the shortcut</p>
+</dd>
+<dt>shortcuts</dt><dd><p>The list of changed shortcuts</p>
+</dd>
+</dl>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="doc-org.freedesktop.impl.portal.FileChooser.html" class="btn btn-neutral float-left" title="org.freedesktop.impl.portal.FileChooser" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="doc-org.freedesktop.impl.portal.Inhibit.html" class="btn btn-neutral float-right" title="org.freedesktop.impl.portal.Inhibit" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, XDG Desktop Portal Authors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

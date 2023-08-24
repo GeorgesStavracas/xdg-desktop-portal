@@ -1,0 +1,104 @@
+.. _org.freedesktop.portal.Session:
+
+==============================
+org.freedesktop.portal.Session
+==============================
+
+-----------
+Description
+-----------
+
+.. _org.freedesktop.portal.Session Description:
+
+Shared session interface
+
+The Session interface is shared by all portal interfaces that involve
+long lived sessions.  When a method that creates a session is called, if
+successful, the reply will include a session handle (i.e. object path) for
+a Session object, which will stay alive for the duration of the session.
+
+The duration of the session is defined by the interface that creates it.
+For convenience, the interface contains a method
+`org.freedesktop.portal.Session.Close`_, and a signal
+`org.freedesktop.portal.Session::Closed`_. Whether it is allowed to directly
+call `org.freedesktop.portal.Session.Close`_ depends on the interface.
+
+The handle of a session will be of the form
+/org/freedesktop/portal/desktop/session/SENDER/TOKEN, where SENDER is the
+callers unique name, with the initial ':' removed and all '.' replaced by
+'_', and TOKEN is a unique token that the caller provided with the
+session_handle_token key in the options vardict of the method creating
+the session.
+
+The token that the caller provides should be unique and not guessable. To
+avoid clashes with calls made from unrelated libraries, it is a good idea
+to use a per-library prefix combined with a random number.
+
+A client who started a session vanishing from the D-Bus is equivalent to
+closing all active sessions made by said client.
+
+
+
+----------
+Properties
+----------
+
+.. org.freedesktop.portal.Session Properties:
+
+org.freedesktop.portal.Session:version
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    version readable u
+
+
+
+
+-------
+Methods
+-------
+
+.. org.freedesktop.portal.Session Methods:
+
+org.freedesktop.portal.Session.Close
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    Close ()
+
+
+Closes the portal session to which this object refers and ends all
+related user interaction (dialogs, etc).
+
+
+
+
+-------
+Signals
+-------
+
+.. org.freedesktop.portal.Session Signals:
+
+org.freedesktop.portal.Session::Closed
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    Closed (
+      details a{sv}
+    )
+
+
+
+Emitted when a session is closed.
+
+The content of ``details`` is specified by the interface creating the session.
+
+
+
+details
+  A key value Vardict with details about the closed session.
+
+

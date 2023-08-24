@@ -1,0 +1,179 @@
+.. _org.freedesktop.impl.portal.Print:
+
+=================================
+org.freedesktop.impl.portal.Print
+=================================
+
+-----------
+Description
+-----------
+
+.. _org.freedesktop.impl.portal.Print Description:
+
+Print portal backend interface
+
+The Print portal allows sandboxed applications to print.
+
+
+
+-------
+Methods
+-------
+
+.. org.freedesktop.impl.portal.Print Methods:
+
+org.freedesktop.impl.portal.Print.Print
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    Print (
+      IN handle o,
+      IN app_id s,
+      IN parent_window s,
+      IN title s,
+      IN fd h,
+      IN options a{sv},
+      OUT response u,
+      OUT results a{sv}
+    )
+
+
+
+Prints a file.
+
+The file is given in the form of a file descriptor open for reading.
+
+If a valid token is present in the ``options``, then this call will print
+with the settings from the Print call that the token refers to. If
+no token is present, then a print dialog will be presented to the user.
+
+Note that it is up to the portal implementation to determine how long
+it considers tokens valid.
+
+Supported keys in the ``options`` vardict:
+<variablelist>
+<varlistentry>
+<term>modal b</term>
+<listitem><para>
+Whether to make the dialog modal. Defaults to yes.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>token u</term>
+<listitem><para>
+Token that was returned by a previous `org.freedesktop.impl.portal.Print.PreparePrint`_ call.
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+
+
+handle
+  Object path for the `org.freedesktop.impl.portal.Request`_ object representing this call
+
+app_id
+  App id of the application
+
+parent_window
+  Identifier for the application window, see <link linkend="parent_window">Common Conventions</link>
+
+title
+  Title for the print dialog
+
+fd
+  File descriptor from which to read the content to print
+
+options
+  Vardict with optional further information
+
+
+
+org.freedesktop.impl.portal.Print.PreparePrint
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    PreparePrint (
+      IN handle o,
+      IN app_id s,
+      IN parent_window s,
+      IN title s,
+      IN settings a{sv},
+      IN page_setup a{sv},
+      IN options a{sv},
+      OUT response u,
+      OUT results a{sv}
+    )
+
+
+
+Presents a print dialog to the user and returns print settings
+and page setup.
+
+Supported keys in the ``options`` vardict:
+<variablelist>
+<varlistentry>
+<term>modal b</term>
+<listitem><para>
+Whether to make the dialog modal. Defaults to yes.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>accept_label s</term>
+<listitem><para>
+Label for the accept button. Mnemonic underlines are allowed.
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+The following results get returned via the ``results`` vardict:
+<variablelist>
+<varlistentry>
+<term>settings a{sv}</term>
+<listitem><para>
+Print settings as set up by the user in the print dialog.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>page-setup a{sv}</term>
+<listitem><para>
+Page setup as set up by the user in the print dialog.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>token u</term>
+<listitem><para>
+Token that can be passed to a subsequent `org.freedesktop.impl.portal.Print.Print`_ call to
+bypass the print dialog.
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+The `org.freedesktop.portal.Print.Print`_ documentation has details about
+the supported keys in settings and page-setup.
+
+
+
+handle
+  Object path for the `org.freedesktop.impl.portal.Request`_ object representing this call
+
+app_id
+  App id of the application
+
+parent_window
+  Identifier for the application window, see <link linkend="parent_window">Common Conventions</link>
+
+title
+  Title for the print dialog
+
+settings
+  Serialized print settings
+
+page_setup
+  Serialized page setup
+
+options
+  Vardict with optional further information
+
+

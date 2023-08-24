@@ -1,0 +1,597 @@
+.. _org.freedesktop.impl.portal.InputCapture:
+
+========================================
+org.freedesktop.impl.portal.InputCapture
+========================================
+
+-----------
+Description
+-----------
+
+.. _org.freedesktop.impl.portal.InputCapture Description:
+
+Capture input portal backend interface
+
+The Capture Input portal allows clients to capture input from local
+devices. This portal is mostly a 1:1 mapping of the
+`org.freedesktop.portal.InputCapture`_ portal, see that portal's
+documentation for details on methods, signals and arguments.
+
+This documentation describes version 1 of this interface.
+
+
+
+----------
+Properties
+----------
+
+.. org.freedesktop.impl.portal.InputCapture Properties:
+
+org.freedesktop.impl.portal.InputCapture:SupportedCapabilities
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    SupportedCapabilities readable u
+
+
+A bitmask of supported capabilities. This list is constant, it is not the list of
+capabilities currently available but rather which capabilies are
+implemented by the portal.
+
+Applications must ignore unknown capabilities.
+
+Currently defined types are:
+
+<simplelist>
+<member>1: KEYBOARD</member>
+<member>2: POINTER</member>
+<member>4: TOUCHSCREEN</member>
+</simplelist>
+
+
+
+
+org.freedesktop.impl.portal.InputCapture:version
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    version readable u
+
+
+
+
+-------
+Methods
+-------
+
+.. org.freedesktop.impl.portal.InputCapture Methods:
+
+org.freedesktop.impl.portal.InputCapture.CreateSession
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    CreateSession (
+      IN handle o,
+      IN session_handle o,
+      IN app_id s,
+      IN parent_window s,
+      IN options a{sv},
+      OUT response u,
+      OUT results a{sv}
+    )
+
+
+
+Create a capture input session.
+
+Supported keys in the ``options`` vardict include:
+<variablelist>
+<varlistentry>
+<term>capabilities u</term>
+<listitem><para>
+Bitmask of requested capabilities, see the
+SupportedCapabilities property. This value is required.
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+The following results get returned in the ``results`` vardict:
+<variablelist>
+<varlistentry>
+<term>session_id s</term>
+<listitem><para>
+The session id. A string representing the created capture input session.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>capabilities u</term>
+<listitem><para>
+The capabilities available to this session. This is always a
+subset of the requested capabilities.
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+
+
+handle
+  Object path for the `org.freedesktop.impl.portal.Request`_ object representing this call
+
+session_handle
+  Object path for the `org.freedesktop.impl.portal.Session`_ object representing the session being created
+
+app_id
+  App id of the application
+
+parent_window
+  Identifier for the application window, see <link linkend="parent_window">Common Conventions</link>
+
+options
+  Vardict with optional further information
+
+
+
+org.freedesktop.impl.portal.InputCapture.GetZones
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    GetZones (
+      IN handle o,
+      IN session_handle o,
+      IN app_id s,
+      IN options a{sv},
+      OUT response u,
+      OUT results a{sv}
+    )
+
+
+
+Return the current zones for this session.
+
+The following results get returned in the ``results`` vardict:
+<variablelist>
+<varlistentry>
+<term>zones a(uuii)</term>
+<listitem><para>
+An array of zones with width, height, x-offset, y-offset.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>zone_set u</term>
+<listitem><para>
+The zone_set ID required in
+`org.freedesktop.impl.portal.InputCapture.SetPointerBarriers`_.
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+
+
+handle
+  Object path for the `org.freedesktop.impl.portal.Request`_ object representing this call
+
+session_handle
+  Object path for the `org.freedesktop.impl.portal.Session`_ object representing the session
+
+app_id
+  App id of the application
+
+options
+  Vardict with optional further information
+
+
+
+org.freedesktop.impl.portal.InputCapture.SetPointerBarriers
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    SetPointerBarriers (
+      IN handle o,
+      IN session_handle o,
+      IN app_id s,
+      IN options a{sv},
+      IN barriers aa{sv},
+      IN zone_set u,
+      OUT response u,
+      OUT results a{sv}
+    )
+
+
+
+Set up zero or more pointer barriers.
+
+Supported keys in the ``barriers`` vardicts include:
+<variablelist>
+<varlistentry>
+<term>barrier_id u</term>
+<listitem><para>
+The non-zero id of this barrier. This id is used in the
+#org.freedesktop.portal.impl.InputCapture::Activated signal to inform
+which barrier triggered input capture.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>position (iiii)</term>
+<listitem><para>
+The x1/y1 x2/y2 position of the pointer barrier. A horizontal
+pointer barrier must have y1 == y2, a vertical pointer barrier
+must have x1 == x2. Diagonal pointer barriers are not supported.
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+The following results get returned in the ``results`` vardict:
+<variablelist>
+<varlistentry>
+<term>failed_barriers au</term>
+<listitem><para>
+An array of barrier_ids of pointer barriers that have been denied. The
+id matches the barrier_id of the entries in the ``barriers`` argument.
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+
+
+handle
+  Object path for the `org.freedesktop.impl.portal.Request`_ object representing this call
+
+session_handle
+  Object path for the `org.freedesktop.impl.portal.Session`_ object representing the session
+
+app_id
+  App id of the application
+
+options
+  Vardict with optional further information
+
+barriers
+  An array of vardicts, each specifying one barrier
+
+zone_set
+  A unique ID referring to the zone set
+
+
+
+org.freedesktop.impl.portal.InputCapture.Enable
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    Enable (
+      IN session_handle o,
+      IN app_id s,
+      IN options a{sv},
+      OUT response u,
+      OUT results a{sv}
+    )
+
+
+
+Enable input capturing.
+
+
+
+session_handle
+  Object path for the `org.freedesktop.impl.portal.Session`_ object representing the session
+
+app_id
+  App id of the application
+
+options
+  Vardict with optional further information
+
+
+
+org.freedesktop.impl.portal.InputCapture.Disable
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    Disable (
+      IN session_handle o,
+      IN app_id s,
+      IN options a{sv},
+      OUT response u,
+      OUT results a{sv}
+    )
+
+
+
+Disable input capturing.
+
+
+
+session_handle
+  Object path for the `org.freedesktop.impl.portal.Session`_ object representing the session
+
+app_id
+  App id of the application
+
+options
+  Vardict with optional further information
+
+
+
+org.freedesktop.impl.portal.InputCapture.Release
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    Release (
+      IN session_handle o,
+      IN app_id s,
+      IN options a{sv},
+      OUT response u,
+      OUT results a{sv}
+    )
+
+
+
+Release ongoing input capturing.
+
+Supported keys in the ``options`` vardict include:
+<variablelist>
+<varlistentry>
+<term>activation_id u</term>
+<listitem><para>
+The same activation_id number as in the
+`org.freedesktop.impl.portal.InputCapture::Activated`_ signal.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>cursor_position (dd)</term>
+<listitem><para>
+The suggested cursor position within the Zones available in
+this session.
+
+This is a suggestion to the compositor to place the cursor in
+the correct position to allow for fluent movement between virtual
+screens. The compositor is not required to honor this suggestion.
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+
+
+session_handle
+  Object path for the `org.freedesktop.impl.portal.Session`_ object representing the session
+
+app_id
+  App id of the application
+
+options
+  Vardict with optional further information
+
+
+
+org.freedesktop.impl.portal.InputCapture.ConnectToEIS
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    ConnectToEIS (
+      IN session_handle o,
+      IN app_id s,
+      IN options a{sv},
+      OUT fd h
+    )
+
+
+
+Set up the connection to an EIS implementation. Once input capturing starts,
+input events are sent via the EI protocol between the compositor and the application.
+This call must be invoked before `org.freedesktop.portal.InputCapture.Enable`_.
+
+A session only needs to set this up once, the EIS implementation is not affected by
+calls to Disable() and `org.freedesktop.portal.InputCapture.Enable`_ -
+the same context can be re-used until the session is closed.
+
+
+
+session_handle
+  Object path for the `org.freedesktop.portal.Session`_ object
+
+app_id
+  App id of the application
+
+options
+  Vardict with optional further information
+
+
+-------
+Signals
+-------
+
+.. org.freedesktop.impl.portal.InputCapture Signals:
+
+org.freedesktop.impl.portal.InputCapture::Disabled
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    Disabled (
+      session_handle o,
+      options a{sv}
+    )
+
+
+
+The Disabled signal is emitted when the application will no longer
+receive captured input. If input capturing is currently ongoing, the
+`org.freedesktop.impl.portal.InputCapture::Deactivated`_ signal is emitted
+before this signal.
+
+
+
+session_handle
+  Object path for the `org.freedesktop.impl.portal.Session`_ object representing the session
+
+options
+  Vardict with optional further information
+
+
+
+org.freedesktop.impl.portal.InputCapture::Activated
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    Activated (
+      session_handle o,
+      options a{sv}
+    )
+
+
+
+The Activated signal is emitted when input capture starts and input events
+are about to be sent to the application.
+
+This signal is only emitted after a prior call
+to `org.freedesktop.impl.portal.InputCapture.Enable`_.
+
+Supported keys in the ``options`` vardict include:
+<variablelist>
+<varlistentry>
+<term>activation_id u</term>
+<listitem><para>
+A number that can be used to synchronize with the
+transport-layer. This number has no intrinsic meaning but
+is guaranteed to increase by an unspecified amount on each call.
+
+In particular: if the compositor sends an activation_id of N as
+part of this request it will also set the sequence in EIS'
+start_emulating event the same value N on the EIS connection
+before the first event from a device is sent.
+This allows an application to have a synchronization point and
+attribute an event sequence to the portal interaction.
+
+Applications must be able to handle the activation_id number wrapping
+around. Implementations of this portal must to increase the
+activation_id number by an sensible amount to allow for wrapping
+detection.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>cursor_position (dd)</term>
+<listitem><para>
+The current cursor position. Note that this position may be
+outside the Zones available to this session - this indicates
+movement larger than a single pixel.
+
+For example, a fast movement against a barrier on the right edge
+of a screen may logically put the cursor dozens of pixels into
+the (non-existing) screen on the other side of the barrier.
+It is the application's responsibility to adjust the cursor
+position as necessary.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>barrier_id u</term>
+<listitem><para>
+The barrier id of the barrier that triggered. If the value is
+nonzero, it matches the barrier id as specified in
+`org.freedesktop.impl.portal.InputCapture.SetPointerBarriers`_.
+
+If the id is zero, the pointer barrier could be determined.
+If the id is missing, the input capture was not triggered by a
+pointer barrier.
+
+Where more than one pointer barrier are triggered by the same
+movement it is up to the compositor to choose one barrier (or use
+a barrier id of zero).
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+
+
+session_handle
+  Object path for the `org.freedesktop.impl.portal.Session`_ object representing the session
+
+options
+  Vardict with optional further information
+
+
+
+org.freedesktop.impl.portal.InputCapture::Deactivated
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    Deactivated (
+      session_handle o,
+      options a{sv}
+    )
+
+
+
+The Deactivated signal is emitted when input capture stopped and input events
+are no longer sent to the application. To prevent future input
+capture, an application must call `org.freedesktop.portal.InputCapture.Disable`_.
+
+Supported keys in the ``options`` vardict include:
+<variablelist>
+<varlistentry>
+<term>activation_id u</term>
+<listitem><para>
+The same activation_id as in the corresponding
+`org.freedesktop.impl.portal.InputCapture::Activated`_ signal.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>cursor_position (dd)</term>
+<listitem><para>
+The current cursor position. Note that this position may be
+outside the Zones available to this session - this indicates
+movement larger than a single pixel.
+
+For example, a fast movement against a barrier on the right edge
+of a screen may logically put the cursor dozens of pixels into
+the (non-existing) screen on the other side of the barrier.
+It is the application's responsibility to adjust the cursor
+position as necessary.
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+
+
+session_handle
+  Object path for the `org.freedesktop.impl.portal.Session`_ object representing the session
+
+options
+  Vardict with optional further information
+
+
+
+org.freedesktop.impl.portal.InputCapture::ZonesChanged
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    ZonesChanged (
+      session_handle o,
+      options a{sv}
+    )
+
+
+
+The ZonesChanged signal is emitted when one or more of the zones
+available **to this session** change. An application should immediately call
+`org.freedesktop.portal.InputCapture.GetZones`_ to update its state of the zones.
+
+
+
+session_handle
+  Object path for the `org.freedesktop.impl.portal.Session`_ object representing the session
+
+options
+  Vardict with optional further information
+
+

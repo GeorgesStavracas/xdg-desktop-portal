@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>org.freedesktop.portal.Location &mdash; XDG Desktop Portals xdg-desktop-portal documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="org.freedesktop.portal.MemoryMonitor" href="doc-org.freedesktop.portal.MemoryMonitor.html" />
+    <link rel="prev" title="org.freedesktop.portal.InputCapture" href="doc-org.freedesktop.portal.InputCapture.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            XDG Desktop Portals
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">For portal users and integrators</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="portals-conf.html">portals.conf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For application developers</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="common-conventions.html">Common Conventions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="portal-interfaces.html">D-Bus Interfaces for Portal Users</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Account.html">org.freedesktop.portal.Account</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Background.html">org.freedesktop.portal.Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Camera.html">org.freedesktop.portal.Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Clipboard.html">org.freedesktop.portal.Clipboard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Device.html">org.freedesktop.portal.Device</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Documents.html">org.freedesktop.portal.Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.DynamicLauncher.html">org.freedesktop.portal.DynamicLauncher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Email.html">org.freedesktop.portal.Email</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.FileChooser.html">org.freedesktop.portal.FileChooser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.FileTransfer.html">org.freedesktop.portal.FileTransfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.GameMode.html">org.freedesktop.portal.GameMode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.GlobalShortcuts.html">org.freedesktop.portal.GlobalShortcuts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Inhibit.html">org.freedesktop.portal.Inhibit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.InputCapture.html">org.freedesktop.portal.InputCapture</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">org.freedesktop.portal.Location</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#properties">Properties</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-location-version">org.freedesktop.portal.Location:version</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#methods">Methods</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-location-createsession">org.freedesktop.portal.Location.CreateSession</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-location-start">org.freedesktop.portal.Location.Start</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#signals">Signals</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-location-locationupdated">org.freedesktop.portal.Location::LocationUpdated</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.MemoryMonitor.html">org.freedesktop.portal.MemoryMonitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.NetworkMonitor.html">org.freedesktop.portal.NetworkMonitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Notification.html">org.freedesktop.portal.Notification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.OpenURI.html">org.freedesktop.portal.OpenURI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.PowerProfileMonitor.html">org.freedesktop.portal.PowerProfileMonitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Print.html">org.freedesktop.portal.Print</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.ProxyResolver.html">org.freedesktop.portal.ProxyResolver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Realtime.html">org.freedesktop.portal.Realtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.RemoteDesktop.html">org.freedesktop.portal.RemoteDesktop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Request.html">org.freedesktop.portal.Request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.ScreenCast.html">org.freedesktop.portal.ScreenCast</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Screenshot.html">org.freedesktop.portal.Screenshot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Secret.html">org.freedesktop.portal.Secret</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Session.html">org.freedesktop.portal.Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Settings.html">org.freedesktop.portal.Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Trash.html">org.freedesktop.portal.Trash</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Wallpaper.html">org.freedesktop.portal.Wallpaper</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For portal developers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="implementation-interfaces.html">D-Bus Interfaces for Portal Implementations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">XDG Desktop Portals</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="portal-interfaces.html">D-Bus Interfaces for Portal Users</a></li>
+      <li class="breadcrumb-item active">org.freedesktop.portal.Location</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/doc-org.freedesktop.portal.Location.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="org-freedesktop-portal-location">
+<span id="id1"></span><h1>org.freedesktop.portal.Location<a class="headerlink" href="#org-freedesktop-portal-location" title="Permalink to this heading"></a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
+<p id="org-freedesktop-portal-location-description">Portal for obtaining information about the location</p>
+<p>This simple interface lets sandboxed applications query basic
+information about the location.</p>
+<p>This documentation describes version 1 of this interface.</p>
+</section>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-portal-location-version">
+<h3>org.freedesktop.portal.Location:version<a class="headerlink" href="#org-freedesktop-portal-location-version" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">version</span> <span class="n">readable</span> <span class="n">u</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-portal-location-createsession">
+<h3>org.freedesktop.portal.Location.CreateSession<a class="headerlink" href="#org-freedesktop-portal-location-createsession" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CreateSession</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">OUT</span> <span class="n">handle</span> <span class="n">o</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Create a location session. A successfully created session can at
+any time be closed using <a href="#id2"><span class="problematic" id="id3">`org.freedesktop.portal.Session.Close`_</span></a>, or may
+at any time be closed by the portal implementation, which will be
+signalled via <a href="#id4"><span class="problematic" id="id5">`org.freedesktop.portal.Session::Closed`_</span></a>.</p>
+<p>Supported keys in the <code class="docutils literal notranslate"><span class="pre">options</span></code> vardict include:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;session_handle_token s&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+A string that will be used as the last element of the session handle. Must be a valid
+object path element. See the <a href="#id6"><span class="problematic" id="id7">`org.freedesktop.portal.Session`_</span></a> documentation for
+more information about the session handle.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;distance-threshold u&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+Distance threshold in meters. Default is 0.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;time-threshold u&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+Time threshold in seconds. Default is 0.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;accuracy u&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+Requested accuracy. Default is EXACT.
+Values: NONE 0, COUNTRY 1, CITY 2, NEIGHBORHOOD 3, STREET 4, EXACT 5
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<dl class="simple">
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-portal-location-start">
+<h3>org.freedesktop.portal.Location.Start<a class="headerlink" href="#org-freedesktop-portal-location-start" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Start</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">parent_window</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">OUT</span> <span class="n">handle</span> <span class="n">o</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Start the location session.
+An application can only attempt start a session once.</p>
+<p>Supported keys in the <code class="docutils literal notranslate"><span class="pre">options</span></code> vardict include:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;handle_token s&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+A string that will be used as the last element of the <code class="docutils literal notranslate"><span class="pre">handle</span></code>. Must be a valid
+object path element. See the <a href="#id8"><span class="problematic" id="id9">`org.freedesktop.portal.Request`_</span></a> documentation for
+more information about the <code class="docutils literal notranslate"><span class="pre">handle</span></code>.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id10"><span class="problematic" id="id11">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>parent_window</dt><dd><p>Identifier for the application window, see &lt;link linkend=”parent_window”&gt;Common Conventions&lt;/link&gt;</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="signals">
+<h2>Signals<a class="headerlink" href="#signals" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-portal-location-locationupdated">
+<h3>org.freedesktop.portal.Location::LocationUpdated<a class="headerlink" href="#org-freedesktop-portal-location-locationupdated" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LocationUpdated</span> <span class="p">(</span>
+  <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">location</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The LocationUpdated signal is emitted when the location has changed, as well
+as when the initial location has been determined.</p>
+<p>The following results may get returned via the <code class="docutils literal notranslate"><span class="pre">location</span></code>:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;Latitude d&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The latitude, in degrees.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;Longitude d&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The longitude, in degrees.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;Altitude d&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The altitude, in meters.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;Accuracy d&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The accuracy, in meters.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;Speed d&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The speed, in meters per second.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;Heading d&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The heading, in degrees, going clockwise. North 0, East 90, South 180, West 270.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;Timestamp (tt)&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The timestamp, as seconds and microseconds since the Unix epoch.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id12"><span class="problematic" id="id13">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>location</dt><dd><p>Vardict with the current location data</p>
+</dd>
+</dl>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="doc-org.freedesktop.portal.InputCapture.html" class="btn btn-neutral float-left" title="org.freedesktop.portal.InputCapture" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="doc-org.freedesktop.portal.MemoryMonitor.html" class="btn btn-neutral float-right" title="org.freedesktop.portal.MemoryMonitor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, XDG Desktop Portal Authors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

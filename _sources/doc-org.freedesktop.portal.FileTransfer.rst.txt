@@ -1,0 +1,224 @@
+.. _org.freedesktop.portal.FileTransfer:
+
+===================================
+org.freedesktop.portal.FileTransfer
+===================================
+
+-----------
+Description
+-----------
+
+.. _org.freedesktop.portal.FileTransfer Description:
+
+Portal for transferring files between apps
+
+The `org.freedesktop.portal.FileTransfer`_ portal operates as a middle-man
+between apps when transferring files via drag-and-drop or copy-paste,
+taking care of the necessary exporting of files in the document portal.
+
+Toolkits are expected to use the application/vnd.portal.filetransfer
+mimetype when using this mechanism for file exchange via copy-paste
+or drag-and-drop.
+
+The data that is transmitted with this mimetype should be the key
+returned by the `org.freedesktop.portal.FileTransfer.StartTransfer`_
+method. Upon receiving this mimetype, the target should call
+`org.freedesktop.portal.FileTransfer.RetrieveFiles`_ with the key,
+to obtain the list of files. The portal will take care of exporting
+files in the document store as necessary to make them accessible to the
+target.
+
+The D-Bus interface for the this portal is available under the
+bus name org.freedesktop.portal.Documents and the object path
+/org/freedesktop/portal/documents.
+
+This documentation describes version 1 of this interface.
+
+
+
+----------
+Properties
+----------
+
+.. org.freedesktop.portal.FileTransfer Properties:
+
+org.freedesktop.portal.FileTransfer:version
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    version readable u
+
+
+
+
+-------
+Methods
+-------
+
+.. org.freedesktop.portal.FileTransfer Methods:
+
+org.freedesktop.portal.FileTransfer.StartTransfer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    StartTransfer (
+      IN options a{sv},
+      OUT key s
+    )
+
+
+
+Starts a session for a file transfer.
+The caller should call `org.freedesktop.portal.FileTransfer.AddFiles`_
+at least once, to add files to this session.
+
+Another application can then call
+`org.freedesktop.portal.FileTransfer.RetrieveFiles`_ to obtain them, if
+it has the ``key``.
+
+Supported keys in the ``options`` vardict include:
+<variablelist>
+<varlistentry>
+<term>writable b</term>
+<listitem><para>
+Whether to allow the chosen application to write to the files.
+Default: False
+</para><para>
+This key only takes effect for files that need to be exported
+in the document portal for the receiving app. But it does require
+the passed-in file descriptors to be writable.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>autostop b</term>
+<listitem><para>
+Whether to stop the transfer automatically after the first
+`org.freedesktop.portal.FileTransfer.RetrieveFiles`_ call. Default: True
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+
+
+options
+  Vardict with optional further information
+
+
+
+org.freedesktop.portal.FileTransfer.AddFiles
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    AddFiles (
+      IN key s,
+      IN fds ah,
+      IN options a{sv}
+    )
+
+
+
+Adds files to a session. This method can be called multiple times on
+a given session. Note that only regular files (not directories) can
+be added.
+
+Note that the session bus often has a low limit of file descriptors per
+message (typically, 16), so you may have to send large file lists with
+multiple `org.freedesktop.portal.FileTransfer.AddFiles`_ calls.
+
+The ``options`` vardict currently has no supported entries.
+
+
+
+key
+  A key returned by `org.freedesktop.portal.FileTransfer.StartTransfer`_
+
+fds
+  File descriptors for the files to register
+
+options
+  Vardict with optional further information
+
+
+
+org.freedesktop.portal.FileTransfer.RetrieveFiles
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    RetrieveFiles (
+      IN key s,
+      IN options a{sv},
+      OUT files as
+    )
+
+
+
+Retrieves files that were previously added to the session with
+`org.freedesktop.portal.FileTransfer.AddFiles`_. The files will be
+exported in the document portal as-needed for the caller, and they
+will be writable if the owner of the session allowed it.
+
+After the first `org.freedesktop.portal.FileTransfer.RetrieveFiles`_ call,
+the session will be closed by the portal, unless ``autostop`` has been set to False.
+
+The ``options`` vardict currently has no supported entries.
+
+
+
+key
+  A key returned by `org.freedesktop.portal.FileTransfer.StartTransfer`_
+
+options
+  Vardict with optional further information
+
+
+
+org.freedesktop.portal.FileTransfer.StopTransfer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    StopTransfer (
+      IN key s
+    )
+
+
+
+Ends the transfer. Further calls to `org.freedesktop.portal.FileTransfer.AddFiles`_
+or `org.freedesktop.portal.FileTransfer.RetrieveFiles`_ for this key will return an error.
+
+
+
+key
+  A key returned by `org.freedesktop.portal.FileTransfer.StartTransfer`_
+
+
+-------
+Signals
+-------
+
+.. org.freedesktop.portal.FileTransfer Signals:
+
+org.freedesktop.portal.FileTransfer::TransferClosed
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    TransferClosed (
+      key s
+    )
+
+
+
+The TransferClosed signal is emitted to the caller of StartTransfer
+when the transfer is closed.
+
+
+
+key
+  key returned by StartTransfer
+
+

@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>org.freedesktop.impl.portal.RemoteDesktop &mdash; XDG Desktop Portals xdg-desktop-portal documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="org.freedesktop.impl.portal.Request" href="doc-org.freedesktop.impl.portal.Request.html" />
+    <link rel="prev" title="org.freedesktop.impl.portal.Print" href="doc-org.freedesktop.impl.portal.Print.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            XDG Desktop Portals
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">For portal users and integrators</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="portals-conf.html">portals.conf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For application developers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="common-conventions.html">Common Conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="portal-interfaces.html">D-Bus Interfaces for Portal Users</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For portal developers</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="implementation-interfaces.html">D-Bus Interfaces for Portal Implementations</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Access.html">org.freedesktop.impl.portal.Access</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Account.html">org.freedesktop.impl.portal.Account</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.AppChooser.html">org.freedesktop.impl.portal.AppChooser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Background.html">org.freedesktop.impl.portal.Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Clipboard.html">org.freedesktop.impl.portal.Clipboard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.DynamicLauncher.html">org.freedesktop.impl.portal.DynamicLauncher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Email.html">org.freedesktop.impl.portal.Email</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.FileChooser.html">org.freedesktop.impl.portal.FileChooser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.GlobalShortcuts.html">org.freedesktop.impl.portal.GlobalShortcuts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Inhibit.html">org.freedesktop.impl.portal.Inhibit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.InputCapture.html">org.freedesktop.impl.portal.InputCapture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Lockdown.html">org.freedesktop.impl.portal.Lockdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Notification.html">org.freedesktop.impl.portal.Notification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.PermissionStore.html">org.freedesktop.impl.portal.PermissionStore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Print.html">org.freedesktop.impl.portal.Print</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">org.freedesktop.impl.portal.RemoteDesktop</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#properties">Properties</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-remotedesktop-availabledevicetypes">org.freedesktop.impl.portal.RemoteDesktop:AvailableDeviceTypes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-remotedesktop-version">org.freedesktop.impl.portal.RemoteDesktop:version</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#methods">Methods</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-remotedesktop-createsession">org.freedesktop.impl.portal.RemoteDesktop.CreateSession</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-remotedesktop-selectdevices">org.freedesktop.impl.portal.RemoteDesktop.SelectDevices</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-remotedesktop-start">org.freedesktop.impl.portal.RemoteDesktop.Start</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-remotedesktop-notifypointermotion">org.freedesktop.impl.portal.RemoteDesktop.NotifyPointerMotion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-remotedesktop-notifypointermotionabsolute">org.freedesktop.impl.portal.RemoteDesktop.NotifyPointerMotionAbsolute</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-remotedesktop-notifypointerbutton">org.freedesktop.impl.portal.RemoteDesktop.NotifyPointerButton</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-remotedesktop-notifypointeraxis">org.freedesktop.impl.portal.RemoteDesktop.NotifyPointerAxis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-remotedesktop-notifypointeraxisdiscrete">org.freedesktop.impl.portal.RemoteDesktop.NotifyPointerAxisDiscrete</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-remotedesktop-notifykeyboardkeycode">org.freedesktop.impl.portal.RemoteDesktop.NotifyKeyboardKeycode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-remotedesktop-notifykeyboardkeysym">org.freedesktop.impl.portal.RemoteDesktop.NotifyKeyboardKeysym</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-remotedesktop-notifytouchdown">org.freedesktop.impl.portal.RemoteDesktop.NotifyTouchDown</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-remotedesktop-notifytouchmotion">org.freedesktop.impl.portal.RemoteDesktop.NotifyTouchMotion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-remotedesktop-notifytouchup">org.freedesktop.impl.portal.RemoteDesktop.NotifyTouchUp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-remotedesktop-connecttoeis">org.freedesktop.impl.portal.RemoteDesktop.ConnectToEIS</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Request.html">org.freedesktop.impl.portal.Request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.ScreenCast.html">org.freedesktop.impl.portal.ScreenCast</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Screenshot.html">org.freedesktop.impl.portal.Screenshot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Secret.html">org.freedesktop.impl.portal.Secret</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Session.html">org.freedesktop.impl.portal.Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Settings.html">org.freedesktop.impl.portal.Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Wallpaper.html">org.freedesktop.impl.portal.Wallpaper</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">XDG Desktop Portals</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="implementation-interfaces.html">D-Bus Interfaces for Portal Implementations</a></li>
+      <li class="breadcrumb-item active">org.freedesktop.impl.portal.RemoteDesktop</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/doc-org.freedesktop.impl.portal.RemoteDesktop.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="org-freedesktop-impl-portal-remotedesktop">
+<span id="id1"></span><h1>org.freedesktop.impl.portal.RemoteDesktop<a class="headerlink" href="#org-freedesktop-impl-portal-remotedesktop" title="Permalink to this heading"></a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
+<p id="org-freedesktop-impl-portal-remotedesktop-description">Remote desktop portal backend interface</p>
+<p>The Remote desktop portal allows to create remote desktop sessions.</p>
+<p>This documentation describes version 2 of this interface.</p>
+</section>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-impl-portal-remotedesktop-availabledevicetypes">
+<h3>org.freedesktop.impl.portal.RemoteDesktop:AvailableDeviceTypes<a class="headerlink" href="#org-freedesktop-impl-portal-remotedesktop-availabledevicetypes" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">AvailableDeviceTypes</span> <span class="n">readable</span> <span class="n">u</span>
+</pre></div>
+</div>
+<p>A bitmask of available source types. Currently defined types are:</p>
+<p>&lt;simplelist&gt;
+&lt;member&gt;1: KEYBOARD&lt;/member&gt;
+&lt;member&gt;2: POINTER&lt;/member&gt;
+&lt;member&gt;4: TOUCHSCREEN&lt;/member&gt;
+&lt;/simplelist&gt;</p>
+</section>
+<section id="org-freedesktop-impl-portal-remotedesktop-version">
+<h3>org.freedesktop.impl.portal.RemoteDesktop:version<a class="headerlink" href="#org-freedesktop-impl-portal-remotedesktop-version" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">version</span> <span class="n">readable</span> <span class="n">u</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-impl-portal-remotedesktop-createsession">
+<h3>org.freedesktop.impl.portal.RemoteDesktop.CreateSession<a class="headerlink" href="#org-freedesktop-impl-portal-remotedesktop-createsession" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CreateSession</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">app_id</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">OUT</span> <span class="n">response</span> <span class="n">u</span><span class="p">,</span>
+  <span class="n">OUT</span> <span class="n">results</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Create a remote desktop session.</p>
+<p>A remote desktop session is used to allow remote controlling a desktop
+session. It can also be used together with a screen cast session (see
+org.freedesktop.portal.ScreenCast), but may only be started and stopped
+with this interface.</p>
+<p>The following results get returned via the <a href="#id2"><span class="problematic" id="id3">`org.freedesktop.portal.Request::Response`_</span></a> signal:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;session s&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The session id. A string representing the created screen cast session.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<dl class="simple">
+<dt>handle</dt><dd><p>Object path for the <a href="#id4"><span class="problematic" id="id5">`org.freedesktop.impl.portal.Request`_</span></a> object representing this call</p>
+</dd>
+</dl>
+<p>session_handle</p>
+<dl class="simple">
+<dt>app_id</dt><dd><p>App id of the application</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-impl-portal-remotedesktop-selectdevices">
+<h3>org.freedesktop.impl.portal.RemoteDesktop.SelectDevices<a class="headerlink" href="#org-freedesktop-impl-portal-remotedesktop-selectdevices" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SelectDevices</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">app_id</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">OUT</span> <span class="n">response</span> <span class="n">u</span><span class="p">,</span>
+  <span class="n">OUT</span> <span class="n">results</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Configure what the devices remote desktop session should expose.</p>
+<p>Supported keys in the <code class="docutils literal notranslate"><span class="pre">options</span></code> vardict include:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;types u&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+Bitmask of what device types to request remote controlling of.
+Default is all.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;restore_data (suv)&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The data to restore from a previous session.
+&lt;/para&gt;
+&lt;para&gt;
+If the stored session cannot be restored, this value is ignored
+and the user will be prompted normally. This may happen when, for
+example, the session contains a monitor or a window that is not
+available anymore, or when the stored permissions are withdrawn.
+&lt;/para&gt;
+&lt;para&gt;
+The restore data is composed of the vendor name (e.g. “GNOME” or
+“KDE”), the version of the implementation-specific private data,
+and the implementation-specific private data itself.
+&lt;/para&gt;
+&lt;para&gt;
+This option was added in version 2 of this interface.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;persist_mode u&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+How this session should persist. Default is 0. Accepted values are:
+&lt;/para&gt;
+&lt;para&gt;
+&lt;simplelist&gt;
+&lt;member&gt;0: Do not persist (default)&lt;/member&gt;
+&lt;member&gt;1: Permissions persist as long as the application is running&lt;/member&gt;
+&lt;member&gt;2: Permissions persist until explicitly revoked&lt;/member&gt;
+&lt;/simplelist&gt;
+&lt;/para&gt;
+&lt;para&gt;
+If the permission for the session to persist is granted, “restore_data”
+will be returned via the <a href="#id6"><span class="problematic" id="id7">`org.freedesktop.portal.Request::Response`_</span></a>
+signal of the <a class="reference internal" href="#org-freedesktop-impl-portal-remotedesktop">org.freedesktop.impl.portal.RemoteDesktop</a>.Start method.
+&lt;/para&gt;
+&lt;para&gt;
+This option was added in version 2 of this interface.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<p>For available device types, see the AvailableDeviceTypes property.</p>
+<dl class="simple">
+<dt>handle</dt><dd><p>Object path for the <a href="#id8"><span class="problematic" id="id9">`org.freedesktop.impl.portal.Request`_</span></a> object representing this call</p>
+</dd>
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id10"><span class="problematic" id="id11">`org.freedesktop.impl.portal.Session`_</span></a> object representing the session</p>
+</dd>
+<dt>app_id</dt><dd><p>App id of the application</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-impl-portal-remotedesktop-start">
+<h3>org.freedesktop.impl.portal.RemoteDesktop.Start<a class="headerlink" href="#org-freedesktop-impl-portal-remotedesktop-start" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Start</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">app_id</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">parent_window</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">OUT</span> <span class="n">response</span> <span class="n">u</span><span class="p">,</span>
+  <span class="n">OUT</span> <span class="n">results</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Start the remote desktop session. This will typically result the portal
+presenting a dialog.</p>
+<p>Supported keys in the <code class="docutils literal notranslate"><span class="pre">options</span></code> vardict include:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;handle_token s&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+A string that will be used as the last element of the <code class="docutils literal notranslate"><span class="pre">handle</span></code>. Must be a valid
+object path element. See the <a href="#id12"><span class="problematic" id="id13">`org.freedesktop.portal.Request`_</span></a> documentation for
+more information about the <code class="docutils literal notranslate"><span class="pre">handle</span></code>.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<p>The following results get returned via the
+<a href="#id14"><span class="problematic" id="id15">`org.freedesktop.portal.Request::Response`_</span></a> signal:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;devices u&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+A bitmask of the devices selected by the user.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;clipboard_enabled b&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+A boolean for whether the clipboard was enabled (‘true’) or not (‘false’).
+See the <a href="#id16"><span class="problematic" id="id17">`org.freedesktop.portal.Clipboard`_</span></a> documentation for more information.
+Since version 2.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;streams a(ua{sv})&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+Equivalent to the streams entry documented in
+<a href="#id18"><span class="problematic" id="id19">`org.freedesktop.impl.portal.ScreenCast`_</span></a>.Start.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;devices u&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The device types that can be used for remote control. See the
+AvailableDeviceTypes property.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<dl class="simple">
+<dt>handle</dt><dd><p>Object path for the <a href="#id20"><span class="problematic" id="id21">`org.freedesktop.impl.portal.Request`_</span></a> object representing this call</p>
+</dd>
+</dl>
+<p>session_handle</p>
+<dl class="simple">
+<dt>app_id</dt><dd><p>App id of the application</p>
+</dd>
+<dt>parent_window</dt><dd><p>Identifier for the application window</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-impl-portal-remotedesktop-notifypointermotion">
+<h3>org.freedesktop.impl.portal.RemoteDesktop.NotifyPointerMotion<a class="headerlink" href="#org-freedesktop-impl-portal-remotedesktop-notifypointermotion" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NotifyPointerMotion</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">IN</span> <span class="n">dx</span> <span class="n">d</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">dy</span> <span class="n">d</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Notify about a new relative pointer motion event. The (dx, dy) vector
+represents the new pointer position in the streams logical coordinate
+space.</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id22"><span class="problematic" id="id23">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+<dt>dx</dt><dd><p>Relative movement on the x axis</p>
+</dd>
+<dt>dy</dt><dd><p>Relative movement on the y axis</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-impl-portal-remotedesktop-notifypointermotionabsolute">
+<h3>org.freedesktop.impl.portal.RemoteDesktop.NotifyPointerMotionAbsolute<a class="headerlink" href="#org-freedesktop-impl-portal-remotedesktop-notifypointermotionabsolute" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NotifyPointerMotionAbsolute</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">IN</span> <span class="n">stream</span> <span class="n">u</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">x</span> <span class="n">d</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">y</span> <span class="n">d</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Notify about a new absolute pointer motion event. The (x, y) position
+represents the new pointer position in the streams logical coordinate
+space (see the logical_size stream property in
+<a href="#id24"><span class="problematic" id="id25">`org.freedesktop.portal.ScreenCast`_</span></a>).</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id26"><span class="problematic" id="id27">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+<dt>stream</dt><dd><p>The PipeWire stream node the coordinate is relative to</p>
+</dd>
+<dt>x</dt><dd><p>Pointer motion x coordinate</p>
+</dd>
+<dt>y</dt><dd><p>Pointer motion y coordinate</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-impl-portal-remotedesktop-notifypointerbutton">
+<h3>org.freedesktop.impl.portal.RemoteDesktop.NotifyPointerButton<a class="headerlink" href="#org-freedesktop-impl-portal-remotedesktop-notifypointerbutton" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NotifyPointerButton</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">IN</span> <span class="n">button</span> <span class="n">i</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">state</span> <span class="n">u</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The pointer button is encoded according to Linux Evdev button codes.</p>
+<p>May only be called if POINTER access was provided after starting the
+session.</p>
+<p>Available button states:
+&lt;simplelist&gt;
+&lt;member&gt;0: Released&lt;/member&gt;
+&lt;member&gt;1: Pressed&lt;/member&gt;
+&lt;/simplelist&gt;</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id28"><span class="problematic" id="id29">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+<dt>button</dt><dd><p>The pointer button was pressed or released</p>
+</dd>
+<dt>state</dt><dd><p>The new state of the button</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-impl-portal-remotedesktop-notifypointeraxis">
+<h3>org.freedesktop.impl.portal.RemoteDesktop.NotifyPointerAxis<a class="headerlink" href="#org-freedesktop-impl-portal-remotedesktop-notifypointeraxis" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NotifyPointerAxis</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">IN</span> <span class="n">dx</span> <span class="n">d</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">dy</span> <span class="n">d</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The axis movement from a ‘smooth scroll’ device, such as a touchpad.
+When applicable, the size of the motion delta should be equivalent to
+the motion vector of a pointer motion done using the same advice.</p>
+<p>May only be called if POINTER access was provided after starting the
+session.</p>
+<p>Supported keys in the <code class="docutils literal notranslate"><span class="pre">options</span></code> vardict include:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;finish b&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+If set to true, this is the last axis event in a series, for
+example as a result of the fingers being lifted from a touchpad
+after a two-finger scroll.  Default is false.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id30"><span class="problematic" id="id31">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+<dt>dx</dt><dd><p>Relative axis movement on the x axis</p>
+</dd>
+<dt>dy</dt><dd><p>Relative axis movement on the y axis</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-impl-portal-remotedesktop-notifypointeraxisdiscrete">
+<h3>org.freedesktop.impl.portal.RemoteDesktop.NotifyPointerAxisDiscrete<a class="headerlink" href="#org-freedesktop-impl-portal-remotedesktop-notifypointeraxisdiscrete" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NotifyPointerAxisDiscrete</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">IN</span> <span class="n">axis</span> <span class="n">u</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">steps</span> <span class="n">i</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>May only be called if POINTER access was provided after starting the
+session.</p>
+<p>Available axes:
+&lt;simplelist&gt;
+&lt;member&gt;0: Vertical scroll&lt;/member&gt;
+&lt;member&gt;1: Horizontal scroll&lt;/member&gt;
+&lt;/simplelist&gt;</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id32"><span class="problematic" id="id33">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+<dt>axis</dt><dd><p>The axis that was scrolled</p>
+</dd>
+<dt>steps</dt><dd><p>The number of steps scrolled</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-impl-portal-remotedesktop-notifykeyboardkeycode">
+<h3>org.freedesktop.impl.portal.RemoteDesktop.NotifyKeyboardKeycode<a class="headerlink" href="#org-freedesktop-impl-portal-remotedesktop-notifykeyboardkeycode" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NotifyKeyboardKeycode</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">IN</span> <span class="n">keycode</span> <span class="n">i</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">state</span> <span class="n">u</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>May only be called if KEYBOARD access was provided after starting the
+session.</p>
+<p>Available keyboard keysym states:
+&lt;simplelist&gt;
+&lt;member&gt;0: Released&lt;/member&gt;
+&lt;member&gt;1: Pressed&lt;/member&gt;
+&lt;/simplelist&gt;</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id34"><span class="problematic" id="id35">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+<dt>keycode</dt><dd><p>Keyboard code that was pressed or released</p>
+</dd>
+<dt>state</dt><dd><p>New state of keyboard keysym</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-impl-portal-remotedesktop-notifykeyboardkeysym">
+<h3>org.freedesktop.impl.portal.RemoteDesktop.NotifyKeyboardKeysym<a class="headerlink" href="#org-freedesktop-impl-portal-remotedesktop-notifykeyboardkeysym" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NotifyKeyboardKeysym</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">IN</span> <span class="n">keysym</span> <span class="n">i</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">state</span> <span class="n">u</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>May only be called if KEYBOARD access was provided after starting the
+session.</p>
+<p>Available keyboard keysym states:
+&lt;simplelist&gt;
+&lt;member&gt;0: Released&lt;/member&gt;
+&lt;member&gt;1: Pressed&lt;/member&gt;
+&lt;/simplelist&gt;</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id36"><span class="problematic" id="id37">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+<dt>keysym</dt><dd><p>Keyboard symbol that was pressed or released</p>
+</dd>
+<dt>state</dt><dd><p>New state of keyboard keysym</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-impl-portal-remotedesktop-notifytouchdown">
+<h3>org.freedesktop.impl.portal.RemoteDesktop.NotifyTouchDown<a class="headerlink" href="#org-freedesktop-impl-portal-remotedesktop-notifytouchdown" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NotifyTouchDown</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">IN</span> <span class="n">stream</span> <span class="n">u</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">slot</span> <span class="n">u</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">x</span> <span class="n">d</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">y</span> <span class="n">d</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>May only be called if TOUCHSCREEN access was provided after starting the
+session.</p>
+<p>Notify about a new touch down event. The (x, y) position
+represents the new touch point position in the streams logical
+coordinate space (see the logical_size stream property in
+<a href="#id38"><span class="problematic" id="id39">`org.freedesktop.portal.ScreenCast`_</span></a>).</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id40"><span class="problematic" id="id41">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+<dt>stream</dt><dd><p>The PipeWire stream node the coordinate is relative to</p>
+</dd>
+<dt>slot</dt><dd><p>Touch slot where touch point appeared</p>
+</dd>
+<dt>x</dt><dd><p>Touch down x coordinate</p>
+</dd>
+<dt>y</dt><dd><p>Touch down y coordinate</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-impl-portal-remotedesktop-notifytouchmotion">
+<h3>org.freedesktop.impl.portal.RemoteDesktop.NotifyTouchMotion<a class="headerlink" href="#org-freedesktop-impl-portal-remotedesktop-notifytouchmotion" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NotifyTouchMotion</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">IN</span> <span class="n">stream</span> <span class="n">u</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">slot</span> <span class="n">u</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">x</span> <span class="n">d</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">y</span> <span class="n">d</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>May only be called if TOUCHSCREEN access was provided after starting the
+session.</p>
+<p>Notify about a new touch motion event. The (x, y) position
+represents where the touch point position in the streams logical
+coordinate space moved (see the logical_size stream property in
+<a href="#id42"><span class="problematic" id="id43">`org.freedesktop.portal.ScreenCast`_</span></a>).</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id44"><span class="problematic" id="id45">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+<dt>stream</dt><dd><p>The PipeWire stream node the coordinate is relative to</p>
+</dd>
+<dt>slot</dt><dd><p>Touch slot where touch point appeared</p>
+</dd>
+<dt>x</dt><dd><p>Touch motion x coordinate</p>
+</dd>
+<dt>y</dt><dd><p>Touch motion y coordinate</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-impl-portal-remotedesktop-notifytouchup">
+<h3>org.freedesktop.impl.portal.RemoteDesktop.NotifyTouchUp<a class="headerlink" href="#org-freedesktop-impl-portal-remotedesktop-notifytouchup" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NotifyTouchUp</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">IN</span> <span class="n">slot</span> <span class="n">u</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>May only be called if TOUCHSCREEN access was provided after starting the
+session.</p>
+<p>Notify about a new touch up event.</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id46"><span class="problematic" id="id47">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+<dt>slot</dt><dd><p>Touch slot where touch point appeared</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-impl-portal-remotedesktop-connecttoeis">
+<h3>org.freedesktop.impl.portal.RemoteDesktop.ConnectToEIS<a class="headerlink" href="#org-freedesktop-impl-portal-remotedesktop-connecttoeis" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ConnectToEIS</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">session_handle</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">app_id</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">options</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">},</span>
+  <span class="n">OUT</span> <span class="n">fd</span> <span class="n">h</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>sender libei context</p>
+<p>Request a connection to an EIS implementation.</p>
+<p>This method is available in version 2 of this interface.</p>
+<dl class="simple">
+<dt>session_handle</dt><dd><p>Object path for the <a href="#id48"><span class="problematic" id="id49">`org.freedesktop.portal.Session`_</span></a> object</p>
+</dd>
+<dt>app_id</dt><dd><p>App id of the application</p>
+</dd>
+<dt>options</dt><dd><p>Vardict with optional further information</p>
+</dd>
+</dl>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="doc-org.freedesktop.impl.portal.Print.html" class="btn btn-neutral float-left" title="org.freedesktop.impl.portal.Print" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="doc-org.freedesktop.impl.portal.Request.html" class="btn btn-neutral float-right" title="org.freedesktop.impl.portal.Request" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, XDG Desktop Portal Authors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,394 @@
+.. _org.freedesktop.portal.ScreenCast:
+
+=================================
+org.freedesktop.portal.ScreenCast
+=================================
+
+-----------
+Description
+-----------
+
+.. _org.freedesktop.portal.ScreenCast Description:
+
+Screen cast portal
+
+The Screen cast portal allows to create screen cast sessions.
+
+This documentation describes version 4 of this interface.
+
+
+
+----------
+Properties
+----------
+
+.. org.freedesktop.portal.ScreenCast Properties:
+
+org.freedesktop.portal.ScreenCast:AvailableSourceTypes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    AvailableSourceTypes readable u
+
+
+A bitmask of available source types. Currently defined types are:
+
+<simplelist>
+<member>1: MONITOR</member>
+<member>2: WINDOW</member>
+<member>4: VIRTUAL</member>
+</simplelist>
+
+
+
+
+org.freedesktop.portal.ScreenCast:AvailableCursorModes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    AvailableCursorModes readable u
+
+
+A bitmask of available cursor modes.
+
+Available cursor mode values:
+<simplelist>
+<member>1: Hidden. The cursor is not part of the screen cast stream.</member>
+<member>2: Embedded: The cursor is embedded as part of the stream buffers.</member>
+<member>4: Metadata: The cursor is not part of the screen cast stream, but sent as PipeWire stream metadata.</member>
+</simplelist>
+
+This property was added in version 2 of this interface.
+
+
+
+
+org.freedesktop.portal.ScreenCast:version
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    version readable u
+
+
+
+
+-------
+Methods
+-------
+
+.. org.freedesktop.portal.ScreenCast Methods:
+
+org.freedesktop.portal.ScreenCast.CreateSession
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    CreateSession (
+      IN options a{sv},
+      OUT handle o
+    )
+
+
+
+Create a screen cast session. A successfully created session can at
+any time be closed using `org.freedesktop.portal.Session.Close`_, or may
+at any time be closed by the portal implementation, which will be
+signalled via `org.freedesktop.portal.Session::Closed`_.
+
+Supported keys in the ``options`` vardict include:
+<variablelist>
+<varlistentry>
+<term>handle_token s</term>
+<listitem><para>
+A string that will be used as the last element of the ``handle``. Must be a valid
+object path element. See the `org.freedesktop.portal.Request`_ documentation for
+more information about the ``handle``.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>session_handle_token s</term>
+<listitem><para>
+A string that will be used as the last element of the session handle. Must be a valid
+object path element. See the `org.freedesktop.portal.Session`_ documentation for
+more information about the session handle.
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+The following results get returned via the `org.freedesktop.portal.Request::Response`_ signal:
+<variablelist>
+<varlistentry>
+<term>session_handle o</term>
+<listitem><para>
+The session handle. An object path for the
+`org.freedesktop.portal.Session`_ object representing the created
+session.
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+
+
+options
+  Vardict with optional further information
+
+
+
+org.freedesktop.portal.ScreenCast.SelectSources
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    SelectSources (
+      IN session_handle o,
+      IN options a{sv},
+      OUT handle o
+    )
+
+
+
+Configure what the screen cast session should record. This method must
+be called before starting the session.
+
+Passing invalid input to this method will cause the session to be
+closed. An application may only attempt to select sources once per
+session.
+
+Supported keys in the ``options`` vardict include:
+<variablelist>
+<varlistentry>
+<term>handle_token s</term>
+<listitem><para>
+A string that will be used as the last element of the ``handle``. Must be a valid
+object path element. See the `org.freedesktop.portal.Request`_ documentation for
+more information about the ``handle``.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>types u</term>
+<listitem><para>
+Bitmask of what types of content to record. Default is MONITOR.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>multiple b</term>
+<listitem><para>
+Whether to allow selecting multiple sources. Default is no.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>cursor_mode u</term>
+<listitem><para>
+Determines how the cursor will be drawn in the screen cast stream. It must be
+one of the cursor modes advertised in
+`org.freedesktop.portal.ScreenCast`_.AvailableCursorModes. Setting a cursor mode
+not advertised will cause the screen cast session to be closed. The default
+cursor mode is 'Hidden'.
+
+This option was added in version 2 of this interface.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>restore_token s</term>
+<listitem><para>
+The token to restore a previous session.
+
+If the stored session cannot be restored, this value is ignored
+and the user will be prompted normally. This may happen when, for
+example, the session contains a monitor or a window that is not
+available anymore, or when the stored permissions are withdrawn.
+
+The restore token is invalidated after using it once. To restore
+the same session again, use the new restore token sent in response
+to starting this session.
+
+Setting a restore_token is only allowed for screen cast sessions.
+Persistent remote desktop screen cast sessions can only be handled
+via the `org.freedesktop.portal.RemoteDesktop`_ interface.
+
+This option was added in version 4 of this interface.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>persist_mode u</term>
+<listitem><para>
+How this session should persist. Default is 0. Accepted values are:
+
+<simplelist>
+<member>0: Do not persist (default)</member>
+<member>1: Permissions persist as long as the application is running</member>
+<member>2: Permissions persist until explicitly revoked</member>
+</simplelist>
+
+Setting persist_mode is only allowed for screen cast sessions. Persistent
+remote desktop screen cast sessions can only be handled via the
+`org.freedesktop.portal.RemoteDesktop`_ interface.
+
+If the permission for the session to persist is granted, a restore token will
+be returned via the `org.freedesktop.portal.Request::Response`_ signal of the
+`org.freedesktop.portal.ScreenCast`_.Start method.
+
+This option was added in version 4 of this interface.
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+For available source types, see the AvailableSourceTypes property.
+
+
+
+session_handle
+  Object path for the `org.freedesktop.portal.Session`_ object
+
+options
+  Vardict with optional further information
+
+
+
+org.freedesktop.portal.ScreenCast.Start
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    Start (
+      IN session_handle o,
+      IN parent_window s,
+      IN options a{sv},
+      OUT handle o
+    )
+
+
+
+Start the screen cast session. This will typically result the portal
+presenting a dialog letting the user do the selection set up by
+`org.freedesktop.portal.ScreenCast.SelectSources`_. An application can
+only attempt start a session once.
+
+A screen cast session may only be started after having selected sources
+using `org.freedesktop.portal.ScreenCast.SelectSources`_.
+
+Supported keys in the ``options`` vardict include:
+<variablelist>
+<varlistentry>
+<term>handle_token s</term>
+<listitem><para>
+A string that will be used as the last element of the ``handle``. Must be a valid
+object path element. See the `org.freedesktop.portal.Request`_ documentation for
+more information about the ``handle``.
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+The following results get returned via the
+`org.freedesktop.portal.Request::Response`_ signal:
+<variablelist>
+<varlistentry>
+<term>streams a(ua{sv})</term>
+<listitem><para>
+An array of PipeWire streams. Each stream consists of a PipeWire
+node ID (the first element in the tuple, and a Vardict of
+properties.
+
+The array will contain a single stream if 'multiple' (see
+`org.freedesktop.portal.ScreenCast.SelectSources`_)
+was set to 'false', or at least one stream if
+'multiple' was set to 'true' as part of the
+`org.freedesktop.portal.ScreenCast.SelectSources`_ method.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>restore_token s</term>
+<listitem><para>
+The restore token. This token is a single use token that can later
+be used to restore a session. See
+`org.freedesktop.portal.ScreenCast.SelectSources`_ for details.
+
+This response option was added in version 4 of this interface.
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+Stream properties include:
+<variablelist>
+<varlistentry>
+<term>id s</term>
+<listitem><para>
+Opaque identifier. Will be unique for this stream and local to this
+session. Will persist with future sessions, if they are restored
+using a restore token. This property was added in version 4 of this
+interface. Optional.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>position (ii)</term>
+<listitem><para>
+A tuple consisting of the position (x, y) in the compositor
+coordinate space. Note that the position may not be equivalent to a
+position in a pixel coordinate space. Only available for monitor
+streams. Optional.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>size (ii)</term>
+<listitem><para>
+A tuple consisting of (width, height). The size represents the size
+of the stream as it is displayed in the compositor coordinate
+space. Note that this size may not be equivalent to a size in a
+pixel coordinate space. The size may differ from the size of the
+stream. Optional.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>source_type u</term>
+<listitem><para>
+The type of the content which is being screen casted.
+For available source types, see the AvailableSourceTypes property.
+This property was added in version 3 of this interface.
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+
+
+session_handle
+  Object path for the `org.freedesktop.portal.Session`_ object
+
+parent_window
+  Identifier for the application window, see <link linkend="parent_window">Common Conventions</link>
+
+options
+  Vardict with optional further information
+
+
+
+org.freedesktop.portal.ScreenCast.OpenPipeWireRemote
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    OpenPipeWireRemote (
+      IN session_handle o,
+      IN options a{sv},
+      OUT fd h
+    )
+
+
+
+Open a file descriptor to the PipeWire remote where the screen cast
+streams are available. The file descriptor should be used to create a
+<classname>pw_core</classname> object, by using
+<function>pw_context_connect_fd</function>. Only the screen cast stream
+nodes will be available from this PipeWire node.
+
+
+
+session_handle
+  Object path for the `org.freedesktop.portal.Session`_ object
+
+options
+  Vardict with optional further information
+
+

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>org.freedesktop.portal.Notification &mdash; XDG Desktop Portals xdg-desktop-portal documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="org.freedesktop.portal.OpenURI" href="doc-org.freedesktop.portal.OpenURI.html" />
+    <link rel="prev" title="org.freedesktop.portal.NetworkMonitor" href="doc-org.freedesktop.portal.NetworkMonitor.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            XDG Desktop Portals
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">For portal users and integrators</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="portals-conf.html">portals.conf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For application developers</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="common-conventions.html">Common Conventions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="portal-interfaces.html">D-Bus Interfaces for Portal Users</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Account.html">org.freedesktop.portal.Account</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Background.html">org.freedesktop.portal.Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Camera.html">org.freedesktop.portal.Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Clipboard.html">org.freedesktop.portal.Clipboard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Device.html">org.freedesktop.portal.Device</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Documents.html">org.freedesktop.portal.Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.DynamicLauncher.html">org.freedesktop.portal.DynamicLauncher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Email.html">org.freedesktop.portal.Email</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.FileChooser.html">org.freedesktop.portal.FileChooser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.FileTransfer.html">org.freedesktop.portal.FileTransfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.GameMode.html">org.freedesktop.portal.GameMode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.GlobalShortcuts.html">org.freedesktop.portal.GlobalShortcuts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Inhibit.html">org.freedesktop.portal.Inhibit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.InputCapture.html">org.freedesktop.portal.InputCapture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Location.html">org.freedesktop.portal.Location</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.MemoryMonitor.html">org.freedesktop.portal.MemoryMonitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.NetworkMonitor.html">org.freedesktop.portal.NetworkMonitor</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">org.freedesktop.portal.Notification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#properties">Properties</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-notification-version">org.freedesktop.portal.Notification:version</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#methods">Methods</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-notification-addnotification">org.freedesktop.portal.Notification.AddNotification</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-notification-removenotification">org.freedesktop.portal.Notification.RemoveNotification</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#signals">Signals</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-notification-actioninvoked">org.freedesktop.portal.Notification::ActionInvoked</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.OpenURI.html">org.freedesktop.portal.OpenURI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.PowerProfileMonitor.html">org.freedesktop.portal.PowerProfileMonitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Print.html">org.freedesktop.portal.Print</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.ProxyResolver.html">org.freedesktop.portal.ProxyResolver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Realtime.html">org.freedesktop.portal.Realtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.RemoteDesktop.html">org.freedesktop.portal.RemoteDesktop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Request.html">org.freedesktop.portal.Request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.ScreenCast.html">org.freedesktop.portal.ScreenCast</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Screenshot.html">org.freedesktop.portal.Screenshot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Secret.html">org.freedesktop.portal.Secret</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Session.html">org.freedesktop.portal.Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Settings.html">org.freedesktop.portal.Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Trash.html">org.freedesktop.portal.Trash</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Wallpaper.html">org.freedesktop.portal.Wallpaper</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For portal developers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="implementation-interfaces.html">D-Bus Interfaces for Portal Implementations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">XDG Desktop Portals</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="portal-interfaces.html">D-Bus Interfaces for Portal Users</a></li>
+      <li class="breadcrumb-item active">org.freedesktop.portal.Notification</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/doc-org.freedesktop.portal.Notification.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="org-freedesktop-portal-notification">
+<span id="id1"></span><h1>org.freedesktop.portal.Notification<a class="headerlink" href="#org-freedesktop-portal-notification" title="Permalink to this heading"></a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
+<p id="org-freedesktop-portal-notification-description">Portal for sending notifications</p>
+<p>This simple interface lets sandboxed applications send and withdraw
+notifications. It is not possible for the application to learn
+if the notification was actually presented to the user. Not a
+portal in the strict sense, since there is no user interaction.</p>
+<p>Note that in contrast to most other portal requests, notifications
+are expected to outlast the running application. If a user clicks
+on a notification after the application has exited, it will get
+activated again.</p>
+<p>Notifications can specify actions that can be activated by the
+user. Actions whose name starts with ‘app.’ are assumed to be
+exported and will be activated via the ActivateAction()
+method in the org.freedesktop.Application interface. Other
+actions are activated by sending the
+<a class="reference internal" href="#org-freedesktop-portal-notification-actioninvoked">org.freedesktop.portal.Notification::ActionInvoked</a> signal
+to the application.</p>
+<p>This documentation describes version 1 of this interface.</p>
+</section>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-portal-notification-version">
+<h3>org.freedesktop.portal.Notification:version<a class="headerlink" href="#org-freedesktop-portal-notification-version" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">version</span> <span class="n">readable</span> <span class="n">u</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-portal-notification-addnotification">
+<h3>org.freedesktop.portal.Notification.AddNotification<a class="headerlink" href="#org-freedesktop-portal-notification-addnotification" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">AddNotification</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="nb">id</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">notification</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Sends a notification.</p>
+<p>The ID can be used to later withdraw the notification.
+If the application reuses the same ID without withdrawing,
+the notification is replaced by the new one.</p>
+<p>The format of the serialized notification is a vardict, with
+the following supported keys, all of which are optional:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;title s&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+User-visible string to display as the title.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;body s&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+User-visible string to display as the body.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;icon v&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+Serialized icon (see g_icon_serialize()).
+&lt;/para&gt;&lt;para&gt;
+The portal only accepts serialized GThemedIcon and GBytesIcons. Both of
+these have the form (sv). For themed icons, the string is “themed”,
+and the value is an array of strings containing the icon names.
+For bytes icons, the string is “bytes”, and the value is a bytestring
+containing the icon data in png, jpeg or svg form. For historical
+reasons, it is also possible to send a simple string for themed
+icons with a single icon name.
+&lt;/para&gt;
+&lt;para&gt;
+There may be further restrictions on the supported kinds of icons.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;priority s&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The priority for the notification. Supported values: low, normal,
+high, urgent.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;default-action s&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+Name of an action that is exported by the application. This
+action will be activated when the user clicks on the notification.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;default-action-target v&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+Target parameter to send along when activating the default action.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;buttons aa{sv}&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+Array of serialized buttons to add to the notification.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<p>The format for serialized buttons is a vardict with the following supported keys:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;label s&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+User-visible label for the button. Mandatory.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;action s&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+Name of an action that is exported by the application. The action
+will be activated when the user clicks on the button. Mandatory.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;target v&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+Target parameter to send along when activating the action.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<dl class="simple">
+<dt>id</dt><dd><p>Application-provided ID for this notification</p>
+</dd>
+<dt>notification</dt><dd><p>Vardict with the serialized notification</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-portal-notification-removenotification">
+<h3>org.freedesktop.portal.Notification.RemoveNotification<a class="headerlink" href="#org-freedesktop-portal-notification-removenotification" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RemoveNotification</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="nb">id</span> <span class="n">s</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Withdraws a notification.</p>
+<dl class="simple">
+<dt>id</dt><dd><p>Application-provided ID for this notification</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="signals">
+<h2>Signals<a class="headerlink" href="#signals" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-portal-notification-actioninvoked">
+<h3>org.freedesktop.portal.Notification::ActionInvoked<a class="headerlink" href="#org-freedesktop-portal-notification-actioninvoked" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ActionInvoked</span> <span class="p">(</span>
+  <span class="nb">id</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">action</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">parameter</span> <span class="n">av</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>for the action, if one was specified</p>
+<p>Send to the application when a non-exported action is
+activated.</p>
+<dl class="simple">
+<dt>id</dt><dd><p>the application-provided ID for the notification</p>
+</dd>
+<dt>action</dt><dd><p>the name of the action</p>
+</dd>
+<dt>parameter</dt><dd><p>array which will contain the target parameter</p>
+</dd>
+</dl>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="doc-org.freedesktop.portal.NetworkMonitor.html" class="btn btn-neutral float-left" title="org.freedesktop.portal.NetworkMonitor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="doc-org.freedesktop.portal.OpenURI.html" class="btn btn-neutral float-right" title="org.freedesktop.portal.OpenURI" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, XDG Desktop Portal Authors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

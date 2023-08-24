@@ -1,0 +1,215 @@
+.. _org.freedesktop.portal.Location:
+
+===============================
+org.freedesktop.portal.Location
+===============================
+
+-----------
+Description
+-----------
+
+.. _org.freedesktop.portal.Location Description:
+
+Portal for obtaining information about the location
+
+This simple interface lets sandboxed applications query basic
+information about the location.
+
+This documentation describes version 1 of this interface.
+
+
+
+----------
+Properties
+----------
+
+.. org.freedesktop.portal.Location Properties:
+
+org.freedesktop.portal.Location:version
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    version readable u
+
+
+
+
+-------
+Methods
+-------
+
+.. org.freedesktop.portal.Location Methods:
+
+org.freedesktop.portal.Location.CreateSession
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    CreateSession (
+      IN options a{sv},
+      OUT handle o
+    )
+
+
+
+Create a location session. A successfully created session can at
+any time be closed using `org.freedesktop.portal.Session.Close`_, or may
+at any time be closed by the portal implementation, which will be
+signalled via `org.freedesktop.portal.Session::Closed`_.
+
+Supported keys in the ``options`` vardict include:
+<variablelist>
+<varlistentry>
+<term>session_handle_token s</term>
+<listitem><para>
+A string that will be used as the last element of the session handle. Must be a valid
+object path element. See the `org.freedesktop.portal.Session`_ documentation for
+more information about the session handle.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>distance-threshold u</term>
+<listitem><para>
+Distance threshold in meters. Default is 0.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>time-threshold u</term>
+<listitem><para>
+Time threshold in seconds. Default is 0.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>accuracy u</term>
+<listitem><para>
+Requested accuracy. Default is EXACT.
+Values: NONE 0, COUNTRY 1, CITY 2, NEIGHBORHOOD 3, STREET 4, EXACT 5
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+
+
+options
+  Vardict with optional further information
+
+
+
+org.freedesktop.portal.Location.Start
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    Start (
+      IN session_handle o,
+      IN parent_window s,
+      IN options a{sv},
+      OUT handle o
+    )
+
+
+
+Start the location session.
+An application can only attempt start a session once.
+
+Supported keys in the ``options`` vardict include:
+<variablelist>
+<varlistentry>
+<term>handle_token s</term>
+<listitem><para>
+A string that will be used as the last element of the ``handle``. Must be a valid
+object path element. See the `org.freedesktop.portal.Request`_ documentation for
+more information about the ``handle``.
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+
+
+session_handle
+  Object path for the `org.freedesktop.portal.Session`_ object
+
+parent_window
+  Identifier for the application window, see <link linkend="parent_window">Common Conventions</link>
+
+options
+  Vardict with optional further information
+
+
+-------
+Signals
+-------
+
+.. org.freedesktop.portal.Location Signals:
+
+org.freedesktop.portal.Location::LocationUpdated
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    LocationUpdated (
+      session_handle o,
+      location a{sv}
+    )
+
+
+
+The LocationUpdated signal is emitted when the location has changed, as well
+as when the initial location has been determined.
+
+The following results may get returned via the ``location``:
+<variablelist>
+<varlistentry>
+<term>Latitude d</term>
+<listitem><para>
+The latitude, in degrees.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Longitude d</term>
+<listitem><para>
+The longitude, in degrees.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Altitude d</term>
+<listitem><para>
+The altitude, in meters.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Accuracy d</term>
+<listitem><para>
+The accuracy, in meters.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Speed d</term>
+<listitem><para>
+The speed, in meters per second.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Heading d</term>
+<listitem><para>
+The heading, in degrees, going clockwise. North 0, East 90, South 180, West 270.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Timestamp (tt)</term>
+<listitem><para>
+The timestamp, as seconds and microseconds since the Unix epoch.
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+
+
+session_handle
+  Object path for the `org.freedesktop.portal.Session`_ object
+
+location
+  Vardict with the current location data
+
+

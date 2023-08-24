@@ -1,0 +1,104 @@
+.. _org.freedesktop.impl.portal.Lockdown:
+
+====================================
+org.freedesktop.impl.portal.Lockdown
+====================================
+
+-----------
+Description
+-----------
+
+.. _org.freedesktop.impl.portal.Lockdown Description:
+
+Lockdown backend interface
+
+This interface provides access to high-level desktop lockdown
+settings that can disable entire portals, such as disabling
+printing or location services.
+
+This is meant to be used by different portal frontends.
+
+
+
+----------
+Properties
+----------
+
+.. org.freedesktop.impl.portal.Lockdown Properties:
+
+org.freedesktop.impl.portal.Lockdown:disable-printing
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    disable-printing readwrite b
+
+
+
+
+
+org.freedesktop.impl.portal.Lockdown:disable-save-to-disk
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    disable-save-to-disk readwrite b
+
+
+
+
+
+org.freedesktop.impl.portal.Lockdown:disable-application-handlers
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    disable-application-handlers readwrite b
+
+
+
+
+
+org.freedesktop.impl.portal.Lockdown:disable-location
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    disable-location readwrite b
+
+
+
+
+
+org.freedesktop.impl.portal.Lockdown:disable-camera
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    disable-camera readwrite b
+
+
+
+
+
+org.freedesktop.impl.portal.Lockdown:disable-microphone
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    disable-microphone readwrite b
+
+
+
+
+
+org.freedesktop.impl.portal.Lockdown:disable-sound-output
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    disable-sound-output readwrite b
+
+
+
+

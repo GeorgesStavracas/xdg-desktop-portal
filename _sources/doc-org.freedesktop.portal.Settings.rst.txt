@@ -1,0 +1,181 @@
+.. _org.freedesktop.portal.Settings:
+
+===============================
+org.freedesktop.portal.Settings
+===============================
+
+-----------
+Description
+-----------
+
+.. _org.freedesktop.portal.Settings Description:
+
+Settings interface
+
+This interface provides read-only access to a small number
+of host settings required for toolkits similar to XSettings.
+It is not for general purpose settings.
+
+Currently the interface provides the following keys:
+
+<variablelist>
+<varlistentry>
+<term>org.freedesktop.appearance color-scheme u</term>
+<listitem><para>
+Indicates the system's preferred color scheme.
+Supported values are:
+<simplelist>
+<member>0: No preference</member>
+<member>1: Prefer dark appearance</member>
+<member>2: Prefer light appearance</member>
+</simplelist>
+Unknown values should be treated as 0 (no preference).
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+Implementations can provide other keys; they are entirely
+implementation details that are undocumented. If you are a
+toolkit and want to use this please open an issue.
+
+This documentation describes version 2 of this interface.
+
+
+
+----------
+Properties
+----------
+
+.. org.freedesktop.portal.Settings Properties:
+
+org.freedesktop.portal.Settings:version
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    version readable u
+
+
+
+
+-------
+Methods
+-------
+
+.. org.freedesktop.portal.Settings Methods:
+
+org.freedesktop.portal.Settings.ReadAll
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    ReadAll (
+      IN namespaces as,
+      OUT value a{sa{sv}}
+    )
+
+
+
+If ``namespaces`` is an empty array or contains an empty string it matches all. Globbing is supported but only for
+trailing sections, e.g. "org.example.*".
+
+
+
+namespaces
+  List of namespaces to filter results by, supports simple globbing explained below.
+
+
+
+org.freedesktop.portal.Settings.Read
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    Read (
+      IN namespace s,
+      IN key s,
+      OUT value v
+    )
+
+
+
+Reads a single value. Returns an error on any unknown namespace or key.
+
+Deprecated, use ReadOne instead. The value argument was intended to have
+the value inside one layer of variant as it is in ReadOne, for example
+`&lt;string "hello"&gt;` in GVariant text notation; but it is actually
+returned inside two layers of variant, for example
+`&lt;&lt;string "hello"&gt;&gt;`.
+
+
+
+namespace
+  Namespace to look up ``key`` in.
+
+key
+  The key to get.
+
+
+.. warning::
+
+   This method is deprecated.
+
+
+
+org.freedesktop.portal.Settings.ReadOne
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    ReadOne (
+      IN namespace s,
+      IN key s,
+      OUT value v
+    )
+
+
+
+Reads a single value which may be any valid DBus type. Returns an error on any unknown namespace or key.
+
+
+
+namespace
+  Namespace to look up ``key`` in.
+
+key
+  The key to get.
+
+
+-------
+Signals
+-------
+
+.. org.freedesktop.portal.Settings Signals:
+
+org.freedesktop.portal.Settings::SettingChanged
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    SettingChanged (
+      namespace s,
+      key s,
+      value v
+    )
+
+
+
+Emitted when a setting changes.
+
+
+
+namespace
+  Namespace of changed setting.
+
+key
+  The key of changed setting.
+
+value
+  The new value.
+
+

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>org.freedesktop.portal.NetworkMonitor &mdash; XDG Desktop Portals xdg-desktop-portal documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="org.freedesktop.portal.Notification" href="doc-org.freedesktop.portal.Notification.html" />
+    <link rel="prev" title="org.freedesktop.portal.MemoryMonitor" href="doc-org.freedesktop.portal.MemoryMonitor.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            XDG Desktop Portals
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">For portal users and integrators</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="portals-conf.html">portals.conf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For application developers</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="common-conventions.html">Common Conventions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="portal-interfaces.html">D-Bus Interfaces for Portal Users</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Account.html">org.freedesktop.portal.Account</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Background.html">org.freedesktop.portal.Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Camera.html">org.freedesktop.portal.Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Clipboard.html">org.freedesktop.portal.Clipboard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Device.html">org.freedesktop.portal.Device</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Documents.html">org.freedesktop.portal.Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.DynamicLauncher.html">org.freedesktop.portal.DynamicLauncher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Email.html">org.freedesktop.portal.Email</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.FileChooser.html">org.freedesktop.portal.FileChooser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.FileTransfer.html">org.freedesktop.portal.FileTransfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.GameMode.html">org.freedesktop.portal.GameMode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.GlobalShortcuts.html">org.freedesktop.portal.GlobalShortcuts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Inhibit.html">org.freedesktop.portal.Inhibit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.InputCapture.html">org.freedesktop.portal.InputCapture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Location.html">org.freedesktop.portal.Location</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.MemoryMonitor.html">org.freedesktop.portal.MemoryMonitor</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">org.freedesktop.portal.NetworkMonitor</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#properties">Properties</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-networkmonitor-version">org.freedesktop.portal.NetworkMonitor:version</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#methods">Methods</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-networkmonitor-getavailable">org.freedesktop.portal.NetworkMonitor.GetAvailable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-networkmonitor-getmetered">org.freedesktop.portal.NetworkMonitor.GetMetered</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-networkmonitor-getconnectivity">org.freedesktop.portal.NetworkMonitor.GetConnectivity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-networkmonitor-getstatus">org.freedesktop.portal.NetworkMonitor.GetStatus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-networkmonitor-canreach">org.freedesktop.portal.NetworkMonitor.CanReach</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#signals">Signals</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-portal-networkmonitor-changed">org.freedesktop.portal.NetworkMonitor::changed</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Notification.html">org.freedesktop.portal.Notification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.OpenURI.html">org.freedesktop.portal.OpenURI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.PowerProfileMonitor.html">org.freedesktop.portal.PowerProfileMonitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Print.html">org.freedesktop.portal.Print</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.ProxyResolver.html">org.freedesktop.portal.ProxyResolver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Realtime.html">org.freedesktop.portal.Realtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.RemoteDesktop.html">org.freedesktop.portal.RemoteDesktop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Request.html">org.freedesktop.portal.Request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.ScreenCast.html">org.freedesktop.portal.ScreenCast</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Screenshot.html">org.freedesktop.portal.Screenshot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Secret.html">org.freedesktop.portal.Secret</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Session.html">org.freedesktop.portal.Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Settings.html">org.freedesktop.portal.Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Trash.html">org.freedesktop.portal.Trash</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.portal.Wallpaper.html">org.freedesktop.portal.Wallpaper</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For portal developers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="implementation-interfaces.html">D-Bus Interfaces for Portal Implementations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">XDG Desktop Portals</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="portal-interfaces.html">D-Bus Interfaces for Portal Users</a></li>
+      <li class="breadcrumb-item active">org.freedesktop.portal.NetworkMonitor</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/doc-org.freedesktop.portal.NetworkMonitor.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="org-freedesktop-portal-networkmonitor">
+<span id="id1"></span><h1>org.freedesktop.portal.NetworkMonitor<a class="headerlink" href="#org-freedesktop-portal-networkmonitor" title="Permalink to this heading"></a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
+<p id="org-freedesktop-portal-networkmonitor-description">Network monitoring portal</p>
+<p>The NetworkMonitor interface provides network status information
+to sandboxed applications. It is not a portal in the strict sense,
+since it does not involve user interaction. Applications are
+expected to use this interface indirectly, via a library API
+such as the GLib GNetworkMonitor interface.</p>
+<p>This documentation describes version 3 of this interface.</p>
+</section>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-portal-networkmonitor-version">
+<h3>org.freedesktop.portal.NetworkMonitor:version<a class="headerlink" href="#org-freedesktop-portal-networkmonitor-version" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">version</span> <span class="n">readable</span> <span class="n">u</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-portal-networkmonitor-getavailable">
+<h3>org.freedesktop.portal.NetworkMonitor.GetAvailable<a class="headerlink" href="#org-freedesktop-portal-networkmonitor-getavailable" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GetAvailable</span> <span class="p">(</span>
+  <span class="n">OUT</span> <span class="n">available</span> <span class="n">b</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Returns whether the network is considered available.
+That is, whether the system as a default route for
+at least one of IPv4 or IPv6.</p>
+<p>This method was added in version 2 to replace
+the available property.</p>
+</section>
+<section id="org-freedesktop-portal-networkmonitor-getmetered">
+<h3>org.freedesktop.portal.NetworkMonitor.GetMetered<a class="headerlink" href="#org-freedesktop-portal-networkmonitor-getmetered" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GetMetered</span> <span class="p">(</span>
+  <span class="n">OUT</span> <span class="n">metered</span> <span class="n">b</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Returns whether the network is considered metered.
+That is, whether the system as traffic flowing through
+the default connection that is subject ot limitations
+by service providers.</p>
+<p>This method was added in version 2 to replace
+the metered property.</p>
+</section>
+<section id="org-freedesktop-portal-networkmonitor-getconnectivity">
+<h3>org.freedesktop.portal.NetworkMonitor.GetConnectivity<a class="headerlink" href="#org-freedesktop-portal-networkmonitor-getconnectivity" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GetConnectivity</span> <span class="p">(</span>
+  <span class="n">OUT</span> <span class="n">connectivity</span> <span class="n">u</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Returns more detailed information about the host’s network
+connectivity. The meaning of the value is:
+&lt;simplelist&gt;
+&lt;member&gt;1: Local only. The host is not configured with a route to the internet.&lt;/member&gt;
+&lt;member&gt;2: Limited connectivity. The host is connected to a network, but can’t reach the full internet.&lt;/member&gt;
+&lt;member&gt;3: Captive portal. The host is behind a captive portal and cannot reach the full internet.&lt;/member&gt;
+&lt;member&gt;4: Full network. The host connected to a network, and can reach the full internet.&lt;/member&gt;
+&lt;/simplelist&gt;</p>
+<p>This method was added in version 2 to replace
+the connectivity property.</p>
+</section>
+<section id="org-freedesktop-portal-networkmonitor-getstatus">
+<h3>org.freedesktop.portal.NetworkMonitor.GetStatus<a class="headerlink" href="#org-freedesktop-portal-networkmonitor-getstatus" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GetStatus</span> <span class="p">(</span>
+  <span class="n">OUT</span> <span class="n">status</span> <span class="n">a</span><span class="p">{</span><span class="n">sv</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Returns the three values all at once.</p>
+<p>The following results get returned via <code class="docutils literal notranslate"><span class="pre">status</span></code>:
+&lt;variablelist&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;available b&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+Whether the network is available.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;metered b&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+Whether the network is metered.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;varlistentry&gt;
+&lt;term&gt;connectivity u&lt;/term&gt;
+&lt;listitem&gt;&lt;para&gt;
+The level of connectivity.
+&lt;/para&gt;&lt;/listitem&gt;
+&lt;/varlistentry&gt;
+&lt;/variablelist&gt;</p>
+<p>This method was added in version 3 to avoid multiple round-trips.</p>
+</section>
+<section id="org-freedesktop-portal-networkmonitor-canreach">
+<h3>org.freedesktop.portal.NetworkMonitor.CanReach<a class="headerlink" href="#org-freedesktop-portal-networkmonitor-canreach" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CanReach</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">hostname</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">port</span> <span class="n">u</span><span class="p">,</span>
+  <span class="n">OUT</span> <span class="n">reachable</span> <span class="n">b</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Returns whether the given hostname is believed to be reachable.
+This method was added in version 3.</p>
+<dl class="simple">
+<dt>hostname</dt><dd><p>the hostname to reach</p>
+</dd>
+<dt>port</dt><dd><p>the port to reach</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="signals">
+<h2>Signals<a class="headerlink" href="#signals" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-portal-networkmonitor-changed">
+<h3>org.freedesktop.portal.NetworkMonitor::changed<a class="headerlink" href="#org-freedesktop-portal-networkmonitor-changed" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">changed</span> <span class="p">()</span>
+</pre></div>
+</div>
+<p>Emitted when the network configuration changes.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="doc-org.freedesktop.portal.MemoryMonitor.html" class="btn btn-neutral float-left" title="org.freedesktop.portal.MemoryMonitor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="doc-org.freedesktop.portal.Notification.html" class="btn btn-neutral float-right" title="org.freedesktop.portal.Notification" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, XDG Desktop Portal Authors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

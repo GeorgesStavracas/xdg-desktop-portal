@@ -1,0 +1,284 @@
+.. _org.freedesktop.impl.portal.Clipboard:
+
+=====================================
+org.freedesktop.impl.portal.Clipboard
+=====================================
+
+-----------
+Description
+-----------
+
+.. _org.freedesktop.impl.portal.Clipboard Description:
+
+
+
+
+
+----------
+Properties
+----------
+
+.. org.freedesktop.impl.portal.Clipboard Properties:
+
+org.freedesktop.impl.portal.Clipboard:version
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    version readable u
+
+
+
+
+-------
+Methods
+-------
+
+.. org.freedesktop.impl.portal.Clipboard Methods:
+
+org.freedesktop.impl.portal.Clipboard.RequestClipboard
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    RequestClipboard (
+      IN session_handle o,
+      IN options a{sv}
+    )
+
+
+
+Requests clipboard access for the given portal session. This request
+must be made before the session starts.
+
+This portal does NOT create it's own session. Instead, it offers existing sessions
+created from other portals the option to integrate with the clipboard. For whether
+this interface is supported for a given session, refer to that portal's documentation.
+See `org.freedesktop.portal.RemoteDesktop`_ to integrate clipboard with the
+remote desktop session.
+
+
+
+session_handle
+  Object path for the `org.freedesktop.portal.Session`_ object
+
+options
+  Vardict with optional further information
+
+
+
+org.freedesktop.impl.portal.Clipboard.SetSelection
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    SetSelection (
+      IN session_handle o,
+      IN options a{sv}
+    )
+
+
+
+Sets the owner of the clipboard formats in 'mime_types' in ``options`` to
+the session, i.e. this session has data for the advertised clipboard formats.
+
+See `org.freedesktop.portal.FileTransfer`_ to transfer files using the
+'application/vnd.portal.filetransfer' mimetype.
+
+May only be called if clipboard access was given after starting the session.
+
+Supported keys in the ``options`` vardict include:
+<variablelist>
+<varlistentry>
+<term>mime_types as</term>
+<listitem><para>
+A list of mime types that the session has clipboard content for.
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+
+
+session_handle
+  Object path for the `org.freedesktop.portal.Session`_ object
+
+options
+  Vardict with optional further information
+
+
+
+org.freedesktop.impl.portal.Clipboard.SelectionWrite
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    SelectionWrite (
+      IN session_handle o,
+      IN serial u,
+      OUT fd h
+    )
+
+
+
+Answer to 'SelectionTransfer' signal. Transfers the clipboard content for
+the given serial to the method callee via a file descriptor.
+It is the Callee that creates the file descriptor.
+
+May only be called if clipboard access was given after starting the session.
+
+
+
+session_handle
+  Object path for the `org.freedesktop.portal.Session`_ object
+
+serial
+  The serial of the request where this answer is directed towards
+
+
+
+org.freedesktop.impl.portal.Clipboard.SelectionWriteDone
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    SelectionWriteDone (
+      IN session_handle o,
+      IN serial u,
+      IN success b
+    )
+
+
+
+
+data was successful ('true') or not ('false')
+
+Notifies that the transfer of the clipboard data has either completed
+successfully, or failed.
+
+May only be called if clipboard access was given after starting the session.
+
+
+
+session_handle
+  Object path for the `org.freedesktop.portal.Session`_ object
+
+serial
+  The serial of the request where this answer is directed to
+
+success
+  A boolean which indicates whether the transfer of the clipboard
+
+
+
+org.freedesktop.impl.portal.Clipboard.SelectionRead
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    SelectionRead (
+      IN session_handle o,
+      IN mime_type s,
+      OUT fd h
+    )
+
+
+
+Transfer the clipboard content given the specified mime type to the
+method caller via a file descriptor.
+It is the callee that creates the file descriptor.
+
+May only be called if clipboard access was given after starting the session.
+
+
+
+session_handle
+  Object path for the `org.freedesktop.portal.Session`_ object
+
+mime_type
+  The mime-type string of the requested format
+
+
+-------
+Signals
+-------
+
+.. org.freedesktop.impl.portal.Clipboard Signals:
+
+org.freedesktop.impl.portal.Clipboard::SelectionOwnerChanged
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    SelectionOwnerChanged (
+      session_handle o,
+      options a{sv}
+    )
+
+
+
+Notifies the session that the clipboard selection has changed.
+
+Caller will only be notified if clipboard access was given after starting the session.
+
+Supported keys in the ``options`` vardict include:
+<variablelist>
+<varlistentry>
+<term>mime_types as</term>
+<listitem><para>
+A list of mime types that the the new clipboard selection has content for.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>session_is_owner b</term>
+<listitem><para>
+A boolean for whether the session is the owner of the clipboard selection ('true') or not ('false').
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+
+
+session_handle
+  Object path for the `org.freedesktop.portal.Session`_ object
+
+options
+  Vardict with optional further information
+
+
+
+org.freedesktop.impl.portal.Clipboard::SelectionTransfer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    SelectionTransfer (
+      session_handle o,
+      mime_type s,
+      serial u
+    )
+
+
+
+Notifies the session of a request for clipboard content of the given mime type.  The
+callee provides a serial to track the request, which any
+`org.freedesktop.portal.Clipboard.SelectionWrite`_ responses must use.
+
+Once the caller is done handling the 'SelectionTransfer' request, they must call
+`org.freedesktop.portal.Clipboard.SelectionWriteDone`_ with the corresponding request's serial
+and whether the request completed successfully. If the request is not handled, the caller should
+respond by setting 'success' to 'false'.
+
+Caller will only be notified if clipboard access was given after starting the session.
+
+
+
+session_handle
+  Object path for the `org.freedesktop.portal.Session`_ object
+
+mime_type
+  The mime-type string of the requested format
+
+serial
+  The serial used to track this transfer, to which the answer of this request must use
+
+

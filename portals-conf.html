@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>portals.conf &mdash; XDG Desktop Portals xdg-desktop-portal documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Common Conventions" href="common-conventions.html" />
+    <link rel="prev" title="Welcome to XDG Desktop Portals’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            XDG Desktop Portals
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">For portal users and integrators</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">portals.conf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#xdg-desktop-portal-configuration">XDG desktop portal configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#description">DESCRIPTION</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#file-format">FILE FORMAT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example">EXAMPLE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#environment">ENVIRONMENT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#see-also">SEE ALSO</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For application developers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="common-conventions.html">Common Conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="portal-interfaces.html">D-Bus Interfaces for Portal Users</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For portal developers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="implementation-interfaces.html">D-Bus Interfaces for Portal Implementations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">XDG Desktop Portals</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">portals.conf</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/portals-conf.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="portals-conf">
+<span id="portals-conf-5"></span><h1>portals.conf<a class="headerlink" href="#portals-conf" title="Permalink to this heading"></a></h1>
+<section id="xdg-desktop-portal-configuration">
+<h2>XDG desktop portal configuration<a class="headerlink" href="#xdg-desktop-portal-configuration" title="Permalink to this heading"></a></h2>
+<section id="description">
+<h3>DESCRIPTION<a class="headerlink" href="#description" title="Permalink to this heading"></a></h3>
+<p>xdg-desktop-portal uses a configuration file to determine which portal backend
+should be used to provide the implementation for the requested interface.
+This mechanism is very similar to the freedesktop.org specification for
+“Association between MIME types and applications” (mime-apps).</p>
+<p>Desktop environments and OS vendors should provide a default configuration
+for their chosen portal backends in
+<code class="docutils literal notranslate"><span class="pre">/usr/share/xdg-desktop-portal/DESKTOP-portals.conf</span></code>, where <code class="docutils literal notranslate"><span class="pre">DESKTOP</span></code>
+is the desktop environment name as it would appear in the
+<code class="docutils literal notranslate"><span class="pre">XDG_CURRENT_DESKTOP</span></code> environment variable, after case-folding ASCII
+upper case to lower case.
+For example, KDE should provide <code class="docutils literal notranslate"><span class="pre">/usr/share/xdg-desktop-portal/kde-portals.conf</span></code>.</p>
+<p>Users can override those defaults, or provide configuration for an otherwise
+unsupported desktop environment, by writing a file
+<code class="docutils literal notranslate"><span class="pre">~/.config/xdg-desktop-portal/portals.conf</span></code>. Users of more than one
+desktop environment can use desktop-specific filenames such as
+<code class="docutils literal notranslate"><span class="pre">kde-portals.conf</span></code> which will only be used in the appropriate desktop
+environment.</p>
+<p>Similarly, system administrators can provide a default configuration for
+all users in <code class="docutils literal notranslate"><span class="pre">/etc/xdg-desktop-portal/DESKTOP-portals.conf</span></code> or
+<code class="docutils literal notranslate"><span class="pre">/etc/xdg-desktop-portal/portals.conf</span></code>.</p>
+<p>The following locations are searched for configuration, highest precedence
+first:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">$XDG_CONFIG_HOME</span></code>, defaulting to <code class="docutils literal notranslate"><span class="pre">~/.config</span></code></p></li>
+<li><p>each directory in <code class="docutils literal notranslate"><span class="pre">$XDG_CONFIG_DIRS</span></code>, defaulting to <code class="docutils literal notranslate"><span class="pre">/etc/xdg</span></code></p></li>
+<li><p>the build-time <code class="docutils literal notranslate"><span class="pre">sysconfdir</span></code> for xdg-desktop-portal, usually <code class="docutils literal notranslate"><span class="pre">/etc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$XDG_DATA_HOME</span></code>, defaulting to <code class="docutils literal notranslate"><span class="pre">~/.local/share</span></code>
+(searched only for consistency with other specifications, writing
+configuration here is not recommended)</p></li>
+<li><p>each directory in <code class="docutils literal notranslate"><span class="pre">$XDG_DATA_DIRS</span></code>, defaulting to <code class="docutils literal notranslate"><span class="pre">/usr/local/share:/usr/share</span></code></p></li>
+<li><p>the build-time <code class="docutils literal notranslate"><span class="pre">datadir</span></code> for xdg-desktop-portal, usually <code class="docutils literal notranslate"><span class="pre">/usr/share</span></code></p></li>
+</ul>
+<p>In each of those locations, for each desktop environment name listed in the
+<code class="docutils literal notranslate"><span class="pre">XDG_CURRENT_DESKTOP</span></code> environment variable, xdg-desktop-portal checks for
+<code class="docutils literal notranslate"><span class="pre">xdg-desktop-portal/DESKTOP-portals.conf</span></code>, where <code class="docutils literal notranslate"><span class="pre">DESKTOP</span></code> is the
+desktop environment name in lower-case. If a desktop-environment-specific
+configuration file is not found, a non-desktop-specific file
+<code class="docutils literal notranslate"><span class="pre">xdg-desktop-portal/portals.conf</span></code> will be read.
+For example, if <code class="docutils literal notranslate"><span class="pre">XDG_CURRENT_DESKTOP</span></code> is set to <code class="docutils literal notranslate"><span class="pre">Budgie:GNOME</span></code>,
+then xdg-desktop-portal will look for
+<code class="docutils literal notranslate"><span class="pre">xdg-desktop-portal/budgie-portals.conf</span></code>,
+<code class="docutils literal notranslate"><span class="pre">xdg-desktop-portal/gnome-portals.conf</span></code> and
+<code class="docutils literal notranslate"><span class="pre">xdg-desktop-portal/portals.conf</span></code> in that order.</p>
+<p>Only the first configuration file found is read, and lower-precedence
+configuration files are ignored. All possible configuration files within
+one directory are tried before moving on to the next directory, so for
+example <code class="docutils literal notranslate"><span class="pre">~/.config/xdg-desktop-portal/portals.conf</span></code> is higher-precedence
+than <code class="docutils literal notranslate"><span class="pre">/usr/share/xdg-desktop-portal/kde-portals.conf</span></code>.</p>
+</section>
+<section id="file-format">
+<h3>FILE FORMAT<a class="headerlink" href="#file-format" title="Permalink to this heading"></a></h3>
+<p>The format of the portals configuration file is the same <code class="docutils literal notranslate"><span class="pre">.ini</span></code> format used by
+systemd unit files or application desktop files.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[preferred]</span></code></p>
+<blockquote>
+<div><p>The main configuration group for preferred portals.</p>
+</div></blockquote>
+<p>The following keys can be present in the <code class="docutils literal notranslate"><span class="pre">preferred</span></code> group:</p>
+<p><code class="docutils literal notranslate"><span class="pre">default</span></code> <em>(string)</em></p>
+<blockquote>
+<div><p>The default portal backend to use for every interface, unless the interface
+is listed explicitly.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">org.freedesktop.impl.portal.*</span></code> <em>(string)</em></p>
+<blockquote>
+<div><p>One of the valid portal interface implementations exposed by
+xdg-desktop-portal.</p>
+</div></blockquote>
+<p>Each key in the group contains a semi-colon separated list of portal backend
+implementation, to be searched for an implementation of the requested interface,
+in the same order as specified in the configuration file. Additionally, the
+special values <code class="docutils literal notranslate"><span class="pre">none</span></code> and <code class="docutils literal notranslate"><span class="pre">*</span></code> can be used:</p>
+<p><code class="docutils literal notranslate"><span class="pre">none</span></code></p>
+<blockquote>
+<div><p>Do not provide a portal implementation for this interface.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">*</span></code></p>
+<blockquote>
+<div><p>Use the first portal implementation found, in lexicographical order.</p>
+</div></blockquote>
+</section>
+<section id="example">
+<h3>EXAMPLE<a class="headerlink" href="#example" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">preferred</span><span class="p">]</span>
+<span class="c1"># Use xdg-desktop-portal-gtk for every portal interface...</span>
+<span class="n">default</span><span class="o">=</span><span class="n">gtk</span>
+<span class="c1"># ... except for the Screencast interface</span>
+<span class="n">org</span><span class="o">.</span><span class="n">freedesktop</span><span class="o">.</span><span class="n">impl</span><span class="o">.</span><span class="n">portal</span><span class="o">.</span><span class="n">Screencast</span><span class="o">=</span><span class="n">gnome</span>
+</pre></div>
+</div>
+</section>
+<section id="environment">
+<h3>ENVIRONMENT<a class="headerlink" href="#environment" title="Permalink to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">XDG_CURRENT_DESKTOP</span></code></p>
+<blockquote>
+<div><p>A colon-separated list of desktop environments, most specific first,
+used to choose a desktop-specific portal configuration.
+The default is an empty list.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">XDG_CONFIG_HOME</span></code></p>
+<blockquote>
+<div><p>The per-user <code class="docutils literal notranslate"><span class="pre">portals.conf</span></code> file is located in this directory. The default
+is <code class="docutils literal notranslate"><span class="pre">$HOME/.config</span></code>.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">XDG_CONFIG_DIRS</span></code></p>
+<blockquote>
+<div><p>A colon-separated list of system configuration directories and secondary
+per-user configuration directories. The default is <code class="docutils literal notranslate"><span class="pre">/etc/xdg</span></code>.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">XDG_DATA_HOME</span></code></p>
+<blockquote>
+<div><p>A per-user data directory, searched for consistency with other
+specifications. The default is <code class="docutils literal notranslate"><span class="pre">$HOME/.local/share</span></code>.</p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">XDG_DATA_DIRS</span></code></p>
+<blockquote>
+<div><p>A colon-separated list of system data directories and secondary per-user
+data directories. The default is <code class="docutils literal notranslate"><span class="pre">/usr/local/share:/usr/share</span></code>.</p>
+</div></blockquote>
+</section>
+<section id="see-also">
+<h3>SEE ALSO<a class="headerlink" href="#see-also" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html">XDG Base Directory Specification</a></p></li>
+<li><p><a class="reference external" href="https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html">XDG Desktop Entry specification</a></p></li>
+<li><p><a class="reference external" href="https://specifications.freedesktop.org/mime-apps-spec/mime-apps-spec-latest.html">XDG Association between MIME type and applications specification</a></p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to XDG Desktop Portals’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="common-conventions.html" class="btn btn-neutral float-right" title="Common Conventions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, XDG Desktop Portal Authors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Common Conventions &mdash; XDG Desktop Portals xdg-desktop-portal documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="D-Bus Interfaces for Portal Users" href="portal-interfaces.html" />
+    <link rel="prev" title="portals.conf" href="portals-conf.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            XDG Desktop Portals
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">For portal users and integrators</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="portals-conf.html">portals.conf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For application developers</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Common Conventions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#portal-requests">Portal requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sessions">Sessions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parent-window-identifiers">Parent window identifiers</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="portal-interfaces.html">D-Bus Interfaces for Portal Users</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For portal developers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="implementation-interfaces.html">D-Bus Interfaces for Portal Implementations</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">XDG Desktop Portals</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Common Conventions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/common-conventions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="common-conventions">
+<h1>Common Conventions<a class="headerlink" href="#common-conventions" title="Permalink to this heading"></a></h1>
+<p>Requests made via portal interfaces generally involve user interaction, and
+dialogs that can stay open for a long time. Therefore portal APIs don’t just use
+async method calls (which time out after at most 25 seconds), but instead return
+results via a Response signal on Request objects.</p>
+<p>Portal APIs don’t use properties very much. This is partially because we need to
+be careful about the flow of information, and partially because it would be
+unexpected to have a dialog appear when you just set a property.</p>
+<section id="portal-requests">
+<h2>Portal requests<a class="headerlink" href="#portal-requests" title="Permalink to this heading"></a></h2>
+<p>The general flow of the portal API is that the application makes a portal
+request, the portal replies to that method call with a handle (i.e. object path)
+to Request object that corresponds to the request. The object is exported on the
+bus and stays alive as long as the user interaction lasts. When the user
+interaction is over, the portal sends a Response signal back to the application
+with the results from the interaction, if any.</p>
+<p>To avoid a race condition between the caller subscribing to the signal after
+receiving the reply for the method call and the signal getting emitted, a
+convention for Request object paths has been established that allows the caller
+to subscribe to the signal before making the method call.</p>
+</section>
+<section id="sessions">
+<h2>Sessions<a class="headerlink" href="#sessions" title="Permalink to this heading"></a></h2>
+<p>Some portal requests are connected to each other and need to be used in
+sequence. The pattern we use in such cases is a Session object. Just like
+Requests, Sessions are represented by an object path, that is returned by the
+initial CreateSession call. Subsequent calls take the object path of the session
+they operate on as an argument.</p>
+<p>Sessions can be ended from the application side by calling the Close() method.
+They can also be closed from the service side, in which case the ::Closed signal
+is emitted to inform the application.</p>
+</section>
+<section id="parent-window-identifiers">
+<h2>Parent window identifiers<a class="headerlink" href="#parent-window-identifiers" title="Permalink to this heading"></a></h2>
+<p>Most portals interact with the user by showing dialogs. These dialogs should
+generally be placed on top of the application window that triggered them. To
+arrange this, the compositor needs to know about the application window. Many
+portal requests expect a “parent_window” string argument for this reason.</p>
+<p>Under X11, the “parent_window” argument should have the form “x11:XID”, where
+XID is the XID of the application window in hexadecimal notation.</p>
+<p>Under Wayland, it should have the form “wayland:HANDLE”, where HANDLE is a
+surface handle obtained with the <a class="reference external" href="https://github.com/wayland-project/wayland-protocols/blob/master/unstable/xdg-foreign/xdg-foreign-unstable-v2.xml">xdg_foreign</a>
+protocol.</p>
+<p>For other windowing systems, or if you don’t have a suitable handle, just pass
+an empty string for “parent_window”.</p>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="portals-conf.html" class="btn btn-neutral float-left" title="portals.conf" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="portal-interfaces.html" class="btn btn-neutral float-right" title="D-Bus Interfaces for Portal Users" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, XDG Desktop Portal Authors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

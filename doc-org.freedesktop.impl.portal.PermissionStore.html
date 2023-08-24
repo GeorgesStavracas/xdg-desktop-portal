@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>org.freedesktop.impl.portal.PermissionStore &mdash; XDG Desktop Portals xdg-desktop-portal documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="org.freedesktop.impl.portal.Print" href="doc-org.freedesktop.impl.portal.Print.html" />
+    <link rel="prev" title="org.freedesktop.impl.portal.Notification" href="doc-org.freedesktop.impl.portal.Notification.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            XDG Desktop Portals
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">For portal users and integrators</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="portals-conf.html">portals.conf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For application developers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="common-conventions.html">Common Conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="portal-interfaces.html">D-Bus Interfaces for Portal Users</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For portal developers</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="implementation-interfaces.html">D-Bus Interfaces for Portal Implementations</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Access.html">org.freedesktop.impl.portal.Access</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Account.html">org.freedesktop.impl.portal.Account</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.AppChooser.html">org.freedesktop.impl.portal.AppChooser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Background.html">org.freedesktop.impl.portal.Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Clipboard.html">org.freedesktop.impl.portal.Clipboard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.DynamicLauncher.html">org.freedesktop.impl.portal.DynamicLauncher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Email.html">org.freedesktop.impl.portal.Email</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.FileChooser.html">org.freedesktop.impl.portal.FileChooser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.GlobalShortcuts.html">org.freedesktop.impl.portal.GlobalShortcuts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Inhibit.html">org.freedesktop.impl.portal.Inhibit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.InputCapture.html">org.freedesktop.impl.portal.InputCapture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Lockdown.html">org.freedesktop.impl.portal.Lockdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Notification.html">org.freedesktop.impl.portal.Notification</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">org.freedesktop.impl.portal.PermissionStore</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#properties">Properties</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-permissionstore-version">org.freedesktop.impl.portal.PermissionStore:version</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#methods">Methods</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-permissionstore-lookup">org.freedesktop.impl.portal.PermissionStore.Lookup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-permissionstore-set">org.freedesktop.impl.portal.PermissionStore.Set</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-permissionstore-delete">org.freedesktop.impl.portal.PermissionStore.Delete</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-permissionstore-setvalue">org.freedesktop.impl.portal.PermissionStore.SetValue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-permissionstore-setpermission">org.freedesktop.impl.portal.PermissionStore.SetPermission</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-permissionstore-deletepermission">org.freedesktop.impl.portal.PermissionStore.DeletePermission</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-permissionstore-getpermission">org.freedesktop.impl.portal.PermissionStore.GetPermission</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-permissionstore-list">org.freedesktop.impl.portal.PermissionStore.List</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#signals">Signals</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-permissionstore-changed">org.freedesktop.impl.portal.PermissionStore::Changed</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Print.html">org.freedesktop.impl.portal.Print</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.RemoteDesktop.html">org.freedesktop.impl.portal.RemoteDesktop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Request.html">org.freedesktop.impl.portal.Request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.ScreenCast.html">org.freedesktop.impl.portal.ScreenCast</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Screenshot.html">org.freedesktop.impl.portal.Screenshot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Secret.html">org.freedesktop.impl.portal.Secret</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Session.html">org.freedesktop.impl.portal.Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Settings.html">org.freedesktop.impl.portal.Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Wallpaper.html">org.freedesktop.impl.portal.Wallpaper</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">XDG Desktop Portals</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="implementation-interfaces.html">D-Bus Interfaces for Portal Implementations</a></li>
+      <li class="breadcrumb-item active">org.freedesktop.impl.portal.PermissionStore</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/doc-org.freedesktop.impl.portal.PermissionStore.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="org-freedesktop-impl-portal-permissionstore">
+<span id="id1"></span><h1>org.freedesktop.impl.portal.PermissionStore<a class="headerlink" href="#org-freedesktop-impl-portal-permissionstore" title="Permalink to this heading"></a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
+<p id="org-freedesktop-impl-portal-permissionstore-description">Database to store permissions</p>
+<p>The permission store can be used by portals to store permissions
+that sandboxed applications have to various resources, such as
+files outside the sandbox.</p>
+<p>Since the resources managed by portals can be varied, the permission
+store is fairly free-form: there can be multiple tables; resources are
+identified by an ID, as are applications, and permissions are stored as
+string arrays. None of these strings are interpreted by the permission
+store in any way.</p>
+<p>In addition, the permission store allows to associate extra data
+(in the form of a GVariant) with each resource.</p>
+<p>This document describes version 2 of the permission store interface.</p>
+</section>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-impl-portal-permissionstore-version">
+<h3>org.freedesktop.impl.portal.PermissionStore:version<a class="headerlink" href="#org-freedesktop-impl-portal-permissionstore-version" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">version</span> <span class="n">readable</span> <span class="n">u</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-impl-portal-permissionstore-lookup">
+<h3>org.freedesktop.impl.portal.PermissionStore.Lookup<a class="headerlink" href="#org-freedesktop-impl-portal-permissionstore-lookup" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Lookup</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">table</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="nb">id</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">OUT</span> <span class="n">permissions</span> <span class="n">a</span><span class="p">{</span><span class="n">sas</span><span class="p">},</span>
+  <span class="n">OUT</span> <span class="n">data</span> <span class="n">v</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Looks up the entry for a resource in one of the tables and returns
+all associated application permissions and data.</p>
+<dl class="simple">
+<dt>table</dt><dd><p>the name of the table to use</p>
+</dd>
+<dt>id</dt><dd><p>the resource ID to look up</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-impl-portal-permissionstore-set">
+<h3>org.freedesktop.impl.portal.PermissionStore.Set<a class="headerlink" href="#org-freedesktop-impl-portal-permissionstore-set" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Set</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">table</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">create</span> <span class="n">b</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="nb">id</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">app_permissions</span> <span class="n">a</span><span class="p">{</span><span class="n">sas</span><span class="p">},</span>
+  <span class="n">IN</span> <span class="n">data</span> <span class="n">v</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Writes the entry for a resource in the given table.</p>
+<dl class="simple">
+<dt>table</dt><dd><p>the name of the table to use</p>
+</dd>
+<dt>create</dt><dd><p>whether to create the table if it does not exist</p>
+</dd>
+<dt>id</dt><dd><p>the resource ID to modify</p>
+</dd>
+<dt>app_permissions</dt><dd><p>map from application ID to permissions</p>
+</dd>
+<dt>data</dt><dd><p>data to associate with the resource</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-impl-portal-permissionstore-delete">
+<h3>org.freedesktop.impl.portal.PermissionStore.Delete<a class="headerlink" href="#org-freedesktop-impl-portal-permissionstore-delete" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Delete</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">table</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="nb">id</span> <span class="n">s</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Removes the entry for a resource in the given table.</p>
+<dl class="simple">
+<dt>table</dt><dd><p>the name of the table to use</p>
+</dd>
+<dt>id</dt><dd><p>the resource ID to delete</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-impl-portal-permissionstore-setvalue">
+<h3>org.freedesktop.impl.portal.PermissionStore.SetValue<a class="headerlink" href="#org-freedesktop-impl-portal-permissionstore-setvalue" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SetValue</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">table</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">create</span> <span class="n">b</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="nb">id</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">data</span> <span class="n">v</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Sets just the data for a resource in the given table.</p>
+<dl class="simple">
+<dt>table</dt><dd><p>the name of the table to use</p>
+</dd>
+<dt>create</dt><dd><p>whether to create the table if it does not exist</p>
+</dd>
+<dt>id</dt><dd><p>the resource ID to modify</p>
+</dd>
+<dt>data</dt><dd><p>data to associate with the resource</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-impl-portal-permissionstore-setpermission">
+<h3>org.freedesktop.impl.portal.PermissionStore.SetPermission<a class="headerlink" href="#org-freedesktop-impl-portal-permissionstore-setpermission" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SetPermission</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">table</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">create</span> <span class="n">b</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="nb">id</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">app</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">permissions</span> <span class="k">as</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Sets the permissions for an application and a resource
+in the given table.</p>
+<dl class="simple">
+<dt>table</dt><dd><p>the name of the table to use</p>
+</dd>
+<dt>create</dt><dd><p>whether to create the table if it does not exist</p>
+</dd>
+<dt>id</dt><dd><p>the resource ID to modify</p>
+</dd>
+<dt>app</dt><dd><p>the application ID to modify</p>
+</dd>
+<dt>permissions</dt><dd><p>permissions to set</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-impl-portal-permissionstore-deletepermission">
+<h3>org.freedesktop.impl.portal.PermissionStore.DeletePermission<a class="headerlink" href="#org-freedesktop-impl-portal-permissionstore-deletepermission" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DeletePermission</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">table</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="nb">id</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">app</span> <span class="n">s</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Removes the entry for an application and a resource
+in the given table.</p>
+<p>This method was added in version 2.</p>
+<dl class="simple">
+<dt>table</dt><dd><p>the name of the table to use</p>
+</dd>
+<dt>id</dt><dd><p>the resource ID to modify</p>
+</dd>
+<dt>app</dt><dd><p>the application ID to modify</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-impl-portal-permissionstore-getpermission">
+<h3>org.freedesktop.impl.portal.PermissionStore.GetPermission<a class="headerlink" href="#org-freedesktop-impl-portal-permissionstore-getpermission" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GetPermission</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">table</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="nb">id</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">IN</span> <span class="n">app</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">OUT</span> <span class="n">permissions</span> <span class="k">as</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Gets the entry for an application and a resource
+in the given table.</p>
+<dl class="simple">
+<dt>table</dt><dd><p>the name of the table to use</p>
+</dd>
+<dt>id</dt><dd><p>the resource ID to modify</p>
+</dd>
+<dt>app</dt><dd><p>the application ID to modify</p>
+</dd>
+</dl>
+</section>
+<section id="org-freedesktop-impl-portal-permissionstore-list">
+<h3>org.freedesktop.impl.portal.PermissionStore.List<a class="headerlink" href="#org-freedesktop-impl-portal-permissionstore-list" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">List</span> <span class="p">(</span>
+  <span class="n">IN</span> <span class="n">table</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">OUT</span> <span class="n">ids</span> <span class="k">as</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Returns all the resources that are present in the table.</p>
+<dl class="simple">
+<dt>table</dt><dd><p>the name of the table to use</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="signals">
+<h2>Signals<a class="headerlink" href="#signals" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-impl-portal-permissionstore-changed">
+<h3>org.freedesktop.impl.portal.PermissionStore::Changed<a class="headerlink" href="#org-freedesktop-impl-portal-permissionstore-changed" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Changed</span> <span class="p">(</span>
+  <span class="n">table</span> <span class="n">s</span><span class="p">,</span>
+  <span class="nb">id</span> <span class="n">s</span><span class="p">,</span>
+  <span class="n">deleted</span> <span class="n">b</span><span class="p">,</span>
+  <span class="n">data</span> <span class="n">v</span><span class="p">,</span>
+  <span class="n">permissions</span> <span class="n">a</span><span class="p">{</span><span class="n">sas</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The Changed signal is emitted when the entry for a resource
+is modified or deleted. If the entry was deleted, then <code class="docutils literal notranslate"><span class="pre">data</span></code>
+and <code class="docutils literal notranslate"><span class="pre">permissions</span></code> contain the last values that were found in the
+database. If the entry was modified, they contain the new values.</p>
+<dl class="simple">
+<dt>table</dt><dd><p>the name of the table</p>
+</dd>
+</dl>
+<p>id</p>
+<dl class="simple">
+<dt>deleted</dt><dd><p>whether the resource was deleted</p>
+</dd>
+<dt>data</dt><dd><p>the data that is associated the resource</p>
+</dd>
+<dt>permissions</dt><dd><p>the permissions that are associated with the resource</p>
+</dd>
+</dl>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="doc-org.freedesktop.impl.portal.Notification.html" class="btn btn-neutral float-left" title="org.freedesktop.impl.portal.Notification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="doc-org.freedesktop.impl.portal.Print.html" class="btn btn-neutral float-right" title="org.freedesktop.impl.portal.Print" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, XDG Desktop Portal Authors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

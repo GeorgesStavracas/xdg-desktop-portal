@@ -1,0 +1,53 @@
+.. _org.freedesktop.portal.PowerProfileMonitor:
+
+==========================================
+org.freedesktop.portal.PowerProfileMonitor
+==========================================
+
+-----------
+Description
+-----------
+
+.. _org.freedesktop.portal.PowerProfileMonitor Description:
+
+Power Profile monitoring portal
+
+The Power Profile Monitor interface provides information about the
+user-selected system-wide power profile, to sandboxed applications.
+It is not a portal in the strict sense, since it does not involve
+user interaction. Applications are expected to use this interface
+indirectly, via a library API such as the GLib GPowerProfileMonitor interface.
+
+This documentation describes version 1 of this interface.
+
+
+
+----------
+Properties
+----------
+
+.. org.freedesktop.portal.PowerProfileMonitor Properties:
+
+org.freedesktop.portal.PowerProfileMonitor:power-saver-enabled
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    power-saver-enabled readable b
+
+
+Whether “Power Saver” mode is enabled on the system.
+
+
+
+
+org.freedesktop.portal.PowerProfileMonitor:version
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    version readable u
+
+
+
+

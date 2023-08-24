@@ -1,0 +1,78 @@
+.. _org.freedesktop.impl.portal.Session:
+
+===================================
+org.freedesktop.impl.portal.Session
+===================================
+
+-----------
+Description
+-----------
+
+.. _org.freedesktop.impl.portal.Session Description:
+
+Shared session interface
+
+The Session interface is shared by all portal interfaces that involve
+long lived sessions.  When a method that creates a session is called, the
+reply will include a session handle (i.e. object path) for a Session
+object, which will stay alive for the duration of the session.
+
+The portal can abort the interaction by calling
+`org.freedesktop.impl.portal.Session.Close`_ on the Session object.
+
+
+
+----------
+Properties
+----------
+
+.. org.freedesktop.impl.portal.Session Properties:
+
+org.freedesktop.impl.portal.Session:version
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    version readable u
+
+
+
+
+-------
+Methods
+-------
+
+.. org.freedesktop.impl.portal.Session Methods:
+
+org.freedesktop.impl.portal.Session.Close
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    Close ()
+
+
+Close the session.
+
+
+
+
+-------
+Signals
+-------
+
+.. org.freedesktop.impl.portal.Session Signals:
+
+org.freedesktop.impl.portal.Session::Closed
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    Closed ()
+
+
+The session was closed by the portal implementation.
+
+
+
+

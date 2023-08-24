@@ -1,0 +1,151 @@
+.. _org.freedesktop.impl.portal.Screenshot:
+
+======================================
+org.freedesktop.impl.portal.Screenshot
+======================================
+
+-----------
+Description
+-----------
+
+.. _org.freedesktop.impl.portal.Screenshot Description:
+
+Screenshot portal backend interface
+
+This screenshot portal lets sandboxed applications request a screenshot.
+
+This documentation describes version 2 of this interface.
+
+
+
+----------
+Properties
+----------
+
+.. org.freedesktop.impl.portal.Screenshot Properties:
+
+org.freedesktop.impl.portal.Screenshot:version
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    version readable u
+
+
+
+
+-------
+Methods
+-------
+
+.. org.freedesktop.impl.portal.Screenshot Methods:
+
+org.freedesktop.impl.portal.Screenshot.Screenshot
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    Screenshot (
+      IN handle o,
+      IN app_id s,
+      IN parent_window s,
+      IN options a{sv},
+      OUT response u,
+      OUT results a{sv}
+    )
+
+
+
+Takes a screenshot.
+
+Supported keys in the ``options`` vardict include:
+<variablelist>
+<varlistentry>
+<term>modal b</term>
+<listitem><para>
+Whether the dialog should be modal. Defaults to yes.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>interactive b</term>
+<listitem><para>
+Hint whether the dialog should offer customization before taking a screenshot.
+Defaults to no.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>permission_store_checked b</term>
+<listitem><para>
+Hint whether the screenshot portal has checked the 'screenshot' permission for
+the requesting app. Defaults to no.
+
+This option was added in version 2 of this interface.
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+The following results get returned via the ``results`` vardict:
+<variablelist>
+<varlistentry>
+<term>uri s</term>
+<listitem><para>A string containing the uri of the screenshot.</para></listitem>
+</varlistentry>
+</variablelist>
+
+
+
+handle
+  Object path for the `org.freedesktop.impl.portal.Request`_ object representing this call
+
+app_id
+  App id of the application
+
+parent_window
+  Identifier for the application window, see <link linkend="parent_window">Common Conventions</link>
+
+options
+  Vardict with optional further information
+
+
+
+org.freedesktop.impl.portal.Screenshot.PickColor
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+    PickColor (
+      IN handle o,
+      IN app_id s,
+      IN parent_window s,
+      IN options a{sv},
+      OUT response u,
+      OUT results a{sv}
+    )
+
+
+
+Obtains the value of a pixel.
+
+The following results get returned via the ``results`` vardict:
+<variablelist>
+<varlistentry>
+<term>color (ddd)</term>
+<listitem><para>The color, rgb values in the range [0,1].</para></listitem>
+</varlistentry>
+</variablelist>
+
+
+
+handle
+  Object path for the `org.freedesktop.impl.portal.Request`_ object representing this call
+
+app_id
+  App id of the application
+
+parent_window
+  Identifier for the application window, see <link linkend="parent_window">Common Conventions</link>
+
+options
+  Vardict with optional further information
+
+

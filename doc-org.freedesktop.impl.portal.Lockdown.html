@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>org.freedesktop.impl.portal.Lockdown &mdash; XDG Desktop Portals xdg-desktop-portal documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="org.freedesktop.impl.portal.Notification" href="doc-org.freedesktop.impl.portal.Notification.html" />
+    <link rel="prev" title="org.freedesktop.impl.portal.InputCapture" href="doc-org.freedesktop.impl.portal.InputCapture.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            XDG Desktop Portals
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">For portal users and integrators</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="portals-conf.html">portals.conf</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For application developers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="common-conventions.html">Common Conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="portal-interfaces.html">D-Bus Interfaces for Portal Users</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For portal developers</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="implementation-interfaces.html">D-Bus Interfaces for Portal Implementations</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Access.html">org.freedesktop.impl.portal.Access</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Account.html">org.freedesktop.impl.portal.Account</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.AppChooser.html">org.freedesktop.impl.portal.AppChooser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Background.html">org.freedesktop.impl.portal.Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Clipboard.html">org.freedesktop.impl.portal.Clipboard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.DynamicLauncher.html">org.freedesktop.impl.portal.DynamicLauncher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Email.html">org.freedesktop.impl.portal.Email</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.FileChooser.html">org.freedesktop.impl.portal.FileChooser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.GlobalShortcuts.html">org.freedesktop.impl.portal.GlobalShortcuts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Inhibit.html">org.freedesktop.impl.portal.Inhibit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.InputCapture.html">org.freedesktop.impl.portal.InputCapture</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">org.freedesktop.impl.portal.Lockdown</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#properties">Properties</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-lockdown-disable-printing">org.freedesktop.impl.portal.Lockdown:disable-printing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-lockdown-disable-save-to-disk">org.freedesktop.impl.portal.Lockdown:disable-save-to-disk</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-lockdown-disable-application-handlers">org.freedesktop.impl.portal.Lockdown:disable-application-handlers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-lockdown-disable-location">org.freedesktop.impl.portal.Lockdown:disable-location</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-lockdown-disable-camera">org.freedesktop.impl.portal.Lockdown:disable-camera</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-lockdown-disable-microphone">org.freedesktop.impl.portal.Lockdown:disable-microphone</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#org-freedesktop-impl-portal-lockdown-disable-sound-output">org.freedesktop.impl.portal.Lockdown:disable-sound-output</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Notification.html">org.freedesktop.impl.portal.Notification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.PermissionStore.html">org.freedesktop.impl.portal.PermissionStore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Print.html">org.freedesktop.impl.portal.Print</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.RemoteDesktop.html">org.freedesktop.impl.portal.RemoteDesktop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Request.html">org.freedesktop.impl.portal.Request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.ScreenCast.html">org.freedesktop.impl.portal.ScreenCast</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Screenshot.html">org.freedesktop.impl.portal.Screenshot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Secret.html">org.freedesktop.impl.portal.Secret</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Session.html">org.freedesktop.impl.portal.Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Settings.html">org.freedesktop.impl.portal.Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doc-org.freedesktop.impl.portal.Wallpaper.html">org.freedesktop.impl.portal.Wallpaper</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">XDG Desktop Portals</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="implementation-interfaces.html">D-Bus Interfaces for Portal Implementations</a></li>
+      <li class="breadcrumb-item active">org.freedesktop.impl.portal.Lockdown</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/doc-org.freedesktop.impl.portal.Lockdown.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="org-freedesktop-impl-portal-lockdown">
+<span id="id1"></span><h1>org.freedesktop.impl.portal.Lockdown<a class="headerlink" href="#org-freedesktop-impl-portal-lockdown" title="Permalink to this heading"></a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this heading"></a></h2>
+<p id="org-freedesktop-impl-portal-lockdown-description">Lockdown backend interface</p>
+<p>This interface provides access to high-level desktop lockdown
+settings that can disable entire portals, such as disabling
+printing or location services.</p>
+<p>This is meant to be used by different portal frontends.</p>
+</section>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Permalink to this heading"></a></h2>
+<section id="org-freedesktop-impl-portal-lockdown-disable-printing">
+<h3>org.freedesktop.impl.portal.Lockdown:disable-printing<a class="headerlink" href="#org-freedesktop-impl-portal-lockdown-disable-printing" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">disable</span><span class="o">-</span><span class="n">printing</span> <span class="n">readwrite</span> <span class="n">b</span>
+</pre></div>
+</div>
+</section>
+<section id="org-freedesktop-impl-portal-lockdown-disable-save-to-disk">
+<h3>org.freedesktop.impl.portal.Lockdown:disable-save-to-disk<a class="headerlink" href="#org-freedesktop-impl-portal-lockdown-disable-save-to-disk" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">disable</span><span class="o">-</span><span class="n">save</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">disk</span> <span class="n">readwrite</span> <span class="n">b</span>
+</pre></div>
+</div>
+</section>
+<section id="org-freedesktop-impl-portal-lockdown-disable-application-handlers">
+<h3>org.freedesktop.impl.portal.Lockdown:disable-application-handlers<a class="headerlink" href="#org-freedesktop-impl-portal-lockdown-disable-application-handlers" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">disable</span><span class="o">-</span><span class="n">application</span><span class="o">-</span><span class="n">handlers</span> <span class="n">readwrite</span> <span class="n">b</span>
+</pre></div>
+</div>
+</section>
+<section id="org-freedesktop-impl-portal-lockdown-disable-location">
+<h3>org.freedesktop.impl.portal.Lockdown:disable-location<a class="headerlink" href="#org-freedesktop-impl-portal-lockdown-disable-location" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">disable</span><span class="o">-</span><span class="n">location</span> <span class="n">readwrite</span> <span class="n">b</span>
+</pre></div>
+</div>
+</section>
+<section id="org-freedesktop-impl-portal-lockdown-disable-camera">
+<h3>org.freedesktop.impl.portal.Lockdown:disable-camera<a class="headerlink" href="#org-freedesktop-impl-portal-lockdown-disable-camera" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">disable</span><span class="o">-</span><span class="n">camera</span> <span class="n">readwrite</span> <span class="n">b</span>
+</pre></div>
+</div>
+</section>
+<section id="org-freedesktop-impl-portal-lockdown-disable-microphone">
+<h3>org.freedesktop.impl.portal.Lockdown:disable-microphone<a class="headerlink" href="#org-freedesktop-impl-portal-lockdown-disable-microphone" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">disable</span><span class="o">-</span><span class="n">microphone</span> <span class="n">readwrite</span> <span class="n">b</span>
+</pre></div>
+</div>
+</section>
+<section id="org-freedesktop-impl-portal-lockdown-disable-sound-output">
+<h3>org.freedesktop.impl.portal.Lockdown:disable-sound-output<a class="headerlink" href="#org-freedesktop-impl-portal-lockdown-disable-sound-output" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">disable</span><span class="o">-</span><span class="n">sound</span><span class="o">-</span><span class="n">output</span> <span class="n">readwrite</span> <span class="n">b</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="doc-org.freedesktop.impl.portal.InputCapture.html" class="btn btn-neutral float-left" title="org.freedesktop.impl.portal.InputCapture" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="doc-org.freedesktop.impl.portal.Notification.html" class="btn btn-neutral float-right" title="org.freedesktop.impl.portal.Notification" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, XDG Desktop Portal Authors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
