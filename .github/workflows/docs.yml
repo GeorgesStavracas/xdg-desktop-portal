@@ -4,9 +4,9 @@ on: [push, pull_request]
 
 jobs:
   docs:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     container:
-      image: ubuntu:22.04
+      image: ubuntu:23.04
     steps:
       - name: Install dependencies
         env:
