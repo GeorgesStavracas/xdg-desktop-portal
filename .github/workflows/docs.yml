@@ -55,18 +55,10 @@ jobs:
           meson setup builddir -Ddocumentation=enabled
           meson compile -C builddir
 
-      - name: Prepare docs
-        working-directory: builddir/doc
-        run: |
-          mkdir published-docs
-          mv portal-docs.html ./published-docs/index.html
-          mv redirect.html ./published-docs/portal-docs.html
-          mv docbook.css ./published-docs
-
       - name: Deploy docs
         uses: peaceiris/actions-gh-pages@v3
         if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main') }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./builddir/doc/published-docs/
+          publish_dir: ./builddir/doc/html/
           destination_dir: ./
