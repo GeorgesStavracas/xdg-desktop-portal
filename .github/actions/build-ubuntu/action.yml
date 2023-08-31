@@ -1,0 +1,136 @@
+name: Set Up and Build xdg-desktop-portal
+description: Builds xdg-desktop-portal on Ubuntu
+
+inputs:
+  ubuntuVersion:
+    description: Ubuntu version
+    required: true
+  compiler:
+    description: Compiler to build xdg-desktop-portal with
+    required: true
+  sanitizer:
+    description: Sanitizer to build xdg-desktop-portal
+    default: 'address'
+  buildDirectory:
+    description: Build directory
+    required: true
+  runCommand:
+    description: Prefix to root commands
+    required: true
+  runAsUserCommand:
+    description: Prefix to user commands
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Prepare environment
+      id: env-setup
+      shell: bash
+      run: |
+        echo "cflags=$BASE_CFLAGS" >> $GITHUB_OUTPUT;
+
+    - name: Prepare container
+      shell: bash
+      run: |
+        docker run --name ${{ matrix.compiler }}-build-container \
+          --tty --device /dev/fuse --cap-add SYS_ADMIN \
+          --security-opt apparmor:unconfined \
+          -v $(pwd):/src \
+          -e DEBIAN_FRONTEND \
+          -e DEBCONF_NONINTERACTIVE_SEEN=true \
+          -e TERM=dumb \
+          -e MAKEFLAGS="-j $(getconf _NPROCESSORS_ONLN)" \
+          -e CC -e CFLAGS="${{ steps.env-setup.outputs.cflags }}" \
+          -d ubuntu:${{ inputs.ubuntuVersion }} sleep infinity
+
+    - name: Install dependencies
+      shell: bash
+      run: |
+        ${{ inputs.runCommand }} apt-get update --quiet
+        ${{ inputs.runCommand }} apt-get upgrade --quiet -y
+        ${{ inputs.runCommand }} apt-get install --quiet -y --no-install-recommends \
+          ${{ inputs.compiler }} \
+          desktop-file-utils \
+          fuse3 \
+          gettext \
+          git \
+          gnome-desktop-testing \
+          gtk-doc-tools \
+          libcap2-bin \
+          libflatpak-dev \
+          libfontconfig1-dev \
+          libfuse3-dev \
+          libgdk-pixbuf-2.0-dev \
+          libgeoclue-2-dev \
+          libglib2.0-dev \
+          libjson-glib-dev \
+          libpipewire-0.3-dev \
+          libportal-dev \
+          libsystemd-dev \
+          libtool \
+          llvm \
+          python3-gi \
+          shared-mime-info
+
+    - name: Install dependencies for meson
+      shell: bash
+      run: |
+        ${{ inputs.runCommand }} apt-get install --quiet -y --no-install-recommends \
+          meson
+
+    - name: Install dependencies for the pytest test suite
+      shell: bash
+      run: |
+        ${{ inputs.runCommand }} apt-get install --quiet -y --no-install-recommends \
+          python3-pytest python3-pytest-xdist python3-dbusmock python3-dbus
+
+    - name: Setup test user
+      shell: bash
+      run: |
+        ${{ inputs.runCommand }} adduser --disabled-password --gecos "" tester
+        ${{ inputs.runCommand }} chown tester:tester . -R
+
+    - name: Build xdg-desktop-portal
+      shell: bash
+      run: |
+        ${{ inputs.runCommand }} ${{ inputs.runAsUserCommand }} meson setup ${{ inputs.buildDirectory }} $MESON_OPTIONS
+        ${{ inputs.runCommand }} ${{ inputs.runAsUserCommand }} meson compile -C ${{ inputs.buildDirectory }}
+      env:
+        MESON_OPTIONS: -Dinstalled-tests=true -Dpytest=enabled -Db_sanitize=${{ inputs.sanitizer }}
+
+    - name: Run xdg-desktop-portal tests
+      shell: bash
+      run: ${{ inputs.runCommand }} ${{ inputs.runAsUserCommand }} timeout --signal=KILL -v ${TESTS_TIMEOUT}m meson test -C ${{ inputs.buildDirectory }}
+      env:
+        TEST_IN_CI: 1
+        G_MESSAGES_DEBUG: all
+        ASAN_OPTIONS: detect_leaks=0 # Right now we're not fully clean, but this gets us use-after-free etc
+
+    - name: Install xdg-desktop-portal
+      shell: bash
+      run: ${{ inputs.runCommand }} meson install -C ${{ inputs.buildDirectory }}
+
+    - name: Run xdg-desktop-portal installed-tests
+      shell: bash
+      run: |
+        test -n "$(${{ inputs.runCommand }} ${{ inputs.runAsUserCommand }} gnome-desktop-testing-runner -l xdg-desktop-portal)"
+        ${{ inputs.runCommand }} ${{ inputs.runAsUserCommand }} \
+          env TEST_INSTALLED_IN_CI=1 XDG_DATA_DIRS=/src/tests/share/:$XDG_DATA_DIRS \
+          gnome-desktop-testing-runner --report-directory installed-test-logs/ \
+            -t $((TESTS_TIMEOUT * 60)) xdg-desktop-portal
+      env:
+        G_MESSAGES_DEBUG: all
+        TEST_IN_CI: 1
+        XDG_DATA_DIRS: /usr/local/share:/usr/share
+        ASAN_OPTIONS: detect_leaks=0 # Right now we're not fully clean, but this gets us use-after-free etc
+
+    - name: Create dist tarball
+      shell: bash
+      run: |
+        ${{ inputs.runCommand }} ${{ inputs.runAsUserCommand }} ls -la
+        ${{ inputs.runCommand }} ${{ inputs.runAsUserCommand }} timeout --signal=KILL -v ${TESTS_TIMEOUT}m meson dist -C ${{ inputs.buildDirectory }}
+      env:
+        TEST_IN_CI: 1
+        G_MESSAGES_DEBUG: all
+        ASAN_OPTIONS: detect_leaks=0 # Right now we're not fully clean, but this gets us use-after-free etc
