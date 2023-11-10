@@ -59,9 +59,55 @@ get_permissions_sync (const char *app_id,
   return g_strdupv (permissions);
 }
 
+const char *
+permissions_to_str (Permission permission)
+{
+  switch (permission)
+    {
+    case PERMISSION_UNSET:
+      return NULL;
+    case PERMISSION_NO:
+      return "no";
+    case PERMISSION_YES:
+      return "yes";
+    case PERMISSION_ASK:
+      return "ask";
+    default:
+      g_assert_not_reached ();
+    }
+
+  return NULL;
+}
+
+static const char * const permission_string_map[] = {
+  [PERMISSION_UNSET] = NULL,
+  [PERMISSION_NO] = "no",
+  [PERMISSION_YES] = "yes",
+  [PERMISSION_ASK] = "ask",
+};
+
+gboolean
+str_to_permission (const char *permission,
+                   Permission *out_permission)
+{
+  for (size_t i = 0; i < G_N_ELEMENTS (permission_string_map); i++)
+    {
+      if (g_strcmp0 (permission, permission_string_map[i]) == 0)
+        {
+          if (out_permission)
+            *out_permission = (Permission) i;
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
 Permission
 permissions_to_tristate (char **permissions)
 {
+  Permission permission;
+
   if (g_strv_length ((char **)permissions) != 1)
     {
       g_autofree char *a = g_strjoinv (" ", (char **)permissions);
@@ -69,47 +115,23 @@ permissions_to_tristate (char **permissions)
       return PERMISSION_UNSET;
     }
 
-  if (strcmp (permissions[0], "yes") == 0)
-    return PERMISSION_YES;
-  else if (strcmp (permissions[0], "no") == 0)
-    return PERMISSION_NO;
-  else if (strcmp (permissions[0], "ask") == 0)
-    return PERMISSION_ASK;
-  else
+  if (!str_to_permission (permissions[0], &permission))
     {
       g_autofree char *a = g_strjoinv (" ", (char **)permissions);
       g_warning ("Wrong permission format, ignoring (%s)", a);
+      return PERMISSION_UNSET;
     }
 
-  return PERMISSION_UNSET;
+  return permission;
 }
 
 char **
 permissions_from_tristate (Permission permission)
 {
-  char *permission_str;
   char **permissions;
 
-  switch (permission)
-    {
-    case PERMISSION_UNSET:
-      return NULL;
-    case PERMISSION_NO:
-      permission_str = g_strdup ("no");
-      break;
-    case PERMISSION_YES:
-      permission_str = g_strdup ("yes");
-      break;
-    case PERMISSION_ASK:
-      permission_str = g_strdup ("ask");
-      break;
-    default:
-      g_assert_not_reached ();
-      break;
-    }
-
   permissions = g_new0 (char *, 2);
-  permissions[0] = permission_str;
+  permissions[0] = g_strdup (permissions_to_str (permission));
 
   return permissions;
 }

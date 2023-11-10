@@ -49,6 +49,10 @@ void set_permission_sync (const char *app_id,
                           const char *id,
                           Permission permission);
 
+const char * permissions_to_str (Permission permission);
+gboolean str_to_permission (const char *permission,
+                            Permission *out_permission);
+
 char **permissions_from_tristate (Permission permission);
 
 Permission permissions_to_tristate (char **permissions);
