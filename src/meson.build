@@ -96,6 +96,7 @@ xdg_desktop_portal_sources = files(
   'trash.c',
   'wallpaper.c',
   'xdg-desktop-portal.c',
+  'xdp-devices-filter.c',
 )
 
 xdg_desktop_portal_sources += [
@@ -131,9 +132,12 @@ common_deps = [
   json_glib_dep,
 ]
 
+if gudev_dep.found()
+  common_deps += gudev_dep
+endif
+
 xdg_desktop_portal_deps = common_deps + [
   geoclue_dep,
-  gudev_dep,
   pipewire_dep,
   libsystemd_dep,
 ]
@@ -195,6 +199,16 @@ executable(
   'xdg-desktop-portal-rewrite-launchers',
   'rewrite-launchers.c',
   'glib-backports.c',
+  dependencies: common_deps,
+  include_directories: common_includes,
+  install: true,
+  install_dir: libexecdir,
+)
+
+executable(
+  'xdg-desktop-portal-devices',
+  'xdg-desktop-portal-devices.c',
+  'xdp-devices-filter.c',
   dependencies: common_deps,
   include_directories: common_includes,
   install: true,

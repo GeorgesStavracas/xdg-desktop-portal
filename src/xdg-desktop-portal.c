@@ -186,6 +186,9 @@ export_portal_implementation (GDBusConnection *connection,
 static void
 peer_died_cb (const char *name)
 {
+#ifdef HAVE_GUDEV
+  usb_revoke_devices_from_sender (name);
+#endif
   close_requests_for_sender (name);
   close_sessions_for_sender (name);
   xdp_session_persistence_delete_transient_permissions_for_sender (name);

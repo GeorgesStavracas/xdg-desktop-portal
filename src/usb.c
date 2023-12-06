@@ -45,6 +45,7 @@
 #include "permissions.h"
 #include "session.h"
 #include "xdp-dbus.h"
+#include "xdp-devices-filter.h"
 #include "xdp-impl-dbus.h"
 #include "xdp-utils.h"
 
@@ -60,23 +61,12 @@
 #define UDEV_PROPERTY_VENDOR_ID "ID_VENDOR_ID"
 #define UDEV_PROPERTY_VENDOR_NAME "ID_VENDOR_ENC"
 
-/*
- * TODO:
- *
- * General
- *  - Extend to other device types?
- *
- * Permission
- *  - Monitor permission store for permission changes
+/* TODO:
  *
  * AccessDevices()
  *  - Check if backend is returning appropriate device ids
  *  - Check if backend is not increasing permissions
- *  - Rename to AcquireDevices()
  *  - Save allowed devices in the permission store
- *
- * ReleaseDevices()
- *  - Implement
  */
 
 typedef struct _Usb
@@ -85,7 +75,9 @@ typedef struct _Usb
 
   GHashTable *ids_to_devices;
   GHashTable *syspaths_to_ids;
+
   GHashTable *sessions;
+  GHashTable *sender_infos;
 
   GUdevClient *gudev_client;
 } Usb;
@@ -122,299 +114,32 @@ hex_to_uint16 (const char *property,
   return TRUE;
 }
 
-
-/* UsbDeviceCandidate */
-
-typedef struct
-{
-  uint16_t vendor_id;
-  uint16_t product_id;
-} UsbDeviceCandidate;
-
-static void
-usb_device_candidate_free (gpointer data)
-{
-  UsbDeviceCandidate *candidate = (UsbDeviceCandidate *) data;
-
-  if (!data)
-    return;
-
-  g_clear_pointer (&candidate, g_free);
-}
-
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (UsbDeviceCandidate, usb_device_candidate_free)
-
-static GPtrArray *
-usb_device_candidates_from_variant (GVariant *variant)
-{
-  g_autoptr(GPtrArray) candidates = NULL;
-  GVariantIter iter;
-  GVariant *device;
-  size_t n_candidates;
-
-  g_assert (variant != NULL);
-  g_assert (g_variant_check_format_string (variant, "aa{sv}", FALSE));
-
-  g_variant_iter_init (&iter, variant);
-
-  n_candidates = g_variant_iter_n_children (&iter);
-  g_assert (n_candidates > 0);
-
-  g_message ("%lu candidate(s):", n_candidates);
-
-  candidates = g_ptr_array_new_full (n_candidates, usb_device_candidate_free);
-
-  while ((device = g_variant_iter_next_value (&iter)) != NULL)
-    {
-      g_autoptr(UsbDeviceCandidate) candidate = NULL;
-
-      g_assert (g_variant_check_format_string (device, "a{sv}", TRUE));
-
-      candidate = g_new0 (UsbDeviceCandidate, 1);
-      g_variant_lookup (device, "vendor_id", "q", &candidate->vendor_id);
-      g_variant_lookup (device, "product_id", "q", &candidate->product_id);
-
-      g_message ("    product: %u, vendor: %u", (uint32_t) candidate->product_id, (uint32_t) candidate->vendor_id);
-
-      g_ptr_array_add (candidates, g_steal_pointer (&candidate));
-
-      g_clear_pointer (&device, g_variant_unref);
-    }
-
-  return g_steal_pointer (&candidates);
-}
-
-static GVariant *
-usb_device_candidates_to_variant (GPtrArray *candidates)
-{
-  GVariantBuilder builder;
-
-  g_assert (candidates != NULL);
-
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("aa{sv}"));
-
-  for (size_t i = 0; i < candidates->len; i++)
-    {
-      UsbDeviceCandidate *candidate = g_ptr_array_index (candidates, i);
-
-      g_assert (candidate != NULL);
-
-      g_variant_builder_open (&builder, G_VARIANT_TYPE ("a{sv}"));
-      g_variant_builder_add (&builder, "{sv}", "vendor_id", g_variant_new_uint16 (candidate->vendor_id));
-      g_variant_builder_add (&builder, "{sv}", "product_id", g_variant_new_uint16 (candidate->product_id));
-      g_variant_builder_close (&builder);
-    }
-
-  return g_variant_builder_end (&builder);
-}
-
-static GPtrArray *
-get_usb_device_candidates_from_options (GVariantDict *options)
-{
-  g_autoptr(GVariantIter) devices_variant_iter = NULL;
-  g_autoptr(GPtrArray) candidates = NULL;
-  GVariant *device;
-  size_t n_devices;
-
-  if (!g_variant_dict_lookup (options, "devices", "aa{sv}", &devices_variant_iter))
-    return NULL;
-
-  n_devices = g_variant_iter_n_children (devices_variant_iter);
-  g_assert (n_devices > 0);
-
-  candidates = g_ptr_array_new_full (n_devices, usb_device_candidate_free);
-
-  while ((device = g_variant_iter_next_value (devices_variant_iter)) != NULL)
-    {
-      g_autoptr(UsbDeviceCandidate) usb_device = NULL;
-      g_auto(GVariantDict) dict;
-
-      g_assert (g_variant_check_format_string (device, "a{sv}", TRUE));
-
-      g_variant_dict_init (&dict, device);
-      g_assert (g_variant_dict_contains (&dict, "vendor_id"));
-      g_assert (g_variant_dict_contains (&dict, "product_id"));
-
-      usb_device = g_new0 (UsbDeviceCandidate, 1);
-      g_variant_dict_lookup (&dict, "vendor_id", "q", &usb_device->vendor_id);
-      g_variant_dict_lookup (&dict, "product_id", "q", &usb_device->product_id);
-
-      g_ptr_array_add (candidates, g_steal_pointer (&usb_device));
-
-      g_clear_pointer (&device, g_variant_unref);
-    }
-
-  return g_steal_pointer (&candidates);
-}
-
-
-/* UsbAccessMode */
-
-typedef enum
-{
-  USB_ACCESS_MODE_LISTED_DEVICES,
-  USB_ACCESS_MODE_ALL,
-} UsbAccessMode;
-
-static const char * const usb_access_mode_string_map[] = {
-  [USB_ACCESS_MODE_LISTED_DEVICES] = "listed-devices",
-  [USB_ACCESS_MODE_ALL] = "all",
-};
-
 static gboolean
-str_to_access_mode (const char    *permission,
-                    UsbAccessMode *out_access_mode)
+is_gudev_device_suitable (GUdevDevice *device)
 {
-  for (size_t i = 0; i < G_N_ELEMENTS (usb_access_mode_string_map); i++)
-    {
-      if (g_strcmp0 (permission, usb_access_mode_string_map[i]) == 0)
-        {
-          if (out_access_mode)
-            *out_access_mode = (UsbAccessMode) i;
-          return TRUE;
-        }
-    }
+  const char *device_file = NULL;
 
-  return FALSE;
+  g_assert (g_strcmp0 (g_udev_device_get_subsystem (device), "usb") == 0);
+
+  device_file = g_udev_device_get_device_file (device);
+  if (!device_file)
+    return FALSE;
+
+  return TRUE;
 }
 
-const char *
-access_mode_to_str (UsbAccessMode access_mode)
-{
-  g_assert (access_mode >= USB_ACCESS_MODE_LISTED_DEVICES);
-  g_assert (access_mode <= USB_ACCESS_MODE_ALL);
-
-  return usb_access_mode_string_map[access_mode];
-}
-
-
-/* UsbPermission */
-
-typedef struct
-{
-  Permission permission;
-  UsbAccessMode access_mode;
-  GPtrArray *candidates;
-} UsbPermission;
-
-static void
-usb_permission_free (gpointer data)
-{
-  UsbPermission *usb_permission = (UsbPermission *) data;
-
-  if (!data)
-    return;
-
-  g_clear_pointer (&usb_permission->candidates, g_ptr_array_unref);
-  g_clear_pointer (&usb_permission, g_free);
-}
-
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (UsbPermission, usb_permission_free)
-
-static UsbPermission *
-strv_to_usb_permission (char **permissions)
-{
-  g_autoptr(UsbPermission) usb_permission = NULL;
-  g_autoptr(GVariant) candidates = NULL;
-  g_autoptr(GVariant) data = NULL;
-  UsbAccessMode access_mode;
-  Permission permission;
-
-  if (g_strv_length ((char **)permissions) != 3 ||
-      !str_to_permission (permissions[0], &permission) ||
-      !str_to_access_mode (permissions[1], &access_mode) ||
-      (data = g_variant_parse (G_VARIANT_TYPE_VARDICT, permissions[2], NULL, NULL, NULL)) == NULL)
-    {
-      g_autofree char *a = g_strjoinv (" ", (char **)permissions);
-      g_warning ("Wrong USB permission format, ignoring (%s)", a);
-      return FALSE;
-    }
-
-  usb_permission = g_new (UsbPermission, 1);
-  usb_permission->permission = permission;
-  usb_permission->access_mode = access_mode;
-
-  g_message ("Stored data: %s", g_variant_print (data, TRUE));
-
-  if (g_variant_lookup (data, "candidates", "@aa{sv}", &candidates))
-    usb_permission->candidates = usb_device_candidates_from_variant (candidates);
-
-  /* TODO: allowed devices */
-
-  return g_steal_pointer (&usb_permission);
-}
-
-static UsbPermission *
-get_usb_permission_sync (const char *app_id)
-{
-  g_auto(GStrv) permissions = NULL;
-
-  permissions = get_permissions_sync (app_id, PERMISSION_TABLE, PERMISSION_ID);
-  if (!permissions)
-    return NULL;
-
-  return strv_to_usb_permission (permissions);
-}
-
-static void
-set_usb_permission_sync (const char    *app_id,
-                         UsbPermission *usb_permission)
-{
-  g_autoptr(GPtrArray) strv = NULL;
-  g_autoptr(GVariant) candidates_variant = NULL;
-  g_autoptr(GVariant) data = NULL;
-  GVariantDict data_dict;
-
-  candidates_variant = usb_device_candidates_to_variant (usb_permission->candidates);
-  g_assert (candidates_variant != NULL);
-
-  g_variant_dict_init (&data_dict, NULL);
-  g_variant_dict_insert (&data_dict, "candidates", "@aa{sv}", g_steal_pointer (&candidates_variant));
-  data = g_variant_dict_end (&data_dict);
-  g_assert (data != NULL);
-
-  strv = g_ptr_array_new_full (4, g_free);
-  g_ptr_array_add (strv, g_strdup (permissions_to_str (usb_permission->permission)));
-  g_ptr_array_add (strv, g_strdup (access_mode_to_str (usb_permission->access_mode)));
-  g_ptr_array_add (strv, g_variant_print (data, TRUE));
-  g_ptr_array_add (strv, NULL);
-
-  set_permissions_sync (app_id,
-                        PERMISSION_TABLE,
-                        PERMISSION_ID,
-                        (const char * const *) strv->pdata);
-}
-
-static UsbPermission *
-usb_permission_new (Permission     permission,
-                    UsbAccessMode  access_mode,
-                    GPtrArray     *candidates)
-{
-  g_autoptr(UsbPermission) usb_permission = NULL;
-
-  g_assert (access_mode != USB_ACCESS_MODE_LISTED_DEVICES || candidates != NULL);
-
-  usb_permission = g_new (UsbPermission, 1);
-  usb_permission->permission = permission;
-  usb_permission->access_mode = access_mode;
-  usb_permission->candidates = g_ptr_array_ref (candidates);
-
-  return g_steal_pointer (&usb_permission);
-}
-
-
-/* UsbDeviceAccessData */
+/* UsbDeviceAcquireData */
 
 typedef struct
 {
   char *device_id;
   gboolean writable;
-} UsbDeviceAccessData;
+} UsbDeviceAcquireData;
 
 static void
-usb_device_access_data_free (gpointer data)
+usb_device_acquire_data_free (gpointer data)
 {
-  UsbDeviceAccessData *access_data = (UsbDeviceAccessData *) data;
+  UsbDeviceAcquireData *access_data = (UsbDeviceAcquireData *) data;
 
   if (!access_data)
     return;
@@ -423,29 +148,171 @@ usb_device_access_data_free (gpointer data)
   g_clear_pointer (&access_data, g_free);
 }
 
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (UsbDeviceAccessData, usb_device_access_data_free)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (UsbDeviceAcquireData, usb_device_acquire_data_free)
 
+/* UsbOwnedDevice */
 
-/* UsbSession */
+typedef struct _UsbOwnedDevice
+{
+  char *sender_name;
+  char *device_id;
+  int fd;
+} UsbOwnedDevice;
+
+static void
+usb_owned_device_free (gpointer data)
+{
+  UsbOwnedDevice *owned_device = (UsbOwnedDevice *) data;
+
+  if (!owned_device)
+    return;
+
+  if (owned_device->fd != -1)
+    {
+      close (owned_device->fd);
+      owned_device->fd = -1;
+    }
+
+  g_clear_pointer (&owned_device->device_id, g_free);
+  g_clear_pointer (&owned_device, g_free);
+}
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (UsbOwnedDevice, usb_owned_device_free)
+
+/* UsbSenderInfo */
 
 typedef enum
 {
-  USB_SESSION_STATE_DEFAULT,
-  USB_SESSION_STATE_ACCESSING_DEVICES,
-} UsbSessionState;
+  USB_SENDER_STATE_DEFAULT,
+  USB_SENDER_STATE_ACQUIRING_DEVICES,
+} UsbSenderState;
+
+typedef struct _UsbSenderInfo
+{
+  gatomicrefcount ref_count;
+
+  char *sender_name;
+
+  UsbSenderState sender_state;
+  GPtrArray *filters;
+  GPtrArray *acquiring_devices;
+
+  GHashTable *owned_devices; /* device id → UsbOwnedDevices */
+} UsbSenderInfo;
+
+static void
+usb_sender_info_unref (gpointer data)
+{
+  UsbSenderInfo *sender_info = (UsbSenderInfo *) data;
+
+  if (g_atomic_ref_count_dec (&sender_info->ref_count))
+    {
+      g_clear_pointer (&sender_info->sender_name, g_free);
+      g_clear_pointer (&sender_info->owned_devices, g_hash_table_destroy);
+      g_clear_pointer (&sender_info->filters, g_ptr_array_unref);
+      g_clear_pointer (&sender_info, g_free);
+    }
+}
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (UsbSenderInfo, usb_sender_info_unref)
+
+static UsbSenderInfo *
+usb_sender_info_new (const char *sender_name,
+                     const char *app_id)
+{
+  g_autoptr(UsbSenderInfo) sender_info = NULL;
+
+  sender_info = g_new0 (UsbSenderInfo, 1);
+  g_atomic_ref_count_init (&sender_info->ref_count);
+  sender_info->sender_name = g_strdup (sender_name);
+  sender_info->sender_state = USB_SENDER_STATE_DEFAULT;
+  sender_info->filters = xdp_devices_filter_get_all_for_app_id (app_id);
+  sender_info->owned_devices = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, usb_owned_device_free);
+
+  return g_steal_pointer (&sender_info);
+}
+
+static UsbSenderInfo *
+usb_sender_info_from_call (Usb  *self,
+                           Call *call)
+{
+  g_autoptr(UsbSenderInfo) sender_info = NULL;
+
+  g_assert (call != NULL);
+
+  sender_info = g_hash_table_lookup (self->sender_infos, call->sender);
+
+  if (!sender_info)
+    {
+      sender_info = usb_sender_info_new (call->sender, xdp_app_info_get_id (call->app_info));
+      g_hash_table_insert (self->sender_infos, g_strdup (call->sender), sender_info);
+    }
+
+  g_assert (sender_info != NULL);
+  g_atomic_ref_count_inc (&sender_info->ref_count);
+
+  return g_steal_pointer (&sender_info);
+}
+
+static UsbSenderInfo *
+usb_sender_info_from_request (Usb     *self,
+                              Request *request)
+{
+  g_autoptr(UsbSenderInfo) sender_info = NULL;
+
+  g_assert (request != NULL);
+
+  sender_info = g_hash_table_lookup (self->sender_infos, request->sender);
+
+  if (!sender_info)
+    {
+      sender_info = usb_sender_info_new (request->sender, xdp_app_info_get_id (request->app_info));
+      g_hash_table_insert (self->sender_infos, g_strdup (request->sender), sender_info);
+    }
+
+  g_assert (sender_info != NULL);
+  g_atomic_ref_count_inc (&sender_info->ref_count);
+
+  return g_steal_pointer (&sender_info);
+}
+
+static void
+usb_sender_info_acquire_device (UsbSenderInfo *sender_info,
+                                const char    *device_id,
+                                int            fd)
+{
+  g_autoptr(UsbOwnedDevice) owned_device = NULL;
+
+  g_assert (sender_info != NULL);
+  g_assert (!g_hash_table_contains (sender_info->owned_devices, device_id));
+
+  owned_device = g_new0 (UsbOwnedDevice, 1);
+  owned_device->device_id = g_strdup (device_id);
+  owned_device->fd = xdp_steal_fd (&fd);
+
+  g_hash_table_insert (sender_info->owned_devices,
+                       g_strdup (device_id),
+                       g_steal_pointer (&owned_device));
+}
+
+static void
+usb_sender_info_release_device (UsbSenderInfo *sender_info,
+                                const char    *device_id)
+{
+  g_assert (sender_info != NULL);
+
+  if (!g_hash_table_remove (sender_info->owned_devices, device_id))
+    g_warning ("Device %s not owned by %s", device_id, sender_info->sender_name);
+
+}
+
+/* UsbSession */
 
 typedef struct _UsbSession
 {
   Session parent;
 
-  gboolean has_all_devices;
   GHashTable *available_devices;
-
-  UsbAccessMode access_mode;
-  GPtrArray *device_candidates;
-
-  UsbSessionState session_state;
-  GPtrArray *accessing_devices;
 } UsbSession;
 
 typedef struct _UsbSessionClass
@@ -476,7 +343,6 @@ usb_session_dispose (GObject *object)
 {
   UsbSession *usb_session = (UsbSession *) object;
 
-  g_clear_pointer (&usb_session->device_candidates, g_ptr_array_unref);
   g_clear_pointer (&usb_session->available_devices, g_hash_table_destroy);
 }
 
@@ -491,91 +357,31 @@ usb_session_class_init (UsbSessionClass *klass)
   session_class->close = usb_session_close;
 }
 
-static UsbAccessMode
-get_access_mode_from_options (GVariantDict *options)
-{
-  UsbAccessMode access_mode;
-  const char *string = NULL;
-
-  g_assert (g_variant_dict_contains (options, "access_mode"));
-  g_variant_dict_lookup (options, "access_mode", "&s", &string);
-
-  if (!str_to_access_mode (string, &access_mode))
-    g_assert_not_reached ();
-
-  return access_mode;
-}
-
 static UsbSession *
 usb_session_new (GDBusConnection  *connection,
-                 Request          *request,
+                 Call             *call,
                  GVariant         *options,
                  GError          **error)
 {
-  GVariantDict options_dict;
   UsbSession *usb_session;
   Session *session = NULL;
 
   session = g_initable_new (usb_session_get_type (),
                             NULL, error,
                             "connection", connection,
-                            "sender", request->sender,
-                            "app-id", xdp_app_info_get_id (request->app_info),
+                            "sender", call->sender,
+                            "app-id", xdp_app_info_get_id (call->app_info),
                             "token", lookup_session_token (options),
                             NULL);
   if (!session)
     return NULL;
 
-  g_variant_dict_init (&options_dict, options);
-
   usb_session = (UsbSession *) session;
-  usb_session->access_mode = get_access_mode_from_options (&options_dict);
-  usb_session->has_all_devices = xdp_app_info_has_all_devices (request->app_info);
-  usb_session->device_candidates = get_usb_device_candidates_from_options (&options_dict);
-  usb_session->available_devices = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                                          g_free, NULL);
-  usb_session->session_state = USB_SESSION_STATE_DEFAULT;
-
-  g_variant_dict_clear (&options_dict);
+  usb_session->available_devices = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
   g_debug ("[usb] USB session '%s' created", session->id);
 
   return (UsbSession *)session;
-}
-
-static gboolean
-usb_session_match_device (UsbSession  *usb_session,
-                          GUdevDevice *device)
-{
-  const char *product_id_str = NULL;
-  const char *vendor_id_str = NULL;
-  uint16_t product_id;
-  uint16_t vendor_id;
-
-  g_assert (usb_session != NULL);
-  g_assert (G_UDEV_IS_DEVICE (device));
-
-  if (usb_session->has_all_devices || usb_session->access_mode == USB_ACCESS_MODE_ALL)
-    return TRUE;
-
-  vendor_id_str = g_udev_device_get_property (device, UDEV_PROPERTY_VENDOR_ID);
-  if (vendor_id_str == NULL || !hex_to_uint16 (vendor_id_str, &vendor_id))
-    return FALSE;
-
-  product_id_str = g_udev_device_get_property (device, UDEV_PROPERTY_PRODUCT_ID);
-  if (product_id_str == NULL || !hex_to_uint16 (product_id_str, &product_id))
-    return FALSE;
-
-  for (unsigned int i = 0; i < usb_session->device_candidates->len; i++)
-    {
-      UsbDeviceCandidate *usb_device = g_ptr_array_index (usb_session->device_candidates, i);
-
-      if (vendor_id == usb_device->vendor_id &&
-          product_id == usb_device->product_id)
-        return TRUE;
-    }
-
-  return FALSE;
 }
 
 #if 0
@@ -685,9 +491,24 @@ decode_and_insert (GVariantDict *dict,
     }
 }
 
+static gboolean
+filters_match_device (GPtrArray   *filters,
+                      GUdevDevice *device)
+{
+  for (size_t i = 0; i < filters->len; i++)
+    {
+      XdpDevicesFilter *filter = g_ptr_array_index (filters, i);
+
+      if (xdp_devices_filter_match_device (filter, device))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 static GVariant *
 gudev_device_to_variant (Usb         *self,
-                         UsbSession  *usb_session,
+                         GPtrArray   *filters,
                          GUdevDevice *device)
 {
   g_auto(GVariantDict) device_variant_dict = G_VARIANT_DICT_INIT (NULL);
@@ -703,7 +524,7 @@ gudev_device_to_variant (Usb         *self,
   uint16_t number;
 
   parent = g_udev_device_get_parent (device);
-  if (parent != NULL && usb_session_match_device (usb_session, parent))
+  if (parent != NULL && filters_match_device (filters, parent))
     {
       const char *parent_syspath = NULL;
       const char *parent_id = NULL;
@@ -767,6 +588,8 @@ create_unique_usb_id (Usb          *self,
   g_autofree char *id = NULL;
   const char *syspath;
 
+  g_assert (is_gudev_device_suitable (device));
+
   syspath = g_udev_device_get_sysfs_path (device);
   g_assert (syspath != NULL);
 
@@ -812,6 +635,9 @@ on_gudev_client_uevent_cb (GUdevClient *client,
   if (!g_strv_contains (supported_actions, action))
     return;
 
+  if (!is_gudev_device_suitable (device))
+    return;
+
   removing = g_str_equal (action, "remove");
 
   if (g_str_equal (action, "add"))
@@ -832,6 +658,7 @@ on_gudev_client_uevent_cb (GUdevClient *client,
   g_hash_table_iter_init (&iter, self->sessions);
   while (g_hash_table_iter_next (&iter, (gpointer *) &usb_session, NULL))
     {
+      g_autoptr(GPtrArray) devices_filters = NULL;
       g_autoptr(GVariant) device_variant = NULL;
       GVariantBuilder devices_builder;
       Session *session;
@@ -839,20 +666,24 @@ on_gudev_client_uevent_cb (GUdevClient *client,
       g_assert (G_UDEV_IS_DEVICE (device));
       g_assert (g_strcmp0 (g_udev_device_get_subsystem (device), "usb") == 0);
 
-      /* We can't use usb_session_match_device() when a device is being
-       * removed because, on removal, the only property the GUdevDevice has
-       * is its sysfs path. Check if this device was previously available to
-       * the USB session instead. */
-      if ((!removing && !usb_session_match_device (usb_session, device)) ||
-          (removing && !g_hash_table_contains (usb_session->available_devices, id)))
+      session = (Session *) usb_session;
+      devices_filters = xdp_devices_filter_get_all_for_app_id (session->app_id);
+      g_assert (devices_filters != NULL);
+
+      /* We can't use filters_match_device() when a device is being removed because,
+       * on removal, the only property the GUdevDevice has is its sysfs path.
+       * Check if this device was previously available to the USB session
+       * instead. */
+      if ((removing && !g_hash_table_contains (usb_session->available_devices, id)) ||
+          (!removing && !filters_match_device (devices_filters, device)))
         continue;
+
 
       g_variant_builder_init (&devices_builder, G_VARIANT_TYPE ("a(ssa{sv})"));
 
-      device_variant = gudev_device_to_variant (self, usb_session, device);
+      device_variant = gudev_device_to_variant (self, devices_filters, device);
       g_variant_builder_add (&devices_builder, "(ss@a{sv})", action, id, g_steal_pointer (&device_variant));
 
-      session = (Session *) usb_session;
       g_dbus_connection_emit_signal (session->connection,
                                      session->sender,
                                      "/org/freedesktop/portal/desktop",
@@ -887,315 +718,40 @@ on_gudev_client_uevent_cb (GUdevClient *client,
 
 /* CreateSession */
 
-typedef enum {
-  USB_SESSION_RESPONSE_DENY,
-  USB_SESSION_RESPONSE_ALLOW,
-  USB_SESSION_RESPONSE_IGNORE,
-} UsbSessionResponse;
-
-static void
-usb_session_created_cb (GObject      *source_object,
-                        GAsyncResult *result,
-                        gpointer      data)
-{
-  g_autoptr(UsbPermission) usb_permission_to_store = NULL;
-  XdgDesktopPortalResponseEnum response;
-  g_auto(GVariantBuilder) results_builder;
-  g_autoptr (GVariant) results = NULL;
-  g_autoptr(Request) request = data;
-  g_autoptr(GError) error = NULL;
-  UsbSessionResponse session_response;
-  UsbSession *usb_session;
-  gboolean close_session;
-  Session *session;
-
-  REQUEST_AUTOLOCK (request);
-
-  response = XDG_DESKTOP_PORTAL_RESPONSE_OTHER;
-  session = (Session *) g_object_get_data (G_OBJECT (request), "usb_session");
-  usb_session = (UsbSession *) session;
-  close_session = TRUE;
-
-  g_variant_builder_init (&results_builder, G_VARIANT_TYPE_VARDICT);
-
-  xdp_dbus_impl_usb_call_create_session_finish (usb_impl,
-                                                &response,
-                                                &results,
-                                                result,
-                                                &error);
-  if (error)
-    {
-      g_dbus_error_strip_remote_error (error);
-      goto out;
-    }
-
-  if (!request->exported || response != XDG_DESKTOP_PORTAL_RESPONSE_SUCCESS)
-    goto out;
-
-  if (!session_export (session, &error))
-    {
-      g_warning ("Failed to export session: %s", error->message);
-      response = XDG_DESKTOP_PORTAL_RESPONSE_OTHER;
-      goto out;
-    }
-
-  if (!g_variant_lookup (results, "result", "u", &session_response))
-    session_response = USB_SESSION_RESPONSE_DENY;
-
-  switch (session_response)
-    {
-    case USB_SESSION_RESPONSE_DENY:
-      usb_permission_to_store = usb_permission_new (PERMISSION_NO,
-                                                    usb_session->access_mode,
-                                                    usb_session->device_candidates);
-      response = XDG_DESKTOP_PORTAL_RESPONSE_CANCELLED;
-      break;
-
-    case USB_SESSION_RESPONSE_ALLOW:
-      usb_permission_to_store = usb_permission_new (PERMISSION_YES,
-                                                    usb_session->access_mode,
-                                                    usb_session->device_candidates);
-      response = XDG_DESKTOP_PORTAL_RESPONSE_SUCCESS;
-      break;
-
-    case USB_SESSION_RESPONSE_IGNORE:
-      response = XDG_DESKTOP_PORTAL_RESPONSE_SUCCESS;
-      break;
-
-    default:
-      g_critical ("Unknown response %u", session_response);
-      response = XDG_DESKTOP_PORTAL_RESPONSE_OTHER;
-      goto out;
-    }
-
-  if (usb_permission_to_store)
-    {
-      set_usb_permission_sync (xdp_app_info_get_id (request->app_info),
-                               usb_permission_to_store);
-
-      if (usb_permission_to_store->permission == PERMISSION_NO)
-        goto out;
-    }
-
-  /* Happy path, don't close the session */
-  close_session = FALSE;
-
-  session_register (session);
-
-  /* Send initial list of devices the app has permission to see */
-  if (request->exported)
-    {
-      GVariantBuilder devices_builder;
-      GHashTableIter iter;
-      GUdevDevice *device;
-      const char *id;
-      Usb *self;
-
-      g_debug ("[usb] Appending devices to CreateSession response");
-
-      g_variant_builder_init (&devices_builder, G_VARIANT_TYPE ("a(sa{sv})"));
-
-      self = (Usb *) usb;
-
-      g_assert (self != NULL);
-      g_assert (usb_session != NULL);
-
-      g_hash_table_iter_init (&iter, self->ids_to_devices);
-      while (g_hash_table_iter_next (&iter, (gpointer *) &id, (gpointer *) &device))
-        {
-          g_autoptr(GVariant) device_variant = NULL;
-
-          g_assert (G_UDEV_IS_DEVICE (device));
-          g_assert (g_strcmp0 (g_udev_device_get_subsystem (device), "usb") == 0);
-
-          if (!usb_session_match_device (usb_session, device))
-            continue;
-
-          device_variant = gudev_device_to_variant (self, usb_session, device);
-          g_variant_builder_add (&devices_builder, "(s@a{sv})", id, g_steal_pointer (&device_variant));
-
-          g_hash_table_add (usb_session->available_devices, g_strdup (id));
-        }
-
-      g_variant_builder_add (&results_builder, "{sv}",
-                             "session_handle", g_variant_new ("s", session->id));
-      g_variant_builder_add (&results_builder, "{sv}",
-                             "available_devices", g_variant_builder_end (&devices_builder));
-    }
-
-out:
-  if (request->exported)
-    {
-      xdp_dbus_request_emit_response (XDP_DBUS_REQUEST (request),
-                                      response,
-                                      g_variant_builder_end (&results_builder));
-      request_unexport (request);
-    }
-
-  if (close_session)
-    session_close (session, FALSE);
-}
-
-static gboolean
-validate_access_mode (const char  *key,
-                      GVariant    *value,
-                      GVariant    *options,
-                      GError     **error)
-{
-  UsbAccessMode access_mode;
-  const char *string;
-
-  string = g_variant_get_string (value, NULL);
-
-  if (!str_to_access_mode (string, &access_mode))
-    {
-      g_set_error (error,
-                   XDG_DESKTOP_PORTAL_ERROR,
-                   XDG_DESKTOP_PORTAL_ERROR_INVALID_ARGUMENT,
-                   "Access mode must be one of the following: listed-devices, all");
-      return FALSE;
-    }
-
-  if (access_mode == USB_ACCESS_MODE_LISTED_DEVICES &&
-      !g_variant_lookup (options, "devices", "aa{sv}", NULL))
-    {
-      g_set_error (error,
-                   XDG_DESKTOP_PORTAL_ERROR,
-                   XDG_DESKTOP_PORTAL_ERROR_INVALID_ARGUMENT,
-                   "No devices passed, but requested \"listed-devices\" access mode");
-      return FALSE;
-    }
-
-  return TRUE;
-}
-
-static gboolean
-validate_devices (const char  *key,
-                  GVariant    *value,
-                  GVariant    *options,
-                  GError     **error)
-{
-  /* Must have at least one device */
-  if (g_variant_n_children (value) == 0)
-    {
-      g_set_error (error,
-                   XDG_DESKTOP_PORTAL_ERROR,
-                   XDG_DESKTOP_PORTAL_ERROR_INVALID_ARGUMENT,
-                   "Invalid devices requested");
-      return TRUE;
-    }
-
-  /* Validate devices */
-  for (size_t i = 0; i < g_variant_n_children (value); i++)
-    {
-      const char * const device_fields[] = { "vendor_id", "product_id", };
-      g_autoptr(GVariant) device = NULL;
-      GVariantDict dict;
-
-      device = g_variant_get_child_value (value, i);
-
-      if (!g_variant_check_format_string (device, "a{sv}", TRUE))
-        {
-          g_set_error (error,
-                       XDG_DESKTOP_PORTAL_ERROR,
-                       XDG_DESKTOP_PORTAL_ERROR_INVALID_ARGUMENT,
-                       "Invalid device");
-          return TRUE;
-        }
-
-      g_variant_dict_init (&dict, device);
-      for (size_t j = 0; j < G_N_ELEMENTS (device_fields); j++)
-        {
-          if (!g_variant_dict_contains (&dict, device_fields[j]))
-            {
-              g_set_error (error,
-                           XDG_DESKTOP_PORTAL_ERROR,
-                           XDG_DESKTOP_PORTAL_ERROR_INVALID_ARGUMENT,
-                           "Device does not contain \"%s\"",
-                           device_fields[j]);
-              g_variant_dict_clear (&dict);
-              return TRUE;
-            }
-        }
-      g_variant_dict_clear (&dict);
-    }
-
-  return TRUE;
-}
-
-static gboolean
-validate_reason (const char  *key,
-                 GVariant    *value,
-                 GVariant    *options,
-                 GError     **error)
-{
-  const char *string = g_variant_get_string (value, NULL);
-
-  if (g_utf8_strlen (string, -1) > 256)
-    {
-      g_set_error (error,
-                   XDG_DESKTOP_PORTAL_ERROR,
-                   XDG_DESKTOP_PORTAL_ERROR_INVALID_ARGUMENT,
-                   "Reason must be shorter than 256 characters");
-      return FALSE;
-    }
-
-  return TRUE;
-}
-
 static XdpOptionKey usb_create_session_options[] = {
-  { "access_mode", G_VARIANT_TYPE_STRING, validate_access_mode },
-  { "devices", (const GVariantType *) "aa{sv}", validate_devices },
   { "handle_token", G_VARIANT_TYPE_STRING, NULL },
   { "session_handle_token", G_VARIANT_TYPE_STRING, NULL },
-  { "reason", G_VARIANT_TYPE_STRING, validate_reason },
 };
 
 static gboolean
 handle_create_session (XdpDbusUsb            *object,
                        GDBusMethodInvocation *invocation,
-                       const char            *arg_parent_window,
                        GVariant              *arg_options)
 {
-  g_autoptr(XdpDbusImplRequest) impl_request = NULL;
-  g_autoptr(UsbPermission) usb_permission = NULL;
-  g_autoptr(GVariant) impl_options = NULL;
   g_autoptr(GVariant) options = NULL;
   g_autoptr(GError) error = NULL;
   GDBusConnection *connection;
   GVariantBuilder options_builder;
   UsbSession *usb_session;
+  Permission permission;
   Session *session;
-  Request *request;
+  Call *call;
   Usb *self;
 
   self = (Usb *) object;
-  request = request_from_invocation (invocation);
+  call = call_from_invocation (invocation);
 
   g_debug ("[usb] Handling CreateSession");
 
-  REQUEST_AUTOLOCK (request);
-
-  usb_permission = get_usb_permission_sync (xdp_app_info_get_id (request->app_info));
-
-  if (usb_permission && usb_permission->permission == PERMISSION_NO)
+  permission = get_permission_sync (xdp_app_info_get_id (call->app_info),
+                                    PERMISSION_TABLE,
+                                    PERMISSION_ID);
+  if (permission == PERMISSION_NO)
     {
       g_dbus_method_invocation_return_error (invocation,
                                              XDG_DESKTOP_PORTAL_ERROR,
                                              XDG_DESKTOP_PORTAL_ERROR_NOT_ALLOWED,
                                              "Not allowed to create USB sessions");
-      return G_DBUS_METHOD_INVOCATION_HANDLED;
-    }
-
-  impl_request = xdp_dbus_impl_request_proxy_new_sync (g_dbus_proxy_get_connection (G_DBUS_PROXY (usb_impl)),
-                                                       G_DBUS_PROXY_FLAGS_NONE,
-                                                       g_dbus_proxy_get_name (G_DBUS_PROXY (usb_impl)),
-                                                       request->id,
-                                                       NULL,
-                                                       &error);
-  if (!impl_request)
-    {
-      g_dbus_method_invocation_return_gerror (invocation, error);
       return G_DBUS_METHOD_INVOCATION_HANDLED;
     }
 
@@ -1212,65 +768,84 @@ handle_create_session (XdpDbusUsb            *object,
   options = g_variant_builder_end (&options_builder);
 
   connection = g_dbus_method_invocation_get_connection (invocation);
-  usb_session = usb_session_new (connection, request, options, &error);
+  usb_session = usb_session_new (connection, call, options, &error);
   if (!usb_session)
     {
       g_dbus_method_invocation_return_gerror (invocation, error);
       return G_DBUS_METHOD_INVOCATION_HANDLED;
     }
 
-  g_object_set_data_full (G_OBJECT (request), "usb_session", g_object_ref (usb_session), g_object_unref);
-  g_hash_table_add (self->sessions, usb_session);
-
-  request_set_impl_request (request, impl_request);
-  request_export (request, connection);
-
-  /* Check if the session matches the permission store, and inject it in
-   * the options variant for backends. */
+  session = (Session *) usb_session;
+  if (!session_export (session, &error))
     {
-      GVariantBuilder impl_options_builder;
-      gboolean matches_permission_store;
-
-      g_assert (!usb_permission || usb_permission->permission != PERMISSION_NO);
-      g_assert (usb_session->access_mode == USB_ACCESS_MODE_ALL ||
-                usb_session->access_mode == USB_ACCESS_MODE_LISTED_DEVICES);
-
-      g_variant_builder_init (&impl_options_builder, G_VARIANT_TYPE_VARDICT);
-      if (!xdp_filter_options (arg_options,
-                               &impl_options_builder,
-                               usb_create_session_options,
-                               G_N_ELEMENTS (usb_create_session_options),
-                               &error))
-        {
-          g_dbus_method_invocation_return_gerror (invocation, error);
-          return G_DBUS_METHOD_INVOCATION_HANDLED;
-        }
-
-      matches_permission_store = usb_permission &&
-                                 usb_permission->permission == PERMISSION_YES &&
-                                 usb_permission->access_mode == usb_session->access_mode &&
-                                 /* TODO: compare device candidates */ TRUE;
-
-      g_variant_builder_add (&impl_options_builder, "{sv}",
-                             "matches_permission_store",
-                             g_variant_new_boolean (matches_permission_store));
-
-      impl_options = g_variant_builder_end (&impl_options_builder);
+      g_dbus_method_invocation_return_gerror (invocation, error);
+      session_close (session, FALSE);
+      return G_DBUS_METHOD_INVOCATION_HANDLED;
     }
 
-  session = (Session *) usb_session;
+  session_register (session);
 
-  xdp_dbus_impl_usb_call_create_session (usb_impl,
-                                         request->id,
-                                         session->id,
-                                         xdp_app_info_get_id (request->app_info),
-                                         arg_parent_window,
-                                         g_steal_pointer (&impl_options),
-                                         NULL,
-                                         usb_session_created_cb,
-                                         g_object_ref (request));
+  g_debug ("New USB session registered: %s",  session->id);
+  g_hash_table_add (self->sessions, usb_session);
 
-  xdp_dbus_usb_complete_create_session (object, invocation, request->id);
+  xdp_dbus_usb_complete_create_session (object, invocation, session->id);
+
+  g_assert (permission != PERMISSION_NO);
+
+  /* Send initial list of devices the app has permission to see */
+    {
+      g_autoptr(UsbSenderInfo) sender_info = NULL;
+      GVariantBuilder devices_builder;
+      GHashTableIter iter;
+      GUdevDevice *device;
+      const char *id;
+
+      g_debug ("[usb] Appending devices to CreateSession response");
+
+      g_variant_builder_init (&devices_builder, G_VARIANT_TYPE ("a(ssa{sv})"));
+
+      g_assert (self != NULL);
+
+      g_message ("A");
+
+      sender_info = usb_sender_info_from_call (self, call);
+      g_assert (sender_info != NULL);
+
+      g_message ("B");
+
+      g_hash_table_iter_init (&iter, self->ids_to_devices);
+      while (g_hash_table_iter_next (&iter, (gpointer *) &id, (gpointer *) &device))
+        {
+          g_autoptr(GVariant) device_variant = NULL;
+
+          g_assert (G_UDEV_IS_DEVICE (device));
+          g_assert (g_strcmp0 (g_udev_device_get_subsystem (device), "usb") == 0);
+
+          if (!filters_match_device (sender_info->filters, device))
+            continue;
+
+          g_message ("  B1");
+
+          device_variant = gudev_device_to_variant (self, sender_info->filters, device);
+          g_variant_builder_add (&devices_builder, "(ss@a{sv})", "add", id, g_steal_pointer (&device_variant));
+
+          g_message ("  B2");
+
+          g_hash_table_add (usb_session->available_devices, g_strdup (id));
+        }
+
+      g_message ("C");
+
+      g_dbus_connection_emit_signal (session->connection,
+                                     session->sender,
+                                     "/org/freedesktop/portal/desktop",
+                                     "org.freedesktop.portal.Usb",
+                                     "DeviceEvents",
+                                     g_variant_new ("(o@a(ssa{sv}))",
+                                                    session->id,
+                                                    g_variant_builder_end (&devices_builder)),
+                                     NULL);
+    }
 
   return G_DBUS_METHOD_INVOCATION_HANDLED;
 }
@@ -1283,26 +858,24 @@ static XdpOptionKey usb_enumerate_devices_options[] = {
 static gboolean
 handle_enumerate_devices (XdpDbusUsb            *object,
                           GDBusMethodInvocation *invocation,
-                          const char            *arg_session_handle,
                           GVariant              *arg_options)
 {
-  g_autoptr(UsbPermission) usb_permission = NULL;
   g_autoptr(GVariant) options = NULL;
   g_autoptr(GVariant) devices = NULL;
   g_autoptr(GError) error = NULL;
   GVariantBuilder options_builder;
-  UsbSession *usb_session;
+  Permission permission;
   Call *call;
   Usb *self;
 
   self = (Usb *) object;
   call = call_from_invocation (invocation);
 
-  usb_permission = get_usb_permission_sync (xdp_app_info_get_id (call->app_info));
+  permission = get_permission_sync (xdp_app_info_get_id (call->app_info),
+                                    PERMISSION_TABLE,
+                                    PERMISSION_ID);
 
-  if (!usb_permission ||
-      usb_permission->permission == PERMISSION_UNSET ||
-      usb_permission->permission == PERMISSION_NO)
+  if (permission == PERMISSION_NO)
     {
       g_dbus_method_invocation_return_error (invocation,
                                              XDG_DESKTOP_PORTAL_ERROR,
@@ -1322,38 +895,27 @@ handle_enumerate_devices (XdpDbusUsb            *object,
     }
   options = g_variant_builder_end (&options_builder);
 
-  usb_session = (UsbSession *) acquire_session_from_call (arg_session_handle, call);
-  if (!usb_session)
-    {
-      g_dbus_method_invocation_return_error (invocation,
-                                             G_DBUS_ERROR,
-                                             G_DBUS_ERROR_ACCESS_DENIED,
-                                             "Invalid session");
-      return G_DBUS_METHOD_INVOCATION_HANDLED;
-    }
-
   /* List devices the app has permission */
     {
+      g_autoptr(UsbSenderInfo) sender_info = NULL;
       GVariantBuilder builder;
       GHashTableIter iter;
       GUdevDevice *device;
       const char *id;
+
+      sender_info = usb_sender_info_from_call (self, call);
+      g_assert (sender_info->filters != NULL);
 
       g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(sa{sv})"));
 
       g_hash_table_iter_init (&iter, self->ids_to_devices);
       while (g_hash_table_iter_next (&iter, (gpointer *) &id, (gpointer *) &device))
         {
-          g_autoptr(GVariant) device_variant = NULL;
-
           g_assert (G_UDEV_IS_DEVICE (device));
           g_assert (g_strcmp0 (g_udev_device_get_subsystem (device), "usb") == 0);
 
-          if (!usb_session_match_device (usb_session, device))
-            continue;
-
-          device_variant = gudev_device_to_variant (self, usb_session, device);
-          g_variant_builder_add (&builder, "(s@a{sv})", id, g_steal_pointer (&device_variant));
+          if (filters_match_device (sender_info->filters, device))
+            g_variant_builder_add (&builder, "(s@a{sv})", id, gudev_device_to_variant (self, sender_info->filters, device));
         }
 
       devices = g_variant_builder_end (&builder);
@@ -1376,28 +938,27 @@ usb_access_devices_cb (GObject      *source_object,
                        gpointer      data)
 {
   XdgDesktopPortalResponseEnum response;
+  g_autoptr(UsbSenderInfo) sender_info = NULL;
   g_autoptr(GVariantIter) devices_iter = NULL;
   g_auto(GVariantBuilder) results_builder;
   g_autoptr (GVariant) results = NULL;
   g_autoptr(Request) request = data;
   g_autoptr(GError) error = NULL;
-  UsbSession *usb_session;
   GVariant *options;
-  Session *session;
   const char *device_id;
 
   REQUEST_AUTOLOCK (request);
 
   response = XDG_DESKTOP_PORTAL_RESPONSE_OTHER;
-  session = (Session *) g_object_get_data (G_OBJECT (request), "usb_session");
-  usb_session = (UsbSession *) session;
+  sender_info = usb_sender_info_from_request (usb, request);
 
-  g_assert (usb_session->session_state == USB_SESSION_STATE_ACCESSING_DEVICES);
-  g_assert (usb_session->accessing_devices == NULL);
+  g_assert (sender_info != NULL);
+  g_assert (sender_info->sender_state == USB_SENDER_STATE_ACQUIRING_DEVICES);
+  g_assert (sender_info->acquiring_devices == NULL);
 
   g_variant_builder_init (&results_builder, G_VARIANT_TYPE_VARDICT);
 
-  xdp_dbus_impl_usb_call_access_devices_finish (usb_impl, &response, &results, result, &error);
+  xdp_dbus_impl_usb_call_acquire_devices_finish (usb_impl, &response, &results, result, &error);
 
   if (error)
     {
@@ -1414,21 +975,21 @@ usb_access_devices_cb (GObject      *source_object,
   if (!g_variant_lookup (results, "devices", "a(sa{sv})", &devices_iter))
     goto out;
 
-  usb_session->accessing_devices = g_ptr_array_new_full (g_variant_iter_n_children (devices_iter),
-                                                         usb_device_access_data_free);
+  sender_info->acquiring_devices = g_ptr_array_new_full (g_variant_iter_n_children (devices_iter),
+                                                         usb_device_acquire_data_free);
   while (g_variant_iter_next (devices_iter, "(&s@a{sv})", &device_id, &options))
     {
-      g_autoptr(UsbDeviceAccessData) access_data = NULL;
+      g_autoptr(UsbDeviceAcquireData) access_data = NULL;
       gboolean writable;
 
       if (!g_variant_lookup (options, "writable", "b", &writable))
         writable = FALSE;
 
-      access_data = g_new0 (UsbDeviceAccessData, 1);
+      access_data = g_new0 (UsbDeviceAcquireData, 1);
       access_data->device_id = g_strdup (device_id);
       access_data->writable = writable;
 
-      g_ptr_array_add (usb_session->accessing_devices, g_steal_pointer (&access_data));
+      g_ptr_array_add (sender_info->acquiring_devices, g_steal_pointer (&access_data));
 
       g_clear_pointer (&options, g_variant_unref);
     }
@@ -1444,12 +1005,13 @@ out:
 }
 
 static gboolean
-filter_access_devices (Usb         *self,
-                       UsbSession  *usb_session,
-                       GVariant    *devices,
-                       GVariant   **out_filtered_devices,
-                       GError     **out_error)
+filter_access_devices (Usb       *self,
+                       Request   *request,
+                       GVariant  *devices,
+                       GVariant **out_filtered_devices,
+                       GError   **out_error)
 {
+  g_autoptr(UsbSenderInfo) sender_info = NULL;
   GVariantBuilder filtered_devices_builder;
   GVariantIter *device_options_iter;
   GVariantIter devices_iter;
@@ -1457,12 +1019,10 @@ filter_access_devices (Usb         *self,
   size_t n_devices;
 
   g_assert (self != NULL);
-  g_assert (usb_session != NULL);
+  g_assert (request != NULL);
   g_assert (devices != NULL);
   g_assert (out_filtered_devices != NULL && *out_filtered_devices == NULL);
   g_assert (out_error != NULL && *out_error == NULL);
-
-  g_message ("Devices: %s", g_variant_print (devices, TRUE));
 
   n_devices = g_variant_iter_init (&devices_iter, devices);
 
@@ -1474,6 +1034,9 @@ filter_access_devices (Usb         *self,
                    "No devices in the devices array");
       return FALSE;
     }
+
+  sender_info = usb_sender_info_from_request (self, request);
+  g_assert (sender_info != NULL);
 
   g_variant_builder_init (&filtered_devices_builder, G_VARIANT_TYPE ("a(sa{sv}a{sv})"));
 
@@ -1505,7 +1068,7 @@ filter_access_devices (Usb         *self,
       g_assert (g_strcmp0 (g_udev_device_get_subsystem (device), "usb") == 0);
 
       /* Can the app even request this device? */
-      if (!usb_session_match_device (usb_session, device))
+      if (!filters_match_device (sender_info->filters, device))
         {
           g_set_error (out_error,
                        XDG_DESKTOP_PORTAL_ERROR,
@@ -1546,7 +1109,7 @@ filter_access_devices (Usb         *self,
             }
         }
 
-      device_variant = gudev_device_to_variant (self, usb_session, device);
+      device_variant = gudev_device_to_variant (self, sender_info->filters, device);
 
       g_variant_builder_add (&filtered_devices_builder,
                              "(s@a{sv}@a{sv})",
@@ -1563,22 +1126,19 @@ static XdpOptionKey usb_access_devices_options[] = {
 };
 
 static gboolean
-handle_access_devices (XdpDbusUsb            *object,
-                       GDBusMethodInvocation *invocation,
-                       const char            *arg_session_handle,
-                       const char            *arg_parent_window,
-                       GVariant              *arg_devices,
-                       GVariant              *arg_options)
+handle_acquire_devices (XdpDbusUsb            *object,
+                        GDBusMethodInvocation *invocation,
+                        const char            *arg_parent_window,
+                        GVariant              *arg_devices,
+                        GVariant              *arg_options)
 {
   g_autoptr(XdpDbusImplRequest) impl_request = NULL;
-  g_autoptr(UsbPermission) usb_permission = NULL;
   g_autoptr(GVariant) filtered_devices = NULL;
   g_autoptr(GVariant) options = NULL;
   g_autoptr(GError) error = NULL;
   GVariantBuilder options_builder;
-  UsbSession *usb_session;
+  Permission permission;
   Request *request;
-  Session *session;
   Usb *self;
 
   self = (Usb *) object;
@@ -1588,30 +1148,10 @@ handle_access_devices (XdpDbusUsb            *object,
 
   REQUEST_AUTOLOCK (request);
 
-  session = acquire_session (arg_session_handle, request);
-  if (!session)
-    {
-      g_dbus_method_invocation_return_error (invocation,
-                                             G_DBUS_ERROR,
-                                             G_DBUS_ERROR_ACCESS_DENIED,
-                                             "Invalid session");
-      return G_DBUS_METHOD_INVOCATION_HANDLED;
-    }
-
-  SESSION_AUTOLOCK_UNREF (session);
-
-  usb_session = (UsbSession *) session;
-  if (usb_session->session_state != USB_SESSION_STATE_DEFAULT)
-    {
-      g_dbus_method_invocation_return_error (invocation,
-                                             G_DBUS_ERROR,
-                                             G_DBUS_ERROR_INVALID_ARGS,
-                                             "Invalid session state");
-      return G_DBUS_METHOD_INVOCATION_HANDLED;
-    }
-
-  usb_permission = get_usb_permission_sync (xdp_app_info_get_id (request->app_info));
-  if (usb_permission && usb_permission->permission == PERMISSION_NO)
+  permission = get_permission_sync (xdp_app_info_get_id (request->app_info),
+                                    PERMISSION_TABLE,
+                                    PERMISSION_ID);
+  if (permission == PERMISSION_NO)
     {
       g_dbus_method_invocation_return_error (invocation,
                                              XDG_DESKTOP_PORTAL_ERROR,
@@ -1645,31 +1185,26 @@ handle_access_devices (XdpDbusUsb            *object,
   options = g_variant_builder_end (&options_builder);
 
   /* Validate devices */
-  if (!filter_access_devices (self, usb_session, arg_devices, &filtered_devices, &error))
+  if (!filter_access_devices (self, request, arg_devices, &filtered_devices, &error))
     {
       g_dbus_method_invocation_return_gerror (invocation, error);
       return G_DBUS_METHOD_INVOCATION_HANDLED;
     }
 
-  g_object_set_data_full (G_OBJECT (request), "usb_session", g_object_ref (usb_session), g_object_unref);
-
   request_set_impl_request (request, impl_request);
   request_export (request, g_dbus_method_invocation_get_connection (invocation));
 
-  usb_session->session_state = USB_SESSION_STATE_ACCESSING_DEVICES;
+  xdp_dbus_impl_usb_call_acquire_devices (usb_impl,
+                                          request->id,
+                                          arg_parent_window,
+                                          xdp_app_info_get_id (request->app_info),
+                                          g_steal_pointer (&filtered_devices),
+                                          g_steal_pointer (&options),
+                                          NULL,
+                                          usb_access_devices_cb,
+                                          g_object_ref (request));
 
-  xdp_dbus_impl_usb_call_access_devices (usb_impl,
-                                         request->id,
-                                         arg_session_handle,
-                                         arg_parent_window,
-                                         xdp_app_info_get_id (request->app_info),
-                                         g_steal_pointer (&filtered_devices),
-                                         g_steal_pointer (&options),
-                                         NULL,
-                                         usb_access_devices_cb,
-                                         g_object_ref (request));
-
-  xdp_dbus_usb_complete_access_devices (object, invocation, request->id);
+  xdp_dbus_usb_complete_acquire_devices (object, invocation, request->id);
 
   return G_DBUS_METHOD_INVOCATION_HANDLED;
 }
@@ -1679,18 +1214,16 @@ handle_access_devices (XdpDbusUsb            *object,
 #define MAX_DEVICES 8
 
 static gboolean
-handle_finish_access_devices (XdpDbusUsb            *object,
-                              GDBusMethodInvocation *invocation,
-                              const gchar           *arg_session_handle,
-                              GVariant              *arg_options)
+handle_finish_acquire_devices (XdpDbusUsb            *object,
+                               GDBusMethodInvocation *invocation,
+                               GVariant              *arg_options)
 {
-  g_autoptr(UsbPermission) usb_permission = NULL;
+  g_autoptr(UsbSenderInfo) sender_info = NULL;
   g_autoptr(GUnixFDList) fds = NULL;
   GVariantBuilder results_builder;
-  UsbSession *usb_session;
+  Permission permission;
   uint32_t accessed_devices;
   gboolean finished;
-  Session *session;
   Call *call;
   Usb *self;
 
@@ -1699,31 +1232,18 @@ handle_finish_access_devices (XdpDbusUsb            *object,
 
   g_debug ("[usb] Handling FinishAccessDevices");
 
-  session = acquire_session_from_call (arg_session_handle, call);
-  if (!session)
-    {
-      g_dbus_method_invocation_return_error (invocation,
-                                             G_DBUS_ERROR,
-                                             G_DBUS_ERROR_ACCESS_DENIED,
-                                             "Invalid session");
-      return G_DBUS_METHOD_INVOCATION_HANDLED;
-    }
+  sender_info = usb_sender_info_from_call (self, call);
+  g_assert (sender_info != NULL);
 
-  SESSION_AUTOLOCK_UNREF (session);
-
-  usb_session = (UsbSession *) session;
-  if (usb_session->session_state != USB_SESSION_STATE_ACCESSING_DEVICES)
+  permission = get_permission_sync (xdp_app_info_get_id (call->app_info),
+                                    PERMISSION_TABLE,
+                                    PERMISSION_ID);
+  if (permission == PERMISSION_NO)
     {
-      g_dbus_method_invocation_return_error (invocation,
-                                             G_DBUS_ERROR,
-                                             G_DBUS_ERROR_INVALID_ARGS,
-                                             "Invalid session state");
-      return G_DBUS_METHOD_INVOCATION_HANDLED;
-    }
+      /* If permission was revoken in between D-Bus calls, reset state */
+      sender_info->sender_state = USB_SENDER_STATE_DEFAULT;
+      g_clear_pointer (&sender_info->acquiring_devices, g_ptr_array_unref);
 
-  usb_permission = get_usb_permission_sync (xdp_app_info_get_id (call->app_info));
-  if (usb_permission && usb_permission->permission == PERMISSION_NO)
-    {
       g_dbus_method_invocation_return_error (invocation,
                                              XDG_DESKTOP_PORTAL_ERROR,
                                              XDG_DESKTOP_PORTAL_ERROR_NOT_ALLOWED,
@@ -1731,8 +1251,8 @@ handle_finish_access_devices (XdpDbusUsb            *object,
       return G_DBUS_METHOD_INVOCATION_HANDLED;
     }
 
-  g_assert (usb_session->session_state == USB_SESSION_STATE_ACCESSING_DEVICES);
-  g_assert (usb_session->accessing_devices != NULL);
+  g_assert (sender_info->sender_state == USB_SENDER_STATE_ACQUIRING_DEVICES);
+  g_assert (sender_info->acquiring_devices != NULL);
 
   fds = g_unix_fd_list_new ();
 
@@ -1740,19 +1260,19 @@ handle_finish_access_devices (XdpDbusUsb            *object,
 
   accessed_devices = 0;
   while (accessed_devices < MAX_DEVICES &&
-         usb_session->accessing_devices->len > 0)
+         sender_info->acquiring_devices->len > 0)
     {
-      g_autoptr(UsbDeviceAccessData) access_data = NULL;
+      g_autoptr(UsbDeviceAcquireData) access_data = NULL;
       g_autoptr(GError) error = NULL;
+      xdp_autofd int fd = -1;
       GVariantDict dict;
       GUdevDevice *device;
       const char *device_file;
       int fd_index;
-      int fd;
 
       g_variant_dict_init (&dict, NULL);
 
-      access_data = g_ptr_array_steal_index (usb_session->accessing_devices, 0);
+      access_data = g_ptr_array_steal_index (sender_info->acquiring_devices, 0);
       device = g_hash_table_lookup (self->ids_to_devices, access_data->device_id);
 
       if (!device)
@@ -1766,18 +1286,10 @@ handle_finish_access_devices (XdpDbusUsb            *object,
         }
 
       device_file = g_udev_device_get_device_file (device);
-      if (!device_file)
-        {
-          g_variant_dict_insert (&dict, "success", "b", FALSE);
-          g_variant_dict_insert (&dict, "error", "s", _("No device file"));
-          g_variant_builder_add (&results_builder, "(s@a{sv})",
-                                 access_data->device_id,
-                                 g_variant_dict_end (&dict));
-          continue;
-        }
+      g_assert (device_file != NULL);
 
       /* Can the app even request this device? */
-      if (!usb_session_match_device (usb_session, device))
+      if (!filters_match_device (sender_info->filters, device))
         {
           g_variant_dict_insert (&dict, "success", "b", FALSE);
           g_variant_dict_insert (&dict, "error", "s", _("Not allowed"));
@@ -1799,7 +1311,6 @@ handle_finish_access_devices (XdpDbusUsb            *object,
         }
 
       fd_index = g_unix_fd_list_append (fds, fd, &error);
-      close (fd);
 
       if (error)
         {
@@ -1811,6 +1322,11 @@ handle_finish_access_devices (XdpDbusUsb            *object,
           continue;
         }
 
+      /* This sender now owns this device */
+      usb_sender_info_acquire_device (sender_info,
+                                      access_data->device_id,
+                                      xdp_steal_fd (&fd));
+
       g_variant_dict_insert (&dict, "success", "b", TRUE);
       g_variant_dict_insert (&dict, "fd", "h", fd_index);
       g_variant_builder_add (&results_builder, "(s@a{sv})",
@@ -1820,12 +1336,12 @@ handle_finish_access_devices (XdpDbusUsb            *object,
       accessed_devices++;
     }
 
-  finished = usb_session->accessing_devices->len == 0;
+  finished = sender_info->acquiring_devices->len == 0;
 
   if (finished)
     {
-      usb_session->session_state = USB_SESSION_STATE_DEFAULT;
-      g_clear_pointer (&usb_session->accessing_devices, g_ptr_array_unref);
+      sender_info->sender_state = USB_SENDER_STATE_DEFAULT;
+      g_clear_pointer (&sender_info->acquiring_devices, g_ptr_array_unref);
     }
 
   g_dbus_method_invocation_return_value_with_unix_fd_list (invocation,
@@ -1837,13 +1353,60 @@ handle_finish_access_devices (XdpDbusUsb            *object,
   return G_DBUS_METHOD_INVOCATION_HANDLED;
 }
 
+/* ReleaseDevice */
+
+static XdpOptionKey usb_release_devices_options[] = {
+};
+
+static gboolean
+handle_release_devices (XdpDbusUsb            *object,
+                        GDBusMethodInvocation *invocation,
+                        const char * const    *arg_devices,
+                        GVariant              *arg_options)
+{
+  g_autoptr(UsbSenderInfo) sender_info = NULL;
+  g_autoptr(GVariant) options = NULL;
+  g_autoptr(GError) error = NULL;
+  GVariantBuilder options_builder;
+  Call *call;
+  Usb *self;
+
+  self = (Usb *) object;
+  call = call_from_invocation (invocation);
+
+  g_debug ("[usb] Handling ReleaseDevices");
+
+  g_variant_builder_init (&options_builder, G_VARIANT_TYPE_VARDICT);
+  if (!xdp_filter_options (arg_options,
+                           &options_builder,
+                           usb_release_devices_options,
+                           G_N_ELEMENTS (usb_release_devices_options),
+                           &error))
+    {
+      g_dbus_method_invocation_return_gerror (invocation, error);
+      return G_DBUS_METHOD_INVOCATION_HANDLED;
+    }
+  options = g_variant_builder_end (&options_builder);
+
+  sender_info = usb_sender_info_from_call (self, call);
+  g_assert (sender_info != NULL);
+
+  for (size_t i = 0; arg_devices && arg_devices[i]; i++)
+    usb_sender_info_release_device (sender_info, arg_devices[i]);
+
+  xdp_dbus_usb_complete_release_devices (object, invocation);
+
+  return G_DBUS_METHOD_INVOCATION_HANDLED;
+}
+
 static void
 usb_iface_init (XdpDbusUsbIface *iface)
 {
   iface->handle_create_session = handle_create_session;
   iface->handle_enumerate_devices = handle_enumerate_devices;
-  iface->handle_access_devices = handle_access_devices;
-  iface->handle_finish_access_devices = handle_finish_access_devices;
+  iface->handle_acquire_devices = handle_acquire_devices;
+  iface->handle_finish_acquire_devices = handle_finish_acquire_devices;
+  iface->handle_release_devices = handle_release_devices;
 }
 
 static void
@@ -1882,6 +1445,7 @@ usb_init (Usb *self)
   self->ids_to_devices = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
   self->syspaths_to_ids = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
   self->sessions = g_hash_table_new (g_direct_hash, g_direct_equal);
+  self->sender_infos = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, usb_sender_info_unref);
 
   self->gudev_client = g_udev_client_new (subsystems);
   g_signal_connect (self->gudev_client,
@@ -1897,6 +1461,9 @@ usb_init (Usb *self)
 
       g_assert (G_UDEV_IS_DEVICE (device));
       g_assert (g_strcmp0 (g_udev_device_get_subsystem (device), "usb") == 0);
+
+      if (!is_gudev_device_suitable (device))
+        continue;
 
       if (!create_unique_usb_id (self, device, NULL))
         g_assert_not_reached ();
@@ -1929,4 +1496,11 @@ usb_create (GDBusConnection *connection,
   usb = g_object_new (usb_get_type (), NULL);
 
   return G_DBUS_INTERFACE_SKELETON (usb);
+}
+
+void
+usb_revoke_devices_from_sender (const char *sender)
+{
+  if (usb && g_hash_table_remove (usb->sender_infos, sender))
+    g_debug ("Revoked acquired USB devices from sender %s", sender);
 }

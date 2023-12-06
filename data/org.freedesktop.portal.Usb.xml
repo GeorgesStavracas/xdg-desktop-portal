@@ -35,65 +35,22 @@
 
     <!--
         CreateSession:
-        @parent_window: Identifier for the application window, see :ref:`Common Conventions <window-identifiers>`
         @options: Vardict with optional further information
         @handle: Object path for the :ref:`org.freedesktop.portal.Request` object representing this call
 
-        Creates an USB session.
+        Creates an USB monitoring session.
 
         Supported keys in the @options vardict include:
-
-        * ``handle_token`` (``s``)
-
-          A string that will be used as the last element of the @handle. Must be a valid
-          object path element. See the :ref:`org.freedesktop.portal.Request` documentation
-          for more information about the @handle.
 
         * ``session_handle_token`` (``s``)
 
           A string that will be used as the last element of the session handle. Must be a valid
           object path element. See the #org.freedesktop.portal.Session documentation for
           more information about the session handle.
-
-        * ``reason`` (``s``)
-
-          User-visible reason for requesting access to USB devices.
-
-        * ``access_mode`` (``s``)
-
-          How the app wants to access devices. The following values are supported:
-
-          - ``listed-devices``: The app provides a specific list of devices
-          - ``all``: The app wants access to all devices
-
-        * ``devices`` (``aa{sv}``)
-
-          The list of devices the app is interested in receiving data and
-          monitoring. Required for apps that requested permissions with
-          "listed-devices" access mode.
-
-          Each element of this array is a vardict with the following keys:
-
-          * ``vendor_id`` (``q``)
-
-            The vendor ID of the USB device. This field is required.
-
-          * ``product_id`` (``q``)
-
-            The product / model ID of the USB device. This field is required.
-
-        The following results get returned via the #org.freedesktop.portal.Request::Response signal:
-
-        * ``available_devices`` (``a(sa{sv})``)
-
-            A list of devices available to this session. See
-            org.freedesktop.portal.Usb.EnumerateDevices() for the list of
-            properties that the device may have.
     -->
     <method name="CreateSession">
-      <arg type="s" name="parent_window" direction="in"/>
       <arg type="a{sv}" name="options" direction="in"/>
-      <arg type="o" name="handle" direction="out"/>
+      <arg type="o" name="session_handle" direction="out"/>
     </method>
 
     <!--
@@ -156,20 +113,18 @@
           should be assumed to be false.
      -->
     <method name="EnumerateDevices">
-      <arg type="o" name="session_handle" direction="in"/>
       <arg type="a{sv}" name="options" direction="in"/>
       <arg type="a(sa{sv})" name="devices" direction="out"/>
     </method>
 
     <!--
-        AccessDevices:
-        @session_handle: Object path for the :ref:`org.freedesktop.portal.Session` object
+        AcquireDevices:
         @parent_window: Identifier for the application window, see :ref:`Common Conventions <window-identifiers>`.
         @devices: Array of device identifiers, device information, and access options
         @options: Vardict with optional further information
         @handle: Object path for the :ref:`org.freedesktop.portal.Request` object representing this call
 
-        Opens the given device node.
+        Acquires the given device nodes.
 
         Each element of the @devices array contains the device ID, and the
         following keys:
@@ -190,8 +145,7 @@
         The #org.freedesktop.portal.Request::Response signal is emitted without
         any extra information.
      -->
-    <method name="AccessDevices">
-      <arg type="o" name="session_handle" direction="in"/>
+    <method name="AcquireDevices">
       <arg type="s" name="parent_window" direction="in"/>
       <arg type="a(sa{sv})" name="devices" direction="in"/>
       <arg type="a{sv}" name="options" direction="in"/>
@@ -199,17 +153,16 @@
     </method>
 
     <!--
-        FinishAccessDevices:
-        @session_handle: Object path for the :ref:`org.freedesktop.portal.Session` object
+        FinishAcquireDevices:
         @options: Vardict with optional further information
         @results: Array of device ids, and the result of the access
         @finished: Whether all device results were reported
 
         Retrieves the file descriptors of the devices requested during
-        org.freedesktop.portal.Usb.AccessDevices().
+        org.freedesktop.portal.Usb.AcquireDevices().
 
         This method can only be called once, and only after calling
-        org.freedesktop.portal.Usb.AccessDevices().
+        org.freedesktop.portal.Usb.AcquireDevices().
 
         Each element of the @devices_fds array contains the device ID, and the
         following keys:
@@ -230,11 +183,27 @@
 
         There are no supported keys in the @options vardict.
      -->
-    <method name="FinishAccessDevices">
-      <arg type="o" name="session_handle" direction="in"/>
+    <method name="FinishAcquireDevices">
       <arg type="a{sv}" name="options" direction="in"/>
       <arg type="a(sa{sv})" name="results" direction="out"/>
       <arg type="b" name="finished" direction="out"/>
+    </method>
+
+    <!--
+        ReleaseDevices:
+        @parent_window: Identifier for the application window, see :ref:`Common Conventions <window-identifiers>`.
+        @devices: Array of device identifiers
+        @options: Vardict with optional further information
+
+        Releases previously acquired devices.
+
+        Each element of the @devices array contains the device ID of the device.
+
+        There are no supported keys in the @options vardict.
+     -->
+    <method name="ReleaseDevices">
+      <arg type="as" name="devices" direction="in"/>
+      <arg type="a{sv}" name="options" direction="in"/>
     </method>
 
     <!--

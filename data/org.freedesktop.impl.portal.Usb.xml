@@ -31,56 +31,8 @@
   <interface name="org.freedesktop.impl.portal.Usb">
 
     <!--
-        CreateSession:
+        AcquireDevices:
         @handle: Object path for the :ref:`org.freedesktop.impl.portal.Request` object representing this call
-        @session_handle: Object path for the :ref:`org.freedesktop.impl.portal.Session` object representing the session being created
-        @app_id: App id of the application
-        @options: Vardict with optional further information
-        @response: Numeric Request response
-        @results: Vardict with the results of the call
-
-        Create a global shortcuts session.
-
-        The @options vardict supports all documented keys for
-        org.freedesktop.portal.Usb.CreateSession(), and also the following
-        backend-specific keys:
-
-        * ``matches_permission_store`` (``b``)
-
-          Whether the app has permission to create USB sessions similar to
-          this. Usually this means that the app is requesting a USB session
-          with the same access mode, and the user has previously granted the
-          permission to do so.
-
-          It is recommended that backends don't ask the user again if the
-          permission matches.
-
-        The following results get returned via the @results vardict:
-
-        * ``result`` (``u``)
-
-            The choice that the user made regarding the USB session:
-
-            - ``0``: Forbid creating the USB session
-            - ``1``: Allow creating the USB session
-            - ``2``: Allow this particular USB session
-    -->
-    <method name="CreateSession">
-      <arg type="o" name="handle" direction="in"/>
-      <arg type="o" name="session_handle" direction="in"/>
-      <arg type="s" name="app_id" direction="in"/>
-      <arg type="s" name="parent_window" direction="in"/>
-      <arg type="a{sv}" name="options" direction="in"/>
-      <annotation name="org.qtproject.QtDBus.QtTypeName.In4" value="QVariantMap"/>
-      <arg type="u" name="response" direction="out"/>
-      <annotation name="org.qtproject.QtDBus.QtTypeName.Out1" value="QVariantMap"/>
-      <arg type="a{sv}" name="results" direction="out"/>
-    </method>
-
-    <!--
-        AccessDevices:
-        @handle: Object path for the :ref:`org.freedesktop.impl.portal.Request` object representing this call
-        @session_handle: Object path for the :ref:`org.freedesktop.impl.portal.Session` object representing the session
         @parent_window: Identifier for the application window, see :ref:`Common Conventions <window-identifiers>`.
         @app_id: App id of the application
         @devices: Array of device identifiers, and options for each device
@@ -105,11 +57,9 @@
         * ``devices`` (``a(sa{sv})``)
 
           Which devices to open
-
      -->
-    <method name="AccessDevices">
+    <method name="AcquireDevices">
       <arg type="o" name="handle" direction="in"/>
-      <arg type="o" name="session_handle" direction="in"/>
       <arg type="s" name="parent_window" direction="in"/>
       <arg type="s" name="app_id" direction="in"/>
       <arg type="a(sa{sv}a{sv})" name="devices" direction="in"/>

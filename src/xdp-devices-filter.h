@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 Endless OS Foundation LLC
+ * Copyright © 2023 GNOME Foundation, Inc.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,14 +15,26 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  *
  * Authors:
- *       Author: Ryan Gonzalez <rymg19+github@gmail.com>
+ *       Georges Basile Stavracas Neto <georges.stavracas@gmail.com>
  */
 
 #pragma once
 
 #include <gio/gio.h>
 
-GDBusInterfaceSkeleton * usb_create (GDBusConnection *connection,
-                                     const char      *dbus_name);
+G_BEGIN_DECLS
 
-void usb_revoke_devices_from_sender (const char *sender);
+#define XDP_TYPE_DEVICES_FILTER (xdp_devices_filter_get_type())
+G_DECLARE_FINAL_TYPE (XdpDevicesFilter, xdp_devices_filter, XDP, DEVICES_FILTER, GObject)
+
+XdpDevicesFilter *xdp_devices_filter_new (GFile   *file,
+                                          GError **error);
+
+GPtrArray *xdp_devices_filter_get_all_for_app_id (const char *app_id);
+
+gboolean xdp_devices_filter_match_device (XdpDevicesFilter *self,
+                                          gpointer          gudev_device);
+
+char * xdp_devices_filter_to_string (XdpDevicesFilter *self);
+
+G_END_DECLS
