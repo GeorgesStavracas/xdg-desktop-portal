@@ -60,23 +60,23 @@ jobs:
             echo "image='ubuntu:latest'" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Build ephemeral image and upload
-        if: ${{ inputs.ephemeral }} && ${{ steps.check.outputs.exists == 'false' }}
+      - name: Build ephemeral image
+        if: ${{ inputs.ephemeral == true && steps.check.outputs.exists == 'false' }}
         uses: docker/build-push-action@v5
         with:
           file: .github/workflows/Containerfile
           tags: ghcr.io/${{ env.REGISTRY_OWNER }}/xdg-desktop-portal:${{ env.IMAGE_TAG }}
           outputs: type=oci,dest=/tmp/image.tar
 
-      - name: Upload artifact
-        if: ${{ inputs.ephemeral }} && ${{ steps.check.outputs.exists == 'false' }}
+      - name: Upload ephemeral image
+        if: ${{ inputs.ephemeral == true && steps.check.outputs.exists == 'false' }}
         uses: actions/upload-artifact@v4
         with:
           name: ephemeral-image
           path: /tmp/image.tar
 
       - name: Build and push
-        if: ${{ !inputs.ephemeral }} && ${{ steps.check.outputs.exists == 'false' }}
+        if: ${{ inputs.ephemeral == false && steps.check.outputs.exists == 'false' }}
         uses: docker/build-push-action@v5
         with:
           push: true
