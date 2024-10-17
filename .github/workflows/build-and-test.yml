@@ -34,12 +34,16 @@ jobs:
       options: ${{ inputs.image_options }}
 
     steps:
-      - name: Setup ephemeral image
+      - name: Download ephemeral image
         uses: actions/download-artifact@v4
-        if: inputs.ephemeral
+        if: ${{ inputs.ephemeral }}
+
+      - name: Setup Docker Buildx for ephemeral build
+        uses: docker/setup-buildx-action@v3
+        if: ${{ inputs.ephemeral }}
 
       - name: Load ephemeral image
-        if: inputs.ephemeral
+        if: ${{ inputs.ephemeral }}
         run: |
           docker load --input ephemeral-image/image.tar
 
