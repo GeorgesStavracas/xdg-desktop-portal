@@ -5,13 +5,11 @@ on:
   workflow_call:
     inputs:
       ephemeral:
+        required: true
         type: boolean
         description: "Build an ephemeral image and upload as an artifact"
-        value: false
 
     outputs:
-      artifact:
-        description: "The artifact name (only for ephemeral images)"
       image:
         description: "The build image"
         value: ${{ jobs.build-container.outputs.image }}

@@ -19,7 +19,6 @@ jobs:
     with:
       #ephemeral: github.event_name == "pull_request"
       ephemeral: true
-      artifact: ${{ needs.build-container.outputs.artifact }}
       image: ${{ needs.build-container.outputs.image }}
       image_options: ${{ needs.build-container.outputs.image_options }}
 
@@ -34,6 +33,5 @@ jobs:
     with:
       #ephemeral: github.event_name == "pull_request"
       ephemeral: true
-      artifact: ${{ needs.build-container.outputs.artifact }}
       image: ${{ needs.build-container.outputs.image }}
       image_options: ${{ needs.build-container.outputs.image_options }}
