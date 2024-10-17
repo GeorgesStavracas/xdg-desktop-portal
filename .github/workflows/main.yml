@@ -9,14 +9,16 @@ jobs:
     permissions:
       packages: write
     with:
-      ephemeral: github.event_name == "pull_request"
+      #ephemeral: github.event_name == "pull_request"
+      ephemeral: true
 
   build-and-test:
     name: Build and Test
     uses: ./.github/workflows/build-and-test.yml
     needs: build-container
     with:
-      ephemeral: github.event_name == "pull_request"
+      #ephemeral: github.event_name == "pull_request"
+      ephemeral: true
       artifact: ${{ needs.build-container.outputs.artifact }}
       image: ${{ needs.build-container.outputs.image }}
       image_options: ${{ needs.build-container.outputs.image_options }}
@@ -30,7 +32,8 @@ jobs:
       pages: write
       id-token: write
     with:
-      ephemeral: github.event_name == "pull_request"
+      #ephemeral: github.event_name == "pull_request"
+      ephemeral: true
       artifact: ${{ needs.build-container.outputs.artifact }}
       image: ${{ needs.build-container.outputs.image }}
       image_options: ${{ needs.build-container.outputs.image_options }}
