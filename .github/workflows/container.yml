@@ -57,7 +57,7 @@ jobs:
             echo "image=$image" >> "$GITHUB_OUTPUT"
           else
             echo "exists='false'" >> "$GITHUB_OUTPUT"
-            echo "image='ubuntu:latest'" >> "$GITHUB_OUTPUT"
+            echo "image=ubuntu:latest" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Build ephemeral image
