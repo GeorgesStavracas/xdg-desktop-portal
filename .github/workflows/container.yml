@@ -61,7 +61,7 @@ jobs:
           fi
 
       - name: Build ephemeral image
-        if: ${{ toJSON(inputs.ephemeral) && steps.check.outputs.exists == 'false' }}
+        if: ${{ inputs.ephemeral }}
         uses: docker/build-push-action@v5
         with:
           file: .github/workflows/Containerfile
@@ -69,14 +69,14 @@ jobs:
           outputs: type=oci,dest=/tmp/image.tar
 
       - name: Upload ephemeral image
-        if: ${{ toJSON(inputs.ephemeral) && steps.check.outputs.exists == 'false' }}
+        if: ${{ inputs.ephemeral }}
         uses: actions/upload-artifact@v4
         with:
           name: ephemeral-image
           path: /tmp/image.tar
 
       - name: Build and push
-        if: ${{ !toJSON(inputs.ephemeral) && steps.check.outputs.exists == 'false' }}
+        if: ${{ !inputs.ephemeral }}
         uses: docker/build-push-action@v5
         with:
           push: true
