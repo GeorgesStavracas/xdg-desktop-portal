@@ -4,6 +4,14 @@ env:
 on:
   workflow_call:
     inputs:
+      artifact:
+        required: false
+        type: string
+        value: ''
+      ephemeral:
+        required: true
+        type: boolean
+        description: "Build an ephemeral image and upload as an artifact"
       image:
         required: true
         type: string
@@ -30,6 +38,14 @@ jobs:
       options: ${{ inputs.image_options }}
 
     steps:
+      - name: Setup ephemeral image
+        uses: actions/download-artifact@v4
+        if: inputs.ephemeral
+
+      - name: Load ephemeral image
+        run: |
+          docker load --input ephemeral-image/image.tar
+
       - name: Configure environment
         run: |
           git config --global --add safe.directory $GITHUB_WORKSPACE
