@@ -39,6 +39,7 @@ jobs:
         if: inputs.ephemeral
 
       - name: Load ephemeral image
+        if: inputs.ephemeral
         run: |
           docker load --input ephemeral-image/image.tar
 

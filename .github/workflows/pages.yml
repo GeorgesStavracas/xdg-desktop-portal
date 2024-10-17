@@ -1,6 +1,10 @@
 on:
   workflow_call:
     inputs:
+      ephemeral:
+        required: true
+        type: boolean
+        description: "Build an ephemeral image and upload as an artifact"
       image:
         required: true
         type: string
@@ -22,6 +26,15 @@ jobs:
       options: ${{ inputs.image_options }}
 
     steps:
+      - name: Setup ephemeral image
+        uses: actions/download-artifact@v4
+        if: inputs.ephemeral
+
+      - name: Load ephemeral image
+        if: inputs.ephemeral
+        run: |
+          docker load --input ephemeral-image/image.tar
+
       - name: Check out xdg-desktop-portal
         uses: actions/checkout@v4
 
